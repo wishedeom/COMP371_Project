@@ -23,8 +23,6 @@
 #include <vector>
 #include <cctype>
 
-using namespace std;
-
 #define M_PI        3.14159265358979323846264338327950288   /* pi */
 #define DEG_TO_RAD	M_PI/180.0f
 
@@ -42,7 +40,7 @@ glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 glm::mat4 model_matrix;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f, 1.0f, 1.0f, 100.0f);
+Camera* cameraptr;
 
 
 //GLuint VBO, VAO, EBO;
@@ -55,16 +53,16 @@ void keyPressed(GLFWwindow *_window, int key, int scancode, int action, int mods
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-		camera.translate(-camera.right());
+		cameraptr->translate(-cameraptr->right());
 	}
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-		camera.translate(camera.right());
+		cameraptr->translate(cameraptr->right());
 	}
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-		camera.translate(camera.forward());
+		cameraptr->translate(cameraptr->forward());
 	}
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-		camera.translate(-camera.forward());
+		cameraptr->translate(-cameraptr->forward());
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		model_matrix = glm::rotate(model_matrix, glm::radians(15.0f), glm::vec3(0.0, 0.0, 0.05));
@@ -79,6 +77,13 @@ void windowResize(GLFWwindow* window, int width, int height){
 	//from http://stackoverflow.com/questions/26831962/opengl-orthographic-projection-oy-resizing
 	proj_matrix = glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
 }
+
+
+void cursorMoved(GLFWwindow* window, const double x, const double y)
+{
+	cameraptr->orientToCursor(x, y);
+}
+
 
 bool initialize() {
 	/// Initialize GL context and O/S window using the GLFW helper library
@@ -101,6 +106,10 @@ bool initialize() {
 	///Register the keyboard callback function: keyPressed(...)
 	glfwSetWindowSizeCallback(window, windowResize);
 	glfwSetKeyCallback(window, keyPressed);
+	glfwSetCursorPosCallback(window, cursorMoved);
+
+	// Hides the mouse cursor
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwMakeContextCurrent(window);
 
@@ -235,6 +244,9 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 int main() {
 	initialize();
 
+	Camera camera(*window);
+	cameraptr = &camera;
+
 	World world;
 	World* worldptr = &world;
 
@@ -251,8 +263,8 @@ int main() {
 	block_shader = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
 	while (!glfwWindowShouldClose(window))
 	{
-		proj_matrix = camera.projection();
-		view_matrix = camera.view();
+		proj_matrix = cameraptr->projection();
+		view_matrix = cameraptr->view();
 
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

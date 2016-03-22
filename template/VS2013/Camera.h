@@ -4,11 +4,13 @@
 
 #pragma once
 #include "glm.hpp"
+#include "glfw3.h"
 
 
 class Camera
 {
-	static const glm::vec3 up;	// The camera's relative up position in the world.
+	static const glm::vec3 up;				// The camera's relative up position in the world.
+	static const float mouseSensitivity;	// Sensitivity of the camera's orientation to mouse movement.
 
 	glm::vec3 m_position;		// The camera's position
 	glm::vec3 m_orientation;	// The direction the camera is pointing.
@@ -16,6 +18,8 @@ class Camera
 	float m_aspectRatio;		// The ratio between the width and height of the viewport. Must be greater than 0.
 	float m_nearPlane;			// The distance between the camera and the near image plane
 	float m_farPlane;			// The distance between the camera and the far image plane
+	double m_xCursorPos;		// The mouse's previous x cursor position.
+	double m_yCursorPos;		// The mouse's previous y cursor position.
 
 public:
 
@@ -26,11 +30,11 @@ public:
 	// aspectRatio: The camera's initial aspect ratio. Must be greater than 0.
 	// nearPlane: The distance between the camera and the near image plane.
 	// farPlane: The distance between the camera and the far image plane
-	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane);
+	// window: The window the camera will be displaying to
+	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane, GLFWwindow& window);
 
-
-	// Constructs a camera with initial position at the origin, orentation along the negative z-axis, field-of-view 90 degrees, focal length 1, and aspect ratio 1.
-	Camera();
+	// Constructs a camera with default parameters and a given window.
+	Camera(GLFWwindow& window);
 
 
 	// Returns the camera's position.
@@ -105,4 +109,8 @@ public:
 
 	// Translates the camera by the given vector.s
 	void translate(const glm::vec3& direction);
+
+
+	// Orients the camera based on new mouse cursor position
+	void orientToCursor(const double x, const double y);
 };

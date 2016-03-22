@@ -4,9 +4,10 @@
 
 
 const glm::vec3 Camera::up(0.0f, 0.0f, 1.0f);
+const float Camera::mouseSensitivity = 0.001f;
 
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane)
+Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane, GLFWwindow& window)
 	: m_position(position)
 {
 	setOrientation(orientation);
@@ -14,10 +15,17 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fo
 	setAspectRatio(aspectRatio);
 	setFarPlane(farPlane);
 	setNearPlane(nearPlane);
+
+	// Set initial cursor positions
+	int width, height;
+	glfwGetWindowSize(&window, &width, &height);
+	m_xCursorPos = width / 2;
+	m_yCursorPos = height / 2;
 }
 
 
-Camera::Camera() : Camera(glm::vec3(), glm::vec3(0.0f, 0.0f, -1.0f), 90.0, 1.0f, 1.0f, 2.0f) {}
+Camera::Camera(GLFWwindow& window)
+	: Camera(glm::vec3(0.0f, 0.0f, 0.7f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, 100.0f, window) {}
 
 
 glm::vec3 Camera::position() const { return m_position; }
@@ -58,8 +66,7 @@ glm::mat4 Camera::projection() const
 
 glm::mat4 Camera::view() const
 {
-	const auto m = glm::lookAt(glm::vec3(), m_orientation, up);
-	return glm::translate(m, m_position);
+	return glm::lookAt(m_position, m_position + m_orientation, up);
 }
 
 
@@ -119,4 +126,14 @@ void Camera::setFarPlane(const float farPlane)
 void Camera::translate(const glm::vec3& direction)
 {
 	m_position += direction;
+}
+
+
+void Camera::orientToCursor(const double x, const double y)
+{
+	const float horizontalAngle = (m_xCursorPos - x) * mouseSensitivity;
+	const float verticalAngle = (m_yCursorPos - y) * mouseSensitivity;
+	m_orientation = glm::vec3(glm::rotate(glm::rotate(glm::mat4(1.0f), horizontalAngle, up), verticalAngle, right())  * glm::vec4(m_orientation, 0.0f));
+	m_xCursorPos = x;
+	m_yCursorPos = y;
 }
