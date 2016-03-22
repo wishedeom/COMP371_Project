@@ -14,6 +14,7 @@
 #include "../VS2013/World.h"
 #include "../VS2013/Building.h"
 #include "../VS2013/Camera.h"
+#include "../VS2013/Constants.h"
 
 #include <vector>
 #include <string>
@@ -22,9 +23,6 @@
 #include <algorithm>
 #include <vector>
 #include <cctype>
-
-#define M_PI        3.14159265358979323846264338327950288   /* pi */
-#define DEG_TO_RAD	M_PI/180.0f
 
 GLFWwindow* window = 0x00;
 
