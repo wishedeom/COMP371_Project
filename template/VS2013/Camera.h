@@ -18,10 +18,12 @@ class Camera
 	float m_aspectRatio;		// The ratio between the width and height of the viewport. Must be greater than 0.
 	float m_nearPlane;			// The distance between the camera and the near image plane
 	float m_farPlane;			// The distance between the camera and the far image plane
-	double m_xCursorPos;		// The mouse's previous x cursor position.
-	double m_yCursorPos;		// The mouse's previous y cursor position.
+	double m_xCursorPos;		// The mouse cursor's previous x-position.
+	double m_yCursorPos;		// The mouse cursor's previous y-position.
 
 public:
+
+	static const float movementSpeed;		// Speed of planar movement.
 
 	// Constructs a camera with a given initial position, orientation, FOV, aspect ratio, near plane, and far plane.
 	// position: The camera's initial position.
@@ -31,7 +33,7 @@ public:
 	// nearPlane: The distance between the camera and the near image plane.
 	// farPlane: The distance between the camera and the far image plane
 	// window: The window the camera will be displaying to
-	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane, GLFWwindow& window);
+	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window);
 
 	// Constructs a camera with default parameters and a given window.
 	Camera(GLFWwindow& window);

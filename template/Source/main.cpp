@@ -52,17 +52,17 @@ void keyPressed(GLFWwindow *_window, int key, int scancode, int action, int mods
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-		cameraptr->translate(-cameraptr->right());
+	if (key == GLFW_KEY_LEFT){
+		cameraptr->translate(-cameraptr->right() * cameraptr->movementSpeed);
 	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-		cameraptr->translate(cameraptr->right());
+	if (key == GLFW_KEY_RIGHT){
+		cameraptr->translate(cameraptr->right() * cameraptr->movementSpeed);
 	}
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-		cameraptr->translate(cameraptr->forward());
+	if (key == GLFW_KEY_UP){
+		cameraptr->translate(cameraptr->forward() * cameraptr->movementSpeed);
 	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-		cameraptr->translate(-cameraptr->forward());
+	if (key == GLFW_KEY_DOWN){
+		cameraptr->translate(-cameraptr->forward() * cameraptr->movementSpeed);
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		model_matrix = glm::rotate(model_matrix, glm::radians(15.0f), glm::vec3(0.0, 0.0, 0.05));
@@ -75,7 +75,7 @@ void windowResize(GLFWwindow* window, int width, int height){
 	GLfloat aspectRatio = width / height;
 	glViewport(0, 0, width, height);
 	//from http://stackoverflow.com/questions/26831962/opengl-orthographic-projection-oy-resizing
-	proj_matrix = glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+	cameraptr->setAspectRatio(aspectRatio);
 }
 
 
@@ -94,7 +94,7 @@ bool initialize() {
 
 	/// Create a window of size 640x480 and with title "Lecture 2: First Triangle"
 	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
-	window = glfwCreateWindow(800, 800, "COMP371: Team 8 Project", NULL, NULL);
+	window = glfwCreateWindow(800, 800, "COMP371: Team 8 Project", nullptr, nullptr);
 	if (!window) {
 		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
 		glfwTerminate();

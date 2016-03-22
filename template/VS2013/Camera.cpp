@@ -4,15 +4,17 @@
 
 
 const glm::vec3 Camera::up(0.0f, 0.0f, 1.0f);
+
 const float Camera::mouseSensitivity = 0.001f;
 
+const float Camera::movementSpeed = 0.1f;
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float aspectRatio, const float nearPlane, const float farPlane, GLFWwindow& window)
+
+Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window)
 	: m_position(position)
 {
 	setOrientation(orientation);
 	setFOV(fov);
-	setAspectRatio(aspectRatio);
 	setFarPlane(farPlane);
 	setNearPlane(nearPlane);
 
@@ -21,11 +23,13 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fo
 	glfwGetWindowSize(&window, &width, &height);
 	m_xCursorPos = width / 2;
 	m_yCursorPos = height / 2;
+
+	m_aspectRatio = width / height;
 }
 
 
 Camera::Camera(GLFWwindow& window)
-	: Camera(glm::vec3(0.0f, 0.0f, 0.7f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 1.0f, 1.0f, 100.0f, window) {}
+	: Camera(glm::vec3(0.0f, 0.0f, 0.7f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 1.0f, 100.0f, window) {}
 
 
 glm::vec3 Camera::position() const { return m_position; }
