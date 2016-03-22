@@ -13,6 +13,7 @@
 #include "../VS2013/Block.h"
 #include "../VS2013/World.h"
 #include "../VS2013/Building.h"
+#include "../VS2013/Camera.h"
 
 #include <vector>
 #include <string>
@@ -41,6 +42,9 @@ glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 glm::mat4 model_matrix;
 
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f, 1.0f, 1.0f, 100.0f);
+
+
 //GLuint VBO, VAO, EBO;
 
 GLfloat point_size = 3.0f;
@@ -51,16 +55,16 @@ void keyPressed(GLFWwindow *_window, int key, int scancode, int action, int mods
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-		view_matrix = glm::translate(view_matrix, glm::vec3(0.5f, 0.f, 0.f));
+		camera.translate(-camera.right());
 	}
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-		view_matrix = glm::translate(view_matrix, glm::vec3(-0.5f, 0.f, 0.f));
+		camera.translate(camera.right());
 	}
 	if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-		view_matrix = glm::translate(view_matrix, glm::vec3(0.f,-0.5f,0.f));
+		camera.translate(camera.forward());
 	}
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-		view_matrix = glm::translate(view_matrix, glm::vec3(0.f, 0.5f, 0.f));
+		camera.translate(-camera.forward());
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		model_matrix = glm::rotate(model_matrix, glm::radians(15.0f), glm::vec3(0.0, 0.0, 0.05));
@@ -245,7 +249,11 @@ int main() {
 	//shader_program = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	building_shader = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	block_shader = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
-	while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window))
+	{
+		proj_matrix = camera.projection();
+		view_matrix = camera.view();
+
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
