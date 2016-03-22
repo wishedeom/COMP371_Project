@@ -114,7 +114,7 @@ public:
 	void translate(const glm::vec3& direction);
 
 
-	// Orients the camera based on new mouse cursor position.
+	// Orients the camera based on new mouse cursor position, relative to the old cursor position.
 	// x: The mouse cursor's x-position.
 	// y: The mouse cursor's y-position.
 	void orientToCursor(const double x, const double y);
