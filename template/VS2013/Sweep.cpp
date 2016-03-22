@@ -56,7 +56,7 @@ std::vector<GLuint> computeSweepIndices(const int p, const int t)
 }
 
 
-std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3> polyline)
+std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3>& polyline)
 {
 
 	std::vector<glm::vec3> displacements;	// To hold displacement vectors
@@ -70,7 +70,7 @@ std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3> polylin
 }
 
 
-std::vector<glm::vec3> computeTranslationalSweep(const std::vector<glm::vec3> profilePolyline, const std::vector<glm::vec3> trajectoryPolyline)
+std::vector<glm::vec3> computeTranslationalSweep(const std::vector<glm::vec3>& profilePolyline, const std::vector<glm::vec3>& trajectoryPolyline)
 {
 	const auto trajectoryCurveDisplacements = computeDisplacements(trajectoryPolyline);	// Compute trajectory curve displacements.
 	std::vector<glm::vec3> translationalSweep;	// To hold translational sweep vertices.
@@ -86,7 +86,7 @@ std::vector<glm::vec3> computeTranslationalSweep(const std::vector<glm::vec3> pr
 }
 
 
-std::vector<glm::vec3> rotatePolyline(const std::vector<glm::vec3> polyline, const GLfloat angle)
+std::vector<glm::vec3> rotatePolyline(const std::vector<glm::vec3>& polyline, const GLfloat angle)
 {
 	const auto rotationMatrix = glm::rotate(glm::mat4(1.0), angle, up);
 	std::vector<glm::vec3> rotatedPolyline;
@@ -97,8 +97,8 @@ std::vector<glm::vec3> rotatePolyline(const std::vector<glm::vec3> polyline, con
 	return rotatedPolyline;
 }
 
-// Produces a rotational sweep froma  profile curve and number of spans
-std::vector<glm::vec3> computeRotationalSweep(const std::vector<glm::vec3> profilePolyline, const int numSpans)
+
+std::vector<glm::vec3> computeRotationalSweep(const std::vector<glm::vec3>& profilePolyline, const int numSpans)
 {
 	const GLfloat angle = 2 * pi / numSpans;
 	std::vector<glm::vec3> rotationalSweep;
@@ -111,4 +111,15 @@ std::vector<glm::vec3> computeRotationalSweep(const std::vector<glm::vec3> profi
 		}
 	}
 	return rotationalSweep;
+}
+
+
+std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices)
+{
+	std::vector<glm::vec3> embeddedVertices;
+	for (const auto vertex : vertices)
+	{
+		embeddedVertices.push_back(glm::vec3(vertex, 0.0f));
+	}
+	return embeddedVertices;
 }
