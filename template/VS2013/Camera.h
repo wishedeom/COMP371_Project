@@ -25,17 +25,18 @@ public:
 
 	static const float movementSpeed;		// Speed of planar movement.
 
-	// Constructs a camera with a given initial position, orientation, FOV, aspect ratio, near plane, and far plane.
+	// Constructs a camera with a given initial position, orientation, FOV, aspect ratio, near plane, and far plane, displaying to a given window.
 	// position: The camera's initial position.
 	// orientation: The camera's new orientation. Cannot be the zero vector.
 	// fov: The camera's initial field of view angle, in degrees. Must be between 0 and 180, exclusive.
 	// aspectRatio: The camera's initial aspect ratio. Must be greater than 0.
 	// nearPlane: The distance between the camera and the near image plane.
-	// farPlane: The distance between the camera and the far image plane
-	// window: The window the camera will be displaying to
+	// farPlane: The distance between the camera and the far image plane.
+	// window: The window the camera will be displaying to.
 	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window);
 
-	// Constructs a camera with default parameters and a given window.
+	// Constructs a camera with default parameters displaying to a given window.
+	// window: The window the camera will be displaying to.
 	Camera(GLFWwindow& window);
 
 
@@ -109,10 +110,12 @@ public:
 	void setFarPlane(const float farPlane);
 
 
-	// Translates the camera by the given vector.s
+	// Translates the camera by the given vector.
 	void translate(const glm::vec3& direction);
 
 
-	// Orients the camera based on new mouse cursor position
+	// Orients the camera based on new mouse cursor position.
+	// x: The mouse cursor's x-position.
+	// y: The mouse cursor's y-position.
 	void orientToCursor(const double x, const double y);
 };
