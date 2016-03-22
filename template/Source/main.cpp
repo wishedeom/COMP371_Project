@@ -46,27 +46,30 @@ Camera* cameraptr;
 GLfloat point_size = 3.0f;
 
 ///Handle the keyboard input
-void keyPressed(GLFWwindow *_window, int key, int scancode, int action, int mods) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-
-	if (key == GLFW_KEY_LEFT){
+void keyPressed(GLFWwindow *_window, const int key, const int scancode, const int action, const int mods) {
+	switch (key)
+	{
+	case GLFW_KEY_ESCAPE:
+		if (action == GLFW_PRESS)
+		{
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		}
+		break;
+	case GLFW_KEY_LEFT:
 		cameraptr->translate(-cameraptr->right() * cameraptr->movementSpeed);
-	}
-	if (key == GLFW_KEY_RIGHT){
+		break;
+	case GLFW_KEY_RIGHT:
 		cameraptr->translate(cameraptr->right() * cameraptr->movementSpeed);
-	}
-	if (key == GLFW_KEY_UP){
+		break;
+	case GLFW_KEY_UP:
 		cameraptr->translate(cameraptr->forward() * cameraptr->movementSpeed);
-	}
-	if (key == GLFW_KEY_DOWN){
+		break;
+	case GLFW_KEY_DOWN:
 		cameraptr->translate(-cameraptr->forward() * cameraptr->movementSpeed);
+		break;
+	default:
+		break;
 	}
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-		model_matrix = glm::rotate(model_matrix, glm::radians(15.0f), glm::vec3(0.0, 0.0, 0.05));
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-		model_matrix = glm::rotate(model_matrix, glm::radians(15.0f), glm::vec3(0.05, 0.0, 0.0));
-	return;
 }
 
 void windowResize(GLFWwindow* window, int width, int height){

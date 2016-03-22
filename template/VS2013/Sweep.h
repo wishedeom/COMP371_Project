@@ -27,3 +27,7 @@ std::vector<glm::vec3> computeRotationalSweep(const std::vector<glm::vec3>& prof
 
 // Interprets a vector of vec2 as a vector of vec3 in the x-y plane.
 std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices);
+
+
+// Flattens an std::vector of n glm::vec3s into an std::vector of 3 * n GLfloats.
+std::vector<GLfloat> flatten(const std::vector<glm::vec3> vertices);
