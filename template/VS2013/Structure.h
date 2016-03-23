@@ -5,6 +5,7 @@
 #include "glew.h"
 
 // A Structure represents a single free-standing building with a polygonal base and a certain height.
+// Temporary working-place, should be merged with Building
 class Structure
 {
 	// Computes vertices and indices to draw a structure with a polygonal base and a constant height.

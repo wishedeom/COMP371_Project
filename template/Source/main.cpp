@@ -15,6 +15,7 @@
 #include "../VS2013/Building.h"
 #include "../VS2013/Camera.h"
 #include "../VS2013/Constants.h"
+#include "../VS2013/Structure.h"
 
 #include <vector>
 #include <string>
@@ -55,16 +56,16 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
 		break;
-	case GLFW_KEY_LEFT:
+	case GLFW_KEY_A:
 		cameraptr->translate(-cameraptr->right() * cameraptr->movementSpeed);
 		break;
-	case GLFW_KEY_RIGHT:
+	case GLFW_KEY_D:
 		cameraptr->translate(cameraptr->right() * cameraptr->movementSpeed);
 		break;
-	case GLFW_KEY_UP:
+	case GLFW_KEY_W:
 		cameraptr->translate(cameraptr->forward() * cameraptr->movementSpeed);
 		break;
-	case GLFW_KEY_DOWN:
+	case GLFW_KEY_S:
 		cameraptr->translate(-cameraptr->forward() * cameraptr->movementSpeed);
 		break;
 	default:
@@ -245,6 +246,14 @@ GLuint loadShaders(std::string vertex_shader_path, std::string fragment_shader_p
 int main() {
 	initialize();
 
+	/*TEST*/
+	std::vector<glm::vec2> baseVertices;
+	baseVertices.push_back(glm::vec2(0.0f, 0.0f));
+	baseVertices.push_back(glm::vec2(5.0f, 5.0f));
+	baseVertices.push_back(glm::vec2(10.0f, 0.0f));
+	Structure structure(baseVertices, 50.0f);
+	/*UNTEST*/
+
 	Camera camera(*window);
 	cameraptr = &camera;
 
@@ -284,6 +293,9 @@ int main() {
 		glUseProgram(block_shader);
 		worldptr->Draw();
 		
+		/*TEST*/
+		structure.draw();
+		/*UNTEST*/
 
 		// update other events like input handling
 		glfwPollEvents();

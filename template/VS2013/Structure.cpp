@@ -1,22 +1,26 @@
 #include "Structure.h"
+#include "Sweep.h"
+
 #include "glm.hpp"
 #include "glew.h"
+
 #include <vector>
-#include "Sweep.h"
 #include <tuple>
+
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height)
 {
-	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height);
-	generateBuffers();
+	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height);	// Compute vertices and indices of building
+	generateBuffers();	// Put into buffers
 }
 
 
 std::pair<std::vector<glm::vec3>, std::vector<GLuint>> Structure::computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height)
 {
-	const auto embeddedBaseVertices = embed(baseVertices); // Base polygon, embedded in 3-space
+	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
+	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
 
-	std::vector<glm::vec3> verticalTrajectory;
+	std::vector<glm::vec3> verticalTrajectory;					// Represents height of the building
 	verticalTrajectory.push_back(glm::vec3());
 	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, height));
 
@@ -39,11 +43,11 @@ void Structure::generateBuffers()
 
 	// Send vertex data to VAO
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0].x) * m_vertices.size(), &m_vertices[0].x, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 
-	// Send vertex data to VAO
+	// Send index data to VAO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), &m_indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
 	// Initialize vertex attribute pointer and enable VAO
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
