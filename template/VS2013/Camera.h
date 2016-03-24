@@ -1,12 +1,9 @@
-// The Camera class represents the user's point of view in the scene. The camera has a position and orientation in three-dimensional space, and the
-// view volume of the camera itself is determined by it's field-of-view (FOV) angle, and the aspect ratio between the width and height of the screen.
-
-
 #pragma once
 #include "glm.hpp"
 #include "glfw3.h"
 
-
+// The Camera class represents the user's point of view in the scene. The camera has a position and orientation in three-dimensional space, and the
+// view volume of the camera itself is determined by it's field-of-view (FOV) angle, and the aspect ratio between the width and height of the screen.
 class Camera
 {
 	static const glm::vec3 up;				// The camera's relative up position in the world.
