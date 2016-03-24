@@ -132,6 +132,29 @@ std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
 	{
 		throw std::logic_error("A polygon must have at least 3 sides.");
 	}
-	const float angle = 2 * pi / sides;		// Central angle between successive pairs of vertices
-	auto rotMatrix = glm::rotate(id4, angle, up);
+	const float angle = 2 * pi / sides;						// Central angle between successive pairs of vertices
+	const auto rotMatrix = glm::rotate(id4, angle, up);		// To rotate our first vertex through each vertex of the polygon
+	std::vector<glm::vec2> vertices;						// To hold the vertices
+	glm::vec2 vertex(apothem, 0.0f);						// First vertex
+	
+	// Construct the polygon
+	for (int i = 1; i <= sides; i++)
+	{
+		vertices.push_back(vertex);
+		// Must embed vec2 in 3D projective space, mutliply to rotate, then project to 2-space.
+		vertex = glm::vec2(rotMatrix * glm::vec4(vertex, 0.0f, 1.0f));
+	}
+	
+	return vertices;
+}
+
+
+std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, const glm::mat4& matrix)
+{
+	std::vector<glm::vec2> transformedPolygon;
+	for (const auto vertex : polygon)
+	{
+		transformedPolygon.push_back(glm::vec2(matrix * glm::vec4(vertex, 0.0f, 1.0f)));
+	}
+	return transformedPolygon;
 }

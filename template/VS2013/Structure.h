@@ -17,9 +17,12 @@ class Structure
 	std::vector<glm::vec3> m_vertices;	// The structure's vertex coordinates
 	std::vector<GLuint> m_indices;		// The indices to draw the structure as triangles
 	std::vector<glm::vec3> m_colours;	// The colour of each vertex
+	//std::vector<glm::vec2> m_textures;	// The texture coordinates of each vertex
+
 	GLuint m_vaoID;						// Vertex array object
-	GLuint m_positionBufferID;			// Vertex psoition buffer object
+	GLuint m_positionBufferID;			// Vertex position buffer object
 	GLuint m_colourBufferID;			// Vertex colour buffer object
+	//GLuint m_texBufferID;				// Vertex texture buffer object
 	GLuint m_eboID;						// Element buffer object
 
 	

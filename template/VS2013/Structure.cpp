@@ -1,5 +1,5 @@
 #include "Structure.h"
-#include "Sweep.h"
+#include "utility.h"
 
 #include "glm.hpp"
 #include "glew.h"
@@ -10,9 +10,9 @@
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
-	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height);	// Compute vertices and indices of building
+	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
 	fill(colour);		// Fill with given colour
-	generateBuffers();	// Put into buffers
+	generateBuffers();	// Put position, colour, and texture data into buffers
 }
 
 

@@ -14,8 +14,8 @@
 #include "../VS2013/World.h"
 #include "../VS2013/Building.h"
 #include "../VS2013/Camera.h"
-#include "../VS2013/Constants.h"
 #include "../VS2013/Structure.h"
+#include "../VS2013/utility.h"
 
 #include <vector>
 #include <string>
@@ -251,7 +251,7 @@ int main() {
 	baseVertices.push_back(glm::vec2(0.0f, 0.0f));
 	baseVertices.push_back(glm::vec2(5.0f, 5.0f));
 	baseVertices.push_back(glm::vec2(10.0f, 0.0f));
-	Structure structure(baseVertices, 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Structure structure(regularPolygon(3, 1.0f), 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	/*UNTEST*/
 
 	Camera camera(*window);

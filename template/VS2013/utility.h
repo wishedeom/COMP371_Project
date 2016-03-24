@@ -45,5 +45,10 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices);
 // Flattens an std::vector of n glm::vec3s into an std::vector of 3 * n GLfloats.
 std::vector<GLfloat> flatten(const std::vector<glm::vec3> vertices);
 
+
 // Produces a collection of vec2s representing a regular n-gon with a given apothem length, centred at the origin, with a point on the positive x-axis.
 std::vector<glm::vec2> regularPolygon(const int sides, const float apothem);
+
+
+// Given a transformation matrix and a collection of vertices representing a polygon in 2D, applies the transformation matrix to each vertex
+std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, const glm::mat4& matrix);
