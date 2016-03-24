@@ -5,16 +5,23 @@ vector<GLuint> Tree::treeInd;
 Shader* Tree::treeShaderptr = NULL;
 const char* Tree::filepath = NULL;
 
-Tree::Tree(GLfloat w, GLfloat h, const char* filepath)
+Tree::Tree(float w, float h, const char* filepath)
 {
 	this->w = w;
 	this->h = h;
 	this->filepath = filepath;
 	//treeShaderptr = (new Shader("../Source/TREE_VERTEX_SHADER.vs", "../Source/TREE_FRAG_SHADER.frag"));
 	//shader_program = treeShaderptr->Program;
-	
+	texture = 0;
+	VAO = 0;
+	VBO = 0;
+	EBO = 0;
+	treeShaderptr = (new Shader("../Source/TREE_VERTEX_SHADER.vs", "../Source/TREE_FRAG_SHADER.frag"));
+	shader_program = 0;
+
 //	defineVertices();
-	treeV = {
+	// xy-axis
+/*	treeV = {
 		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
 		-0.5f, 0.5f, 0.0f,	0.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
@@ -23,6 +30,19 @@ Tree::Tree(GLfloat w, GLfloat h, const char* filepath)
 		0.5f, 0.5f, 0.0f,	1.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
 		0.5f, -0.5f, 0.0f,	1.0f, 1.0f
+	};
+*/
+
+	// xz-axis
+	treeV = {
+		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
+		-0.5f, 0.6f, 0.5f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, 0.6f, 0.5f, 1.0f, 0.0f,
+
+		0.5f, 0.6f, 0.5f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f
 	};
 	treeInd = {
 		0,1,2,
@@ -38,6 +58,7 @@ Tree::Tree(GLfloat w, GLfloat h, const char* filepath)
 Tree::~Tree()
 {
 	treeV.clear();
+	treeInd.clear();
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
@@ -47,13 +68,14 @@ Tree::~Tree()
 	filepath = nullptr;
 }
 
-void Tree::writeColorCoord()
+/*void Tree::writeColorCoord()
 {
 	treeV.push_back(0.0f);
 	treeV.push_back(1.0f);
 	treeV.push_back(0.0f);
-}
+}*/
 
+/* Set the size of random trees & find the vertices */
 void Tree::defineVertices()
 {
 	/*treeV.push_back(-(w / 2)); // Top left
@@ -122,9 +144,6 @@ void Tree::createBuffers()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0); // Position
 	glEnableVertexAttribArray(0);
 
-/*	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat))); // Color
-	glEnableVertexAttribArray(1);*/
-
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat))); // Texture
 	glEnableVertexAttribArray(1);
 	
@@ -154,31 +173,6 @@ GLuint Tree::getShaderProgram()
 
 void Tree::loadTexture()
 {
-	treeShaderptr = (new Shader("../Source/TREE_VERTEX_SHADER.vs", "../Source/TREE_FRAG_SHADER.frag"));
-/*	glGenTextures(1, &texture);
-	int width, height;
-	unsigned char* image = SOIL_load_image(filepath, &width, &height, 0, SOIL_LOAD_RGBA);
-	if (image == '\0')
-	{
-		std::cout << "Unable to load image." << std::endl;
-	}
-	else
-		cout << "Successful loading" << endl;
-
-	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	// Set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// Set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// Load image, create texture and generate mipmaps
-	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
-	SOIL_free_image_data(image);*/
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 

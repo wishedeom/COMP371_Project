@@ -30,9 +30,9 @@ private:
 	GLuint VAO, VBO, EBO;
 	static Shader *treeShaderptr;
 	GLuint shader_program;
-	GLfloat w, h;
+	GLfloat w, h; // To set the size of random trees & find the vertices
 
-	void writeColorCoord();
+	//void writeColorCoord();
 };
 
 #endif /* TREE_H_ */
