@@ -7,7 +7,7 @@
 class TextureManager
 {
 
-	std::map<std::string, Texture> m_textures;
+	std::map<std::string, Texture> m_textures;	// Each texture has a name
 
 public:
 

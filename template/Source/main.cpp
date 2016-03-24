@@ -169,13 +169,13 @@ int main() {
 	//why does this take priority?
 	//shader_program = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
 	//shader_program = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
-	/*Shader building_shader("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
-	Shader block_shader("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");*/
+	Shader building_shader("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
+	Shader block_shader("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
 	//The three variables below hold the id of each of the variables in the shader
 	//If you read the vertex shader file you'll see that the same variable names are used.
-	/*view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
+	view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
 	model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
-	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");*/
+	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
 	while (!glfwWindowShouldClose(window))
 	{
 		proj_matrix = cameraptr->projection();
@@ -188,15 +188,16 @@ int main() {
 
 		//glUseProgram(shader_program);
 		//Pass the values of the three matrices to the shaders
-		/*glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		
+		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));*/
+		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
-		//glUseProgram(building_shader);
-		//buildingsptr->Draw();
+		building_shader.use();
+		buildingsptr->Draw();
 
-		//block_shader.use();
-		//worldptr->Draw();
+		block_shader.use();
+		worldptr->Draw();
 		
 		/*TEST*/
 		glUniformMatrix4fv(structure.projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
