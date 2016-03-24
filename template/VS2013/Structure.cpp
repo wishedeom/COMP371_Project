@@ -1,10 +1,8 @@
 #include "Structure.h"
 #include "utility.h"
-
 #include "glm.hpp"
 #include "glew.h"
 #include "SOIL.h"
-
 #include <vector>
 #include <tuple>
 
@@ -14,14 +12,14 @@ const GLuint Structure::textureID = SOIL_load_OGL_texture("building.jpg", 0, 0, 
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
-	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
+	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
 	textureFill();		// Fill with texture coordinates
 	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put position, colour, and texture data into buffers
 }
 
 
-std::pair<std::vector<glm::vec3>, std::vector<GLuint>> Structure::computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height)
+std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> Structure::computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -30,10 +28,22 @@ std::pair<std::vector<glm::vec3>, std::vector<GLuint>> Structure::computeStructu
 	verticalTrajectory.push_back(glm::vec3());
 	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, height));
 
-	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
-	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
+	const auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
+	const auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
-	return make_pair(vertices, indices);
+	// Assign alternating 0 and 1 s-texture coordinates to base vertices, then the t-coordinate matches the height of each vertex.
+	std::vector<glm::vec2> textureCoords;
+	float s = 0.0f;
+	for (float t = 0.0f; t <= height; t += height)
+	{
+		for (int i = 0; i < embeddedBaseVertices.size(); i++)
+		{
+			textureCoords.push_back(glm::vec2(s, t));
+			s = 1.0f - s;
+		}
+	}
+
+	return make_tuple(vertices, indices, textureCoords);
 }
 
 
@@ -64,7 +74,7 @@ void Structure::generateBuffers()
 	// Put vertex texture coordinate data into VAO attribute 2
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(m_textures[0]) * m_textures.size(), m_textures.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_textureCoords[0]) * m_textureCoords.size(), m_textureCoords.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
 
 	// Send index data to EBO
@@ -80,7 +90,7 @@ void Structure::textureFill()
 {
 	for (const auto vertex : m_vertices)
 	{
-		m_textures.push_back(glm::vec2(vertex.x, vertex.z));
+		m_textureCoords.push_back(glm::vec2(vertex.x, vertex.z));
 	}
 }
 

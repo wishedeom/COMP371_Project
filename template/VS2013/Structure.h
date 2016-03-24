@@ -1,9 +1,9 @@
 #pragma once
-
 #include <vector>
 #include "glm.hpp"
 #include "glew.h"
 #include "SOIL.h"
+#include <tuple>
 
 // A Structure represents a single free-standing building with a polygonal base and a certain height.
 // Temporary working-place, should be merged with Building
@@ -15,13 +15,13 @@ class Structure
 	// Computes vertices and indices to draw a structure with a polygonal base and a constant height.
 	// baseVertices: The vertices of the base polygon.
 	// height: The height of the structure.
-	static std::pair<std::vector<glm::vec3>, std::vector<GLuint>> computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height);
+	static std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height);
 
 	
-	std::vector<glm::vec3> m_vertices;	// The structure's vertex coordinates
-	std::vector<GLuint> m_indices;		// The indices to draw the structure as triangles
-	std::vector<glm::vec3> m_colours;	// The colour of each vertex
-	std::vector<glm::vec2> m_textures;	// The texture coordinates of each vertex
+	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates
+	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
+	std::vector<glm::vec3> m_colours;		// The colour of each vertex
+	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
 
 	GLuint m_vaoID;						// Vertex array object
 	GLuint m_positionBufferID;			// Vertex position buffer object
