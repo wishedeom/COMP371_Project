@@ -16,7 +16,7 @@ class Structure
 
 public:
 
-	static GLuint viewMatrixID;
+	static GLuint viewMatrixID;		// HIDE LATER
 	static GLuint modelMatrixID;
 	static GLuint projMatrixID;
 
