@@ -19,7 +19,7 @@ Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float hei
 {
 	if (texture.id() == 0)
 	{
-		texture = Texture("building", "../Images/building.jpg");
+		texture = Texture("../Images/building.jpg");
 	}
 	if (!shader.initialized())
 	{
@@ -49,7 +49,7 @@ std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> 
 	// Assign alternating 0 and 1 s-texture coordinates to base vertices, then the t-coordinate matches the height of each vertex.
 	std::vector<glm::vec2> textureCoords;
 	float s = 0.0f;
-	for (float t = 0.0f; t <= height; t += height)
+	for (float t = 0.0f; t <= 1.0f; t += 1.0f)
 	{
 		for (int i = 0; i < embeddedBaseVertices.size(); i++)
 		{
@@ -122,6 +122,12 @@ void Structure::fill(const glm::vec3& colour)
 void Structure::draw() const
 {
 	glBindTexture(GL_TEXTURE_2D, texture.id());
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	shader.use();
 
