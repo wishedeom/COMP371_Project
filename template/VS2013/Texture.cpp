@@ -19,6 +19,8 @@ Texture::Texture(const std::string& name, const std::string& filePath)
 	}
 }
 
+Texture::Texture() { m_id = 0; }
+
 std::string Texture::name() const { return m_name; }
 std::string Texture::filePath() const { return m_filePath; }
 GLuint Texture::id() const { return m_id; }

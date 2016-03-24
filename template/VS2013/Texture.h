@@ -12,6 +12,8 @@ class Texture
 public:
 	Texture(const std::string& name, const std::string& filePath);
 
+	Texture();
+
 	std::string name() const;
 	std::string filePath() const;
 	GLuint id() const;

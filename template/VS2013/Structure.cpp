@@ -8,7 +8,7 @@
 #include "Shader.h"
 
 
-GLuint Structure::textureID = 0;
+Texture Structure::texture;
 Shader Structure::shader;
 
 GLuint Structure::viewMatrixID;
@@ -17,10 +17,9 @@ GLuint Structure::projMatrixID;
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
-	if (textureID == 0)
+	if (texture.id() == 0)
 	{
-		textureID = SOIL_load_OGL_texture("../Images/building.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+		texture = Texture("building", "../Images/building.jpg");
 	}
 	if (!shader.initialized())
 	{
@@ -122,7 +121,7 @@ void Structure::fill(const glm::vec3& colour)
 
 void Structure::draw() const
 {
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, texture.id());
 
 	shader.use();
 

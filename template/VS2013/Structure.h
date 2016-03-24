@@ -5,13 +5,14 @@
 #include "SOIL.h"
 #include <tuple>
 #include "Shader.h"
+#include "Texture.h"
 
 // A Structure represents a single free-standing building with a polygonal base and a certain height.
 // Temporary working-place, should be merged with Building
 class Structure
 {
 
-	static GLuint textureID;		// Holds building texture ID - global for all buildings for now, will work on creating "texture library"
+	static Texture texture;
 	static Shader shader;
 
 public:
