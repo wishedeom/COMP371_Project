@@ -1,4 +1,6 @@
 #include "Shader.h"
+#include "glew.h"
+#include "glfw3.h"
 
 Shader(const GLchar* vertexPath, const GLchar* fragmentPath, const GLchar* geometryPath = nullptr)
 {
