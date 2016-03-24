@@ -64,10 +64,10 @@ void Block::draw(){
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, boardTexture);
-	glUniform1i(glGetUniformLocation(blockShaderptr->Program, "ourTexture1"), 0);
+	glUniform1i(glGetUniformLocation(blockShaderptr->m_programID, "ourTexture1"), 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, sidewalkGrassTexture);
-	glUniform1i(glGetUniformLocation(blockShaderptr->Program, "ourTexture2"), 1);
+	glUniform1i(glGetUniformLocation(blockShaderptr->m_programID, "ourTexture2"), 1);
 
 	//sun stuff; WHY ISNT IT WORKIN
 	/*

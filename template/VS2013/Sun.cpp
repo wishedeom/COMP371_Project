@@ -52,27 +52,27 @@ void Sun::Draw(){
 	glGenTextures(1, &emissionMap);
 
 	lightingShader.Use();
-	glUniform1i(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0);
-	glUniform1i(glGetUniformLocation(lightingShader.Program, "material.specular"), 1);
+	glUniform1i(glGetUniformLocation(lightingShader.m_programID, "material.diffuse"), 0);
+	glUniform1i(glGetUniformLocation(lightingShader.m_programID, "material.specular"), 1);
 
-	lightDirLoc = glGetUniformLocation(lightingShader.Program, "light.direction");
-	viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
+	lightDirLoc = glGetUniformLocation(lightingShader.m_programID, "light.direction");
+	viewPosLoc = glGetUniformLocation(lightingShader.m_programID, "viewPos");
 	glUniform3f(lightDirLoc, -0.2f, -1.0f, -0.3f);
 
 	// glUniform3f(viewPosLoc,  camera.Position.x, camera.Position.y, camera.Position.z);
 	glUniform3f(viewPosLoc, 0.f, 0.0f, 0.f);
 	// Set lights properties
-	glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.2f, 0.2f, 0.2f);
-	glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 0.5f, 0.5f, 0.5f);
-	glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(lightingShader.m_programID, "light.ambient"), 0.2f, 0.2f, 0.2f);
+	glUniform3f(glGetUniformLocation(lightingShader.m_programID, "light.diffuse"), 0.5f, 0.5f, 0.5f);
+	glUniform3f(glGetUniformLocation(lightingShader.m_programID, "light.specular"), 1.0f, 1.0f, 1.0f);
 
 	// Set material properties
-	glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 32.0f);
+	glUniform1f(glGetUniformLocation(lightingShader.m_programID, "material.shininess"), 32.0f);
 
 	// Get the uniform locations
-	GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
-	GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
-	GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
+	GLint modelLoc = glGetUniformLocation(lightingShader.m_programID, "model");
+	GLint viewLoc = glGetUniformLocation(lightingShader.m_programID, "view");
+	GLint projLoc = glGetUniformLocation(lightingShader.m_programID, "projection");
 	// Pass the matrices to the shader
 	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
