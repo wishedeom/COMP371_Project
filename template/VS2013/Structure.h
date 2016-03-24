@@ -4,13 +4,23 @@
 #include "glew.h"
 #include "SOIL.h"
 #include <tuple>
+#include "Shader.h"
 
 // A Structure represents a single free-standing building with a polygonal base and a certain height.
 // Temporary working-place, should be merged with Building
 class Structure
 {
 
-	static const GLuint textureID;		// Holds building texture ID - global for all buildings for now, will work on creating "texture library"
+	static GLuint textureID;		// Holds building texture ID - global for all buildings for now, will work on creating "texture library"
+	static Shader shader;
+
+public:
+
+	static GLuint viewMatrixID;
+	static GLuint modelMatrixID;
+	static GLuint projMatrixID;
+
+private:
 
 	// Computes vertices and indices to draw a structure with a polygonal base and a constant height.
 	// baseVertices: The vertices of the base polygon.

@@ -28,7 +28,8 @@ class Shader
 	static GLuint makeShaderProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
 
-	GLuint m_programID;	// Holds the OpenGL shader program ID.
+	GLuint m_programID;		// Holds the OpenGL shader program ID.
+	bool m_initialized;		// Has the shader program been created yet?
 
 public: 
 
@@ -38,8 +39,15 @@ public:
 	Shader(const std::string& vertexPath, const std::string& fragmentPath);
 	
 
-	// Returns the program ID of the shader program
+	// Constructs an uninitialized Shader.
+	Shader();
+
+	// Returns the program ID of the shader program.
 	GLuint programID() const;
+
+	
+	// Returns true if and only if the shader program has been created.
+	bool initialized() const;
 
 
     // Uses the current shader

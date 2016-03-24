@@ -5,7 +5,12 @@
 
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
-	: m_programID(makeShaderProgram(vertexPath, fragmentPath)) {}
+	: m_programID(makeShaderProgram(vertexPath, fragmentPath))
+	, m_initialized(true) {}
+
+
+Shader::Shader()
+	: m_initialized(false) {}
 
 
 GLuint Shader::programID() const { return m_programID; }
@@ -105,3 +110,6 @@ GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std:
 
 	return programID;
 }
+
+
+bool Shader::initialized() const { return m_initialized; }

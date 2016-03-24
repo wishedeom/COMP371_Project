@@ -5,15 +5,31 @@
 #include "SOIL.h"
 #include <vector>
 #include <tuple>
+#include "Shader.h"
 
 
-const GLuint Structure::textureID = SOIL_load_OGL_texture("building.jpg", 0, 0, 0);
+GLuint Structure::textureID = 0;
+Shader Structure::shader;
 
+GLuint Structure::viewMatrixID;
+GLuint Structure::modelMatrixID;
+GLuint Structure::projMatrixID;
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
+	if (textureID == 0)
+	{
+		textureID = SOIL_load_OGL_texture("../Images/building.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+	}
+	if (!shader.initialized())
+	{
+		shader = Shader("Structure.vs", "Structure.frag");
+		viewMatrixID = glGetUniformLocation(shader.programID(), "view_matrix");
+		modelMatrixID = glGetUniformLocation(shader.programID(), "model_matrix");
+		projMatrixID = glGetUniformLocation(shader.programID(), "proj_matrix");
+	}
 	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
-	textureFill();		// Fill with texture coordinates
 	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put position, colour, and texture data into buffers
 }
@@ -85,7 +101,7 @@ void Structure::generateBuffers()
 	glBindVertexArray(0);
 }
 
-
+// DELETE THIS
 void Structure::textureFill()
 {
 	for (const auto vertex : m_vertices)
@@ -107,6 +123,9 @@ void Structure::fill(const glm::vec3& colour)
 void Structure::draw() const
 {
 	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	shader.use();
+
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
