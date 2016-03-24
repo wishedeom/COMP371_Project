@@ -3,14 +3,19 @@
 
 #include "glm.hpp"
 #include "glew.h"
+#include "SOIL.h"
 
 #include <vector>
 #include <tuple>
 
 
+const GLuint Structure::textureID = SOIL_load_OGL_texture("building.jpg", 0, 0, 0);
+
+
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
 	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
+	textureFill();		// Fill with texture coordinates
 	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put position, colour, and texture data into buffers
 }
@@ -38,6 +43,7 @@ void Structure::generateBuffers()
 	glGenVertexArrays(1, &m_vaoID);
 	glGenBuffers(1, &m_positionBufferID);
 	glGenBuffers(1, &m_colourBufferID);
+	glGenBuffers(1, &m_texBufferID);
 	glGenBuffers(1, &m_eboID);
 
 	// Bind VAO
@@ -55,12 +61,27 @@ void Structure::generateBuffers()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_colours[0]) * m_colours.size(), m_colours.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
 
+	// Put vertex texture coordinate data into VAO attribute 2
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, m_texBufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_textures[0]) * m_textures.size(), m_textures.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
+
 	// Send index data to EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
 	// Unbind VAO
 	glBindVertexArray(0);
+}
+
+
+void Structure::textureFill()
+{
+	for (const auto vertex : m_vertices)
+	{
+		m_textures.push_back(glm::vec2(vertex.x, vertex.z));
+	}
 }
 
 
@@ -75,6 +96,7 @@ void Structure::fill(const glm::vec3& colour)
 
 void Structure::draw() const
 {
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
