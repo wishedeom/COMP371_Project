@@ -51,7 +51,7 @@ void Sun::Draw(){
 	glGenTextures(1, &specularMap);
 	glGenTextures(1, &emissionMap);
 
-	lightingShader.Use();
+	lightingShader.use();
 	glUniform1i(glGetUniformLocation(lightingShader.programID(), "material.diffuse"), 0);
 	glUniform1i(glGetUniformLocation(lightingShader.programID(), "material.specular"), 1);
 

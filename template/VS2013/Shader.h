@@ -1,7 +1,5 @@
 #pragma once
-
 #include "glew.h"
-
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -10,9 +8,27 @@
 class Shader
 {
 
-	GLuint m_programID;
+	// Reads shader ource code from a file.
+	// path: The file path of the shader source code, written in GLSL.
+	// Returns: The shader source code, as a string.
+	static std::string readSourceCode(const std::string& path);
 
-	void checkCompileErrors(GLuint shader, std::string type);
+
+	// Compiles a shader program from a file.
+	// path: The file path of the shader source code, written in GLSL.
+	// shaderType: Either GL_VERTEX_SHADER or GL_FRAGMENT_SHADER.
+	// Returns: The OpenGL ID of the shader.
+	static GLuint compileShader(const std::string& path, const GLenum shaderType);
+
+
+	// Reads, compiles, and links a vertex and fragment shader, then attaches them to a shader program.
+	// vertexShaderPath: The file path of the vertex shader source code, written in GLSL.
+	// fragmentShaderPath: The file path of the vertex shader source code, written in GLSL.
+	// Returns: The OpenGL ID of the shader program.
+	static GLuint makeShaderProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+
+
+	GLuint m_programID;	// Holds the OpenGL shader program ID.
 
 public: 
 
@@ -27,6 +43,6 @@ public:
 
 
     // Uses the current shader
-	void Use() const;
+	void use() const;
 
 };
