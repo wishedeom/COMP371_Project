@@ -251,7 +251,7 @@ int main() {
 	baseVertices.push_back(glm::vec2(0.0f, 0.0f));
 	baseVertices.push_back(glm::vec2(5.0f, 5.0f));
 	baseVertices.push_back(glm::vec2(10.0f, 0.0f));
-	Structure structure(baseVertices, 50.0f);
+	Structure structure(baseVertices, 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	/*UNTEST*/
 
 	Camera camera(*window);
@@ -291,7 +291,7 @@ int main() {
 		//buildingsptr->Draw();
 
 		glUseProgram(block_shader);
-		worldptr->Draw();
+		//worldptr->Draw();
 		
 		/*TEST*/
 		structure.draw();

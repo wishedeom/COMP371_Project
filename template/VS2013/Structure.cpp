@@ -8,9 +8,10 @@
 #include <tuple>
 
 
-Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height)
+Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
 {
 	std::tie(m_vertices, m_indices) = computeStructureData(baseVertices, height);	// Compute vertices and indices of building
+	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put into buffers
 }
 
@@ -33,34 +34,48 @@ std::pair<std::vector<glm::vec3>, std::vector<GLuint>> Structure::computeStructu
 
 void Structure::generateBuffers()
 {
-	// Generate vertex array object and vertex and element buffer objects
-	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &m_VBO);
-	glGenBuffers(1, &m_EBO);
+	// Generate vertex array object, vertex position and colour and element buffer objects
+	glGenVertexArrays(1, &m_vaoID);
+	glGenBuffers(1, &m_positionBufferID);
+	glGenBuffers(1, &m_colourBufferID);
+	glGenBuffers(1, &m_eboID);
 
 	// Bind VAO
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(m_vaoID);
 
-	// Send vertex data to VAO
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
-
-	// Send index data to VAO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
-
-	// Initialize vertex attribute pointer and enable VAO
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	// Put vertex position data into VAO attribute 0
 	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, m_positionBufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)0);
+
+	// Put vertex position data into VAO attribute 1
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_colourBufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_colours[0]) * m_colours.size(), m_colours.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
+
+	// Send index data to EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
 	// Unbind VAO
 	glBindVertexArray(0);
 }
 
 
+void Structure::fill(const glm::vec3& colour)
+{
+	for (int i = 0; i < m_vertices.size(); i++)
+	{
+		m_colours.push_back(colour);
+	}
+}
+
+
 void Structure::draw() const
 {
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
 }
