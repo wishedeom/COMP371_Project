@@ -6,7 +6,7 @@ out vec4 color;
 
 // Texture samplers
 uniform sampler2D ourTexture1;
-//uniform sampler2D ourTexture2;
+uniform sampler2D ourTexture2;
 
 void main()
 {

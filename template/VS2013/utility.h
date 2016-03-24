@@ -19,10 +19,14 @@ const glm::mat4 id4;
 
 // Given a number of profile polyline vertices p and a number of trajectory polyline vertices t, computes the array of vertex indices to draw each triangle in the
 // translational sweep.
+// p: Number of vertices in profile polyline
+// t: Number of vertices in translational polyline
 std::vector<GLuint> computeSweepIndices(const int p, const int t);
 
 
 // Given a std::vector of 3D vectors representing vertices of a polyline (curve), computes the displacement of each vertex from the first vertex.
+// Effectively translates the polyline so that the first vertes is at the origin.
+// polyline: Polyline to compute displacements of
 std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3>& polyline);
 
 
@@ -30,7 +34,7 @@ std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3>& polyli
 std::vector<glm::vec3> computeTranslationalSweep(const std::vector<glm::vec3>& profilePolyline, const std::vector<glm::vec3>& trajectoryPolyline);
 
 
-// Rotates a polyline once by a given angle
+// Rotates a planar polyline once by a given angle about the positive z-axis
 std::vector<glm::vec3> rotatePolyline(const std::vector<glm::vec3>& polyline, const GLfloat angle);
 
 
@@ -38,7 +42,7 @@ std::vector<glm::vec3> rotatePolyline(const std::vector<glm::vec3>& polyline, co
 std::vector<glm::vec3> computeRotationalSweep(const std::vector<glm::vec3>& profilePolyline, const int numSpans);
 
 
-// Interprets a vector of vec2 as a vector of vec3 in the x-y plane.
+// Interprets a collection of vec2 as a collection of vec3 in the x-y plane.
 std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices);
 
 
