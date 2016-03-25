@@ -27,6 +27,8 @@
 #include "../VS2013/Camera.h"
 #include "../VS2013/Structure.h"
 #include "../VS2013/utility.h"
+#include "../VS2013/Sun.h"
+#include "../VS2013/Shader.h"
 
 GLFWwindow* window = 0x00;
 
@@ -153,34 +155,52 @@ int main() {
 	initialize();
 
 	/*TEST*/
+	/*
 	Structure s1 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	Structure s2 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 0.0f, 0.0f));
 	Structure s3 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 5.0f, 0.0f));
 	Structure s4 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 5.0f, 0.0f));
+	*/
 	/*UNTEST*/
 
 	Camera camera(*window);
 	cameraptr = &camera;
 
+	Sun sun(cameraptr);
+	Sun *sunptr = &sun;
+
 	World world;
 	World* worldptr = &world;
 
+	/*
 	building buildings;
 	building* buildingsptr = &buildings;
 	buildingsptr->BuildCity();
+	*/
+
 	// This will identify our vertex buffer
-	GLuint vertexbuffer;
+	//GLuint vertexbuffer;
 
 	//why does this take priority?
 	//shader_program = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
 	//shader_program = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	Shader building_shader("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	Shader block_shader("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
+	Shader lighting_shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag");
 	//The three variables below hold the id of each of the variables in the shader
 	//If you read the vertex shader file you'll see that the same variable names are used.
+
+	/*
 	view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
 	model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
 	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
+
+	view_matrix_id = glGetUniformLocation(lighting_shader.programID(), "view");
+	model_matrix_id = glGetUniformLocation(lighting_shader.programID(), "model");
+	proj_matrix_id = glGetUniformLocation(lighting_shader.programID(), "projection");
+	
+	*/
+
 	while (!glfwWindowShouldClose(window))
 	{
 		proj_matrix = cameraptr->projection();
@@ -193,18 +213,41 @@ int main() {
 
 		//glUseProgram(shader_program);
 		//Pass the values of the three matrices to the shaders
-		
-		//glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		//glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		//glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+
 
 		//building_shader.use();
 		//buildingsptr->Draw();
 
-		//block_shader.use();
-		//worldptr->Draw();
+	
 		
+		/*
+		view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
+		model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
+		proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
+		
+		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+
+		block_shader.use();
+		worldptr->Draw();
+		*/
+		view_matrix_id = glGetUniformLocation(lighting_shader.programID(), "view");
+		model_matrix_id = glGetUniformLocation(lighting_shader.programID(), "model");
+		proj_matrix_id = glGetUniformLocation(lighting_shader.programID(), "projection");
+
+		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+		
+
+		lighting_shader.use();
+		sunptr->Draw();
+
+
+
 		/*TEST*/
+		/*
 		glUniformMatrix4fv(Structure::projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 		glUniformMatrix4fv(Structure::viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(Structure::modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
@@ -212,6 +255,7 @@ int main() {
 		s2.draw();
 		s3.draw();
 		s4.draw();
+		*/
 		/*UNTEST*/
 
 		// update other events like input handling
