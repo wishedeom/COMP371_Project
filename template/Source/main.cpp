@@ -147,7 +147,7 @@ int main() {
 	initialize();
 
 	/*TEST*/
-	Structure structure(regularPolygon(3, 1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Structure structure(regularPolygon(10, 1.0f), 5.0f);
 	/*UNTEST*/
 
 	Camera camera(*window);

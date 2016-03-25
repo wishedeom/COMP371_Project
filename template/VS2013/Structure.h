@@ -6,6 +6,7 @@
 #include <tuple>
 #include "Shader.h"
 #include "Texture.h"
+#include "utility.h"
 
 // A Structure represents a single free-standing building with a polygonal base and a certain height.
 // Temporary working-place, should be merged with Building
@@ -27,6 +28,8 @@ private:
 	// baseVertices: The vertices of the base polygon.
 	// height: The height of the structure.
 	static std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height);
+
+	static const Texture& randomTexture();
 
 	
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates
@@ -54,7 +57,7 @@ public:
 	// Constructs a structure with a polygonal base and a constant height.
 	// baseVertices: The vertices of the base polygon.
 	// height: The height of the structure.
-	Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour);
+	Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour = randomColour());
 
 
 	// Draws the structure.

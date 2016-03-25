@@ -56,3 +56,11 @@ std::vector<glm::vec2> regularPolygon(const int sides, const float apothem);
 
 // Given a transformation matrix and a collection of vertices representing a polygon in 2D, applies the transformation matrix to each vertex
 std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, const glm::mat4& matrix);
+
+
+// Generates a random float from 0.0f to 1.0f
+float randomFloat();
+
+
+// Generates a random RGB colour
+glm::vec3 randomColour();

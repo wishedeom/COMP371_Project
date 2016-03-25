@@ -16,7 +16,7 @@ GLuint Structure::modelMatrixID;
 GLuint Structure::projMatrixID;
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
-	: texture(getTexture("../Images/building.jpg"))
+	: texture(randomTexture())
 {
 	if (!shader.initialized())
 	{
@@ -110,4 +110,10 @@ void Structure::draw() const
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
+}
+
+
+const Texture& Structure::randomTexture()
+{
+	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
 }
