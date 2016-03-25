@@ -5,7 +5,6 @@
 // Represents a single texture.
 class Texture
 {
-	std::string m_filePath;	// Where the texture image is stored
 	GLuint m_id;			// OpenGL id for the texture; 0 if not loaded
 
 public:
@@ -17,10 +16,6 @@ public:
 	
 	// Constructs an empty texture object
 	Texture();
-
-	
-	// Returns the file path of the texture
-	std::string filePath() const;
 
 	
 	// Returns the OpenGL id for the texture; 0 if not loaded

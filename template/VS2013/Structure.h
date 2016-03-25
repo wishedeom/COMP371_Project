@@ -12,7 +12,7 @@
 class Structure
 {
 
-	static Texture texture;
+	Texture texture;
 	static Shader shader;
 
 public:

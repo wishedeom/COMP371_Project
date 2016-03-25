@@ -11,24 +11,14 @@ Texture::Texture(const std::string& filePath)
 	{
 		std::cout << "Error loading texture: " << filePath << std::endl;
 	}
-	else
-	{
-		m_filePath = filePath;
-		m_id = id;
-	}
+	m_id = id;
 }
 
 
 Texture::Texture() { m_id = 0; }
 
 
-std::string Texture::filePath() const { return m_filePath; }
-
-
 GLuint Texture::id() const { return m_id; }
 
 
-void Texture::bind() const
-{
-	glBindTexture(GL_TEXTURE_2D, m_id);
-}
+void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, m_id); }

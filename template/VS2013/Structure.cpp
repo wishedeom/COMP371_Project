@@ -6,9 +6,9 @@
 #include <vector>
 #include <tuple>
 #include "Shader.h"
+#include "TextureManager.h"
 
 
-Texture Structure::texture;
 Shader Structure::shader;
 
 GLuint Structure::viewMatrixID;
@@ -16,11 +16,8 @@ GLuint Structure::modelMatrixID;
 GLuint Structure::projMatrixID;
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
+	: texture(getTexture("../Images/building.jpg"))
 {
-	if (texture.id() == 0)
-	{
-		texture = Texture("../Images/building.jpg");
-	}
 	if (!shader.initialized())
 	{
 		shader = Shader("Structure.vs", "Structure.frag");
