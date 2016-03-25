@@ -30,17 +30,11 @@
 
 GLFWwindow* window = 0x00;
 
-GLuint building_shader = 0;
-GLuint block_shader = 0;
-
-GLuint view_matrix_id = 0;
-GLuint model_matrix_id = 0;
-GLuint proj_matrix_id = 0;
-
 ///Transformations
 glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 glm::mat4 model_matrix;
+
 
 Camera* cameraptr;
 
@@ -149,35 +143,17 @@ bool cleanUp() {
 }
 
 
-int main() {
+int main()
+{
 	initialize();
-
-	/*TEST*/
-	Structure structure(regularPolygon(10, 1.0f), 5.0f, glm::vec3(5.0f, 0.0f, 0.0f));
-	/*UNTEST*/
 
 	Camera camera(*window);
 	cameraptr = &camera;
+	
+	Structure structure(regularPolygon(10, 1.0f), 5.0f, glm::vec3(5.0f, 0.0f, 0.0f));
+	Block block{ glm::vec3{} };
 
-	World world;
-	World* worldptr = &world;
 
-	building buildings;
-	building* buildingsptr = &buildings;
-	buildingsptr->BuildCity();
-	// This will identify our vertex buffer
-	GLuint vertexbuffer;
-
-	//why does this take priority?
-	//shader_program = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
-	//shader_program = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
-	Shader building_shader("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
-	Shader block_shader("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
-	//The three variables below hold the id of each of the variables in the shader
-	//If you read the vertex shader file you'll see that the same variable names are used.
-	view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
-	model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
-	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
 	while (!glfwWindowShouldClose(window))
 	{
 		proj_matrix = cameraptr->projection();
@@ -188,25 +164,10 @@ int main() {
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		//glUseProgram(shader_program);
-		//Pass the values of the three matrices to the shaders
 		
-		//glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		//glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		//glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
-
-		//building_shader.use();
-		//buildingsptr->Draw();
-
-		//block_shader.use();
-		//worldptr->Draw();
-		
-		/*TEST*/
-		glUniformMatrix4fv(structure.projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(structure.viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(structure.modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
-		structure.draw();
-		/*UNTEST*/
+		auto transformation = proj_matrix * view_matrix * model_matrix;
+		block.draw(transformation);
+		structure.draw(transformation);
 
 		// update other events like input handling
 		glfwPollEvents();

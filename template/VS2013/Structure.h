@@ -20,29 +20,21 @@
 class Structure
 {
 
-	Texture texture;
-	static Shader shader;
-
-public:
-
-	static GLuint viewMatrixID;		// HIDE LATER
-	static GLuint modelMatrixID;
-	static GLuint projMatrixID;
-
-private:
+	static Shader shader;					// All Structures use the same shader
+	static GLuint transformationMatrixID;	// The location of the transformation matrix in the shader program
 
 	// Computes vertices and indices to draw a structure with a polygonal base and a constant height.
 	// baseVertices: The vertices of the base polygon.
 	// height: The height of the structure.
 	static std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height);
 
-	static const Texture& randomTexture();
-
 	
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates
 	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
 	std::vector<glm::vec3> m_colours;		// The colour of each vertex
 	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
+
+	const Texture& texture;					// Holds the Structure's texture
 
 	GLuint m_vaoID;							// Vertex array object
 	GLuint m_positionBufferID;				// Vertex position buffer object
@@ -68,5 +60,5 @@ public:
 
 
 	// Draws the structure.
-	void draw() const;
+	void draw(const glm::mat4& transformation) const;
 };

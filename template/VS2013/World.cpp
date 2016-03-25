@@ -18,7 +18,7 @@ World::World(){
 
 	for (GLuint i = 0; i < WORLD_HEIGHT; i++){
 		for (int j = 0; j < WORLD_LENGTH; j++){
-			Block* b = (new Block(i,j));
+			Block* b = (new Block(glm::vec3()));
 			blocks.push_back(b);
 		}
 	}
@@ -42,7 +42,7 @@ void World::Draw(){
 	buildingsptr->Draw();
 
 	for (int i = 0; i < blocks.size(); i++){
-		blocks.at(i)->draw();
+		blocks.at(i)->draw(glm::mat4());
 	}
 	
 	

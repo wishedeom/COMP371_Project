@@ -5,8 +5,9 @@
 #include <tuple>
 
 // Third-party
-#include "glm.hpp"
 #include "glew.h"
+#include "glm.hpp"
+#include "gtc/type_ptr.hpp"
 #include "SOIL.h"
 
 // Project
@@ -17,27 +18,27 @@
 
 Shader Structure::shader;	// All Structures use the same shader
 
-GLuint Structure::viewMatrixID;
-GLuint Structure::modelMatrixID;
-GLuint Structure::projMatrixID;
+GLuint Structure::transformationMatrixID;
 
 Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& centre, const glm::vec3& colour)
-	: texture(randomTexture())
+	: texture(randomBuildingTexture())
 {
-	if (!shader.initialized())
+	// Shader is static variable, yet cannot be initialized before GLFW!
+	// This ensures the shader is constructed after initialization of GLFW.
+	if (!shader.isInitialized())
 	{
 		shader = Shader("Structure.vs", "Structure.frag");
-		viewMatrixID = glGetUniformLocation(shader.programID(), "view_matrix");
-		modelMatrixID = glGetUniformLocation(shader.programID(), "model_matrix");
-		projMatrixID = glGetUniformLocation(shader.programID(), "proj_matrix");
+		transformationMatrixID = shader.transformationMatrixID();
 	}
-	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
+
+	// Compute vertices and indices of building
+	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height);
 	if (centre != glm::vec3())
 	{
 		m_vertices = translate(m_vertices, centre);
 	}
-	fill(colour);		// Fill with given colour
-	generateBuffers();	// Put position, colour, and texture data into buffers
+	fill(colour);			// Fill with given colour
+	generateBuffers();		// Put position, colour, and texture data into buffers
 }
 
 
@@ -112,18 +113,12 @@ void Structure::fill(const glm::vec3& colour)
 }
 
 
-void Structure::draw() const
+void Structure::draw(const glm::mat4& transformation) const
 {
 	texture.bind();
 	shader.use();
-
+	glUniformMatrix4fv(transformationMatrixID, 1, GL_FALSE, glm::value_ptr(transformation));
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
-}
-
-
-const Texture& Structure::randomTexture()
-{
-	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
 }

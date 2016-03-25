@@ -1,46 +1,47 @@
 #pragma once
 
 #include <vector>
-#include "glew.h"		
+#include <iostream>
+
+#include "glew.h"
 #include "glfw3.h"		
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 #include "gtc/constants.hpp"
-#include <iostream>
+
 #include "Shader.h"
 #include "SOIL.h"
+#include "Texture.h"
+#include "TextureManager.h"
 
-#define BLOCK_WIDTH 20
-#define BLOCK_HEIGHT 20
 
+class Block
+{
+	static Shader shader;
+	static GLuint transformationMatrixID;	// The location of the transformation matrix in the shader program
+	
+	static const float width;
+	static const float length;
 
-class Block{
-	public:
-		Block();
-		Block(GLuint,GLuint);
-		~Block();
+	std::vector<glm::vec3> m_vertices;
+	std::vector<glm::vec2> m_textureCoords;
+	std::vector<GLuint> m_indices;
 
-		static Block* getBlocks();
-		std::vector<glm::vec3> getBlockCoordinates();
-		void draw();
-		void loadTextures(GLuint,GLuint);
+	GLuint m_vaoID;
+	GLuint m_positionBufferID;
+	GLuint m_texBufferID;
+	GLuint m_eboID;
 
-	private:
-		static const char* filepath1;
-		static const char* filepath2;
-		//static const char* filepath;
-		static GLuint boardTexture;
-		static GLuint sidewalkGrassTexture;
+	const Texture& roadTexture;
+	const Texture& sidewalkGrassTexture;
 
-		static Shader *blockShaderptr;
-		static std::vector<glm::vec3> blockCoordinates;
-		static std::vector<GLuint> blockIndices;
-		static std::vector<Block> blocks;
-		static Shader lightingShader;
+public:
 
-		GLuint VAO, VBO, EBO;
-		void createVAO();
-		GLuint numInd;
-		GLuint shader_program;
+	Block(const glm::vec3& centre);
+
+	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
+	void generateBuffers();
+
+	void draw(const glm::mat4& transformation);
 };

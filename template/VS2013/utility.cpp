@@ -6,6 +6,8 @@
 #include "glm.hpp"
 #include "GLM/GTC/matrix_transform.hpp"
 
+#include "TextureManager.h"
+
 
 // The translational sweep is made from a profile polyline with p vertices and a trajectory polyline with t vertices, for a total of p * t vertices. The sweep itself
 // consists of (p - 1) * (t - 1) recangles, paramaterized from 0 to p - 2 along the profile curve and from 0 to t - 2 along the trajectory curve. Since the
@@ -174,6 +176,12 @@ float randomFloat()
 glm::vec3 randomColour()
 {
 	return glm::vec3(randomFloat(), randomFloat(), randomFloat());
+}
+
+
+const Texture& randomBuildingTexture()
+{
+	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
 }
 
 

@@ -5,6 +5,8 @@
 #include "glfw3.h"
 #include "glm.hpp"
 
+class Texture;
+
 //------------Constants--------------//
 
 // Global up direction
@@ -66,6 +68,9 @@ float randomFloat();
 
 // Generates a random RGB colour
 glm::vec3 randomColour();
+
+// Generates a random building texture
+const Texture& randomBuildingTexture();
 
 
 // Translates a collection of vertices (a mesh) to a new position
