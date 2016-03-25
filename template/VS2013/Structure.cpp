@@ -46,18 +46,13 @@ std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> 
 	const auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
 	const auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
-	// Assign alternating 0 and 1 s-texture coordinates to base vertices, then the t-coordinate matches the height of each vertex.
-	std::vector<glm::vec2> textureCoords;
-	float s = 0.0f;
-	for (float t = 0.0f; t <= 1.0f; t += 1.0f)
+	// Wrap texture around...
+	std::vector<glm::vec2> textureCoords(vertices.size());
+	for (int i = 0; i < vertices.size() / 2; i++)
 	{
-		for (int i = 0; i < embeddedBaseVertices.size(); i++)
-		{
-			textureCoords.push_back(glm::vec2(s, t));
-			s = 1.0f - s;
-		}
+		textureCoords[i] = glm::vec2(i, 0.0f);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i - 2.5f, height);
 	}
-
 	return make_tuple(vertices, indices, textureCoords);
 }
 
@@ -90,7 +85,7 @@ void Structure::generateBuffers()
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_textureCoords[0]) * m_textureCoords.size(), m_textureCoords.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_textureCoords[0]), (GLvoid*)0);
 
 	// Send index data to EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);

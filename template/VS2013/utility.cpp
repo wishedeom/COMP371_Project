@@ -128,10 +128,10 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices)
 std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
 {
 	// Triangle is the polygon with least number of sides
-	if (sides < 3)
+	/*if (sides < 3)
 	{
 		throw std::logic_error("A polygon must have at least 3 sides.");
-	}
+	}*/
 	const float angle = 2 * pi / sides;						// Central angle between successive pairs of vertices
 	const auto rotMatrix = glm::rotate(id4, angle, up);		// To rotate our first vertex through each vertex of the polygon
 	std::vector<glm::vec2> vertices;						// To hold the vertices

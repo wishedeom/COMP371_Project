@@ -147,11 +147,7 @@ int main() {
 	initialize();
 
 	/*TEST*/
-	std::vector<glm::vec2> baseVertices;
-	baseVertices.push_back(glm::vec2(0.0f, 0.0f));
-	baseVertices.push_back(glm::vec2(5.0f, 5.0f));
-	baseVertices.push_back(glm::vec2(10.0f, 0.0f));
-	Structure structure(regularPolygon(3, 1.0f), 50.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Structure structure(regularPolygon(3, 1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	/*UNTEST*/
 
 	Camera camera(*window);
@@ -189,15 +185,15 @@ int main() {
 		//glUseProgram(shader_program);
 		//Pass the values of the three matrices to the shaders
 		
-		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+		//glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		//glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+		//glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
-		building_shader.use();
-		buildingsptr->Draw();
+		//building_shader.use();
+		//buildingsptr->Draw();
 
-		block_shader.use();
-		worldptr->Draw();
+		//block_shader.use();
+		//worldptr->Draw();
 		
 		/*TEST*/
 		glUniformMatrix4fv(structure.projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
