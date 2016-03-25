@@ -153,7 +153,10 @@ int main() {
 	initialize();
 
 	/*TEST*/
-	Structure structure(regularPolygon(10, 1.0f), 5.0f, glm::vec3(5.0f, 0.0f, 0.0f));
+	Structure s1 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	Structure s2 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 0.0f, 0.0f));
+	Structure s3 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 5.0f, 0.0f));
+	Structure s4 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 5.0f, 0.0f));
 	/*UNTEST*/
 
 	Camera camera(*window);
@@ -202,10 +205,13 @@ int main() {
 		//worldptr->Draw();
 		
 		/*TEST*/
-		glUniformMatrix4fv(structure.projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(structure.viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(structure.modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
-		structure.draw();
+		glUniformMatrix4fv(Structure::projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		glUniformMatrix4fv(Structure::viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
+		glUniformMatrix4fv(Structure::modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
+		s1.draw();
+		s2.draw();
+		s3.draw();
+		s4.draw();
 		/*UNTEST*/
 
 		// update other events like input handling

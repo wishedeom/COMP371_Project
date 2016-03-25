@@ -36,8 +36,6 @@ private:
 	// height: The height of the structure.
 	static std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> computeStructureData(const std::vector<glm::vec2>& baseVertices, const float height);
 
-	static const Texture& randomTexture();
-
 	
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates
 	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
@@ -60,6 +58,13 @@ private:
 
 
 public:
+
+	// Constructs a random structure.
+	// maxSides: The maximum number of sides the structure can have. Must be at least 3.
+	// maxApothem: The maximum size of the apothem the structure can have. Must be positive.
+	// maxHeight: The maximum height of the structure. Must be positive.
+	static Structure randomStructure(const int maxSides, const float maxApothem, const float maxHeight, const glm::vec3& centre = glm::vec3());
+
 
 	// Constructs a structure with a polygonal base and a constant height.
 	// baseVertices: The vertices of the base polygon.

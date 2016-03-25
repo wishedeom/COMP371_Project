@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "TextureManager.h"
 
+const Texture& randomTexture();
 
 Shader Structure::shader;	// All Structures use the same shader
 
@@ -123,7 +124,16 @@ void Structure::draw() const
 }
 
 
-const Texture& Structure::randomTexture()
+const Texture& randomTexture()
 {
 	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
+}
+
+
+Structure Structure::randomStructure(const int maxSides, const float maxApothem, const float maxHeight, const glm::vec3& centre)
+{
+	const int sides = (std::rand() % (maxSides - 2)) + 3;
+	const float apothem = static_cast<float>(std::rand()) / RAND_MAX * maxApothem;
+	const float height = static_cast<float>(std::rand()) / RAND_MAX * maxHeight;
+	return Structure(regularPolygon(sides, apothem), height, centre);
 }
