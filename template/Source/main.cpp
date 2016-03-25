@@ -190,16 +190,10 @@ int main() {
 	//The three variables below hold the id of each of the variables in the shader
 	//If you read the vertex shader file you'll see that the same variable names are used.
 
-	/*
+	
 	view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
 	model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
 	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
-
-	view_matrix_id = glGetUniformLocation(lighting_shader.programID(), "view");
-	model_matrix_id = glGetUniformLocation(lighting_shader.programID(), "model");
-	proj_matrix_id = glGetUniformLocation(lighting_shader.programID(), "projection");
-	
-	*/
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -218,32 +212,17 @@ int main() {
 		//building_shader.use();
 		//buildingsptr->Draw();
 
-	
-		
-		/*
-		view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
-		model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
-		proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
-		
 		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
-
-		block_shader.use();
-		worldptr->Draw();
-		*/
-		view_matrix_id = glGetUniformLocation(lighting_shader.programID(), "view");
-		model_matrix_id = glGetUniformLocation(lighting_shader.programID(), "model");
-		proj_matrix_id = glGetUniformLocation(lighting_shader.programID(), "projection");
-
-		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
-		
 
 		lighting_shader.use();
 		sunptr->Draw();
 
+		block_shader.use();
+		worldptr->Draw();
+
+		
 
 
 		/*TEST*/
