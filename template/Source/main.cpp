@@ -1,19 +1,4 @@
-#include "glew.h"
-#include "glfw3.h"
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
-#include "gtc/constants.hpp"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include "../VS2013/Block.h"
-#include "../VS2013/World.h"
-#include "../VS2013/Building.h"
-#include "../VS2013/Camera.h"
-#include "../VS2013/Structure.h"
-#include "../VS2013/utility.h"
+// Standard C++
 #include <vector>
 #include <string>
 #include <fstream>
@@ -21,6 +6,27 @@
 #include <algorithm>
 #include <vector>
 #include <cctype>
+
+// Standard C
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+// Third-party
+#include "glew.h"
+#include "glfw3.h"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
+#include "gtc/constants.hpp"
+
+// Project
+#include "../VS2013/Block.h"
+#include "../VS2013/World.h"
+#include "../VS2013/Building.h"
+#include "../VS2013/Camera.h"
+#include "../VS2013/Structure.h"
+#include "../VS2013/utility.h"
 
 GLFWwindow* window = 0x00;
 
@@ -147,7 +153,7 @@ int main() {
 	initialize();
 
 	/*TEST*/
-	Structure structure(regularPolygon(3, 1.0f), 5.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Structure structure(regularPolygon(10, 1.0f), 5.0f, glm::vec3(5.0f, 0.0f, 0.0f));
 	/*UNTEST*/
 
 	Camera camera(*window);

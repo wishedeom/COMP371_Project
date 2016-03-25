@@ -1,7 +1,8 @@
 #pragma once
+
 #include <vector>
-#include "glew.h"		// include GL Extension Wrangler
-#include "glfw3.h"		// include GLFW helper library
+#include "glew.h"		
+#include "glfw3.h"		
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
@@ -10,7 +11,6 @@
 #include "Shader.h"
 #include "SOIL.h"
 
-using namespace std;
 #define BLOCK_WIDTH 20
 #define BLOCK_HEIGHT 20
 
@@ -22,7 +22,7 @@ class Block{
 		~Block();
 
 		static Block* getBlocks();
-		vector<glm::vec3> getBlockCoordinates();
+		std::vector<glm::vec3> getBlockCoordinates();
 		void draw();
 		void loadTextures(GLuint,GLuint);
 
@@ -34,9 +34,9 @@ class Block{
 		static GLuint sidewalkGrassTexture;
 
 		static Shader *blockShaderptr;
-		static vector<glm::vec3> blockCoordinates;
-		static vector<GLuint> blockIndices;
-		static vector<Block> blocks;
+		static std::vector<glm::vec3> blockCoordinates;
+		static std::vector<GLuint> blockIndices;
+		static std::vector<Block> blocks;
 		static Shader lightingShader;
 
 		GLuint VAO, VBO, EBO;

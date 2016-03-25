@@ -1,26 +1,29 @@
 #include "Structure.h"
-#include "utility.h"
+
+// Standard
+#include <vector>
+#include <tuple>
+
+// Third-party
 #include "glm.hpp"
 #include "glew.h"
 #include "SOIL.h"
-#include <vector>
-#include <tuple>
+
+// Project
+#include "utility.h"
 #include "Shader.h"
+#include "TextureManager.h"
 
 
-Texture Structure::texture;
-Shader Structure::shader;
+Shader Structure::shader;	// All Structures use the same shader
 
 GLuint Structure::viewMatrixID;
 GLuint Structure::modelMatrixID;
 GLuint Structure::projMatrixID;
 
-Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
+Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& centre, const glm::vec3& colour)
+	: texture(randomTexture())
 {
-	if (texture.id() == 0)
-	{
-		texture = Texture("../Images/building.jpg");
-	}
 	if (!shader.initialized())
 	{
 		shader = Shader("Structure.vs", "Structure.frag");
@@ -29,6 +32,10 @@ Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float hei
 		projMatrixID = glGetUniformLocation(shader.programID(), "proj_matrix");
 	}
 	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
+	if (centre != glm::vec3())
+	{
+		m_vertices = translate(m_vertices, centre);
+	}
 	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put position, colour, and texture data into buffers
 }
@@ -51,7 +58,7 @@ std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> 
 	for (int i = 0; i < vertices.size() / 2; i++)
 	{
 		textureCoords[i] = glm::vec2(i, 0.0f);
-		textureCoords[i + vertices.size() / 2] = glm::vec2(i - 2.5f, height);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
 	}
 	return make_tuple(vertices, indices, textureCoords);
 }
@@ -95,15 +102,6 @@ void Structure::generateBuffers()
 	glBindVertexArray(0);
 }
 
-// DELETE THIS
-void Structure::textureFill()
-{
-	for (const auto vertex : m_vertices)
-	{
-		m_textureCoords.push_back(glm::vec2(vertex.x, vertex.z));
-	}
-}
-
 
 void Structure::fill(const glm::vec3& colour)
 {
@@ -116,17 +114,16 @@ void Structure::fill(const glm::vec3& colour)
 
 void Structure::draw() const
 {
-	glBindTexture(GL_TEXTURE_2D, texture.id());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// Set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	texture.bind();
 	shader.use();
 
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
+}
+
+
+const Texture& Structure::randomTexture()
+{
+	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
 }

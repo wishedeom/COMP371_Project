@@ -1,4 +1,9 @@
 #include "utility.h"
+
+#include <vector>
+
+#include "glfw3.h"
+#include "glm.hpp"
 #include "GLM/GTC/matrix_transform.hpp"
 
 
@@ -128,10 +133,10 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices)
 std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
 {
 	// Triangle is the polygon with least number of sides
-	/*if (sides < 3)
+	if (sides < 3)
 	{
 		throw std::logic_error("A polygon must have at least 3 sides.");
-	}*/
+	}
 	const float angle = 2 * pi / sides;						// Central angle between successive pairs of vertices
 	const auto rotMatrix = glm::rotate(id4, angle, up);		// To rotate our first vertex through each vertex of the polygon
 	std::vector<glm::vec2> vertices;						// To hold the vertices
@@ -157,4 +162,27 @@ std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, c
 		transformedPolygon.push_back(glm::vec2(matrix * glm::vec4(vertex, 0.0f, 1.0f)));
 	}
 	return transformedPolygon;
+}
+
+
+float randomFloat()
+{
+	return static_cast<float>(std::rand()) / RAND_MAX;
+}
+
+
+glm::vec3 randomColour()
+{
+	return glm::vec3(randomFloat(), randomFloat(), randomFloat());
+}
+
+
+std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const glm::vec3& translation)
+{
+	std::vector<glm::vec3> newVertices;
+	for (const auto vertex : vertices)
+	{
+		newVertices.push_back(vertex + translation);
+	}
+	return newVertices;
 }
