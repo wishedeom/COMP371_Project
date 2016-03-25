@@ -1,5 +1,7 @@
 #pragma once
+
 #include <vector>
+
 #include "glfw3.h"
 #include "glm.hpp"
 
@@ -64,3 +66,7 @@ float randomFloat();
 
 // Generates a random RGB colour
 glm::vec3 randomColour();
+
+
+// Translates a collection of vertices (a mesh) to a new position
+std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const glm::vec3& difference);

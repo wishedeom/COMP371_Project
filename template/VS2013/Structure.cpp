@@ -1,21 +1,27 @@
 #include "Structure.h"
-#include "utility.h"
+
+// Standard
+#include <vector>
+#include <tuple>
+
+// Third-party
 #include "glm.hpp"
 #include "glew.h"
 #include "SOIL.h"
-#include <vector>
-#include <tuple>
+
+// Project
+#include "utility.h"
 #include "Shader.h"
 #include "TextureManager.h"
 
 
-Shader Structure::shader;
+Shader Structure::shader;	// All Structures use the same shader
 
 GLuint Structure::viewMatrixID;
 GLuint Structure::modelMatrixID;
 GLuint Structure::projMatrixID;
 
-Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& colour)
+Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float height, const glm::vec3& centre, const glm::vec3& colour)
 	: texture(randomTexture())
 {
 	if (!shader.initialized())
@@ -26,6 +32,10 @@ Structure::Structure(const std::vector<glm::vec2>& baseVertices, const float hei
 		projMatrixID = glGetUniformLocation(shader.programID(), "proj_matrix");
 	}
 	std::tie(m_vertices, m_indices, m_textureCoords) = computeStructureData(baseVertices, height); // Compute vertices and indices of building
+	if (centre != glm::vec3())
+	{
+		m_vertices = translate(m_vertices, centre);
+	}
 	fill(colour);		// Fill with given colour
 	generateBuffers();	// Put position, colour, and texture data into buffers
 }

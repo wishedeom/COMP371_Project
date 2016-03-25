@@ -1,4 +1,9 @@
 #include "utility.h"
+
+#include <vector>
+
+#include "glfw3.h"
+#include "glm.hpp"
 #include "GLM/GTC/matrix_transform.hpp"
 
 
@@ -169,4 +174,15 @@ float randomFloat()
 glm::vec3 randomColour()
 {
 	return glm::vec3(randomFloat(), randomFloat(), randomFloat());
+}
+
+
+std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const glm::vec3& translation)
+{
+	std::vector<glm::vec3> newVertices;
+	for (const auto vertex : vertices)
+	{
+		newVertices.push_back(vertex + translation);
+	}
+	return newVertices;
 }
