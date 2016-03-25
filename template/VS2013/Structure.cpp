@@ -51,7 +51,7 @@ std::tuple<std::vector<glm::vec3>, std::vector<GLuint>, std::vector<glm::vec2>> 
 	for (int i = 0; i < vertices.size() / 2; i++)
 	{
 		textureCoords[i] = glm::vec2(i, 0.0f);
-		textureCoords[i + vertices.size() / 2] = glm::vec2(i - 2.5f, height);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
 	}
 	return make_tuple(vertices, indices, textureCoords);
 }
