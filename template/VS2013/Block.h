@@ -14,6 +14,7 @@
 #include "SOIL.h"
 #include "Texture.h"
 #include "TextureManager.h"
+#include "Structure.h"
 
 
 class Block
@@ -32,6 +33,8 @@ class Block
 	GLuint m_positionBufferID;
 	GLuint m_texBufferID;
 	GLuint m_eboID;
+
+	std::array<Structure, 4> structures;
 
 	const Texture& roadTexture;
 	const Texture& sidewalkGrassTexture;

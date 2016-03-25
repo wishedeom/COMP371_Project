@@ -10,6 +10,7 @@ const float Block::length = 20.0f;
 Block::Block(const glm::vec3& centre)
 	: roadTexture(getTexture("../Images/road.png"))
 	, sidewalkGrassTexture(getTexture("../Images/sidewalk.png"))
+	, structures {randomS}
 {
 	if (!shader.isInitialized())
 	{

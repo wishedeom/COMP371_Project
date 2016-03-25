@@ -32,7 +32,7 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fo
 
 
 Camera::Camera(GLFWwindow& window)
-	: Camera(glm::vec3(0.0f, 0.0f, 0.7f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 1.0f, 50.0f, window) {}
+	: Camera(glm::vec3(0.0f, 0.0f, 0.2f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 0.2f, 100.0f, window) {}
 
 
 glm::vec3 Camera::position() const { return m_position; }
