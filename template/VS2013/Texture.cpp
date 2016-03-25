@@ -26,3 +26,9 @@ std::string Texture::filePath() const { return m_filePath; }
 
 
 GLuint Texture::id() const { return m_id; }
+
+
+void Texture::bind() const
+{
+	glBindTexture(GL_TEXTURE_2D, m_id);
+}

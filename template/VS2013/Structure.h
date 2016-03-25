@@ -48,8 +48,6 @@ private:
 	// Fills the structure with a constant colour
 	void fill(const glm::vec3& colour);
 
-	// Generates texture coordinates
-	void textureFill();
 
 public:
 

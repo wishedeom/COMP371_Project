@@ -95,15 +95,6 @@ void Structure::generateBuffers()
 	glBindVertexArray(0);
 }
 
-// DELETE THIS
-void Structure::textureFill()
-{
-	for (const auto vertex : m_vertices)
-	{
-		m_textureCoords.push_back(glm::vec2(vertex.x, vertex.z));
-	}
-}
-
 
 void Structure::fill(const glm::vec3& colour)
 {
@@ -116,14 +107,7 @@ void Structure::fill(const glm::vec3& colour)
 
 void Structure::draw() const
 {
-	glBindTexture(GL_TEXTURE_2D, texture.id());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// Set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	texture.bind();
 	shader.use();
 
 	glBindVertexArray(m_vaoID);
