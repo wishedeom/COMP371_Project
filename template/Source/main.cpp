@@ -25,7 +25,7 @@
 #include "../VS2013/World.h"
 #include "../VS2013/Building.h"
 #include "../VS2013/Camera.h"
-#include "../VS2013/Structure.h"
+#include "../VS2013/Drawable.h"
 #include "../VS2013/utility.h"
 
 GLFWwindow* window = 0x00;
@@ -150,8 +150,7 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
-	Structure structure(regularPolygon(10, 1.0f), 5.0f, glm::vec3(5.0f, 0.0f, 0.0f));
-	Block block{ glm::vec3{} };
+	Drawable structure = genPolygonalPrism(regularPolygon(10, 1.0f), 5.0f);
 
 
 	while (!glfwWindowShouldClose(window))
@@ -166,7 +165,6 @@ int main()
 
 		
 		auto transformation = proj_matrix * view_matrix * model_matrix;
-		block.draw(transformation);
 		structure.draw(transformation);
 
 		// update other events like input handling

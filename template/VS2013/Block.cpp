@@ -10,13 +10,7 @@ const float Block::length = 20.0f;
 Block::Block(const glm::vec3& centre)
 	: roadTexture(getTexture("../Images/road.png"))
 	, sidewalkGrassTexture(getTexture("../Images/sidewalk.png"))
-	, structures {randomS}
 {
-	if (!shader.isInitialized())
-	{
-		shader = Shader("../Source/Block.vs", "../Source/Block.frag");
-		transformationMatrixID = shader.transformationMatrixID();
-	}
 	m_vertices.push_back(centre + glm::vec3(-length / 2, -width / 2, 0.0f));
 	m_vertices.push_back(centre + glm::vec3(-length / 2, width / 2, 0.0f));
 	m_vertices.push_back(centre + glm::vec3(length / 2, width / 2, 0.0f));
@@ -42,7 +36,7 @@ void Block::generateBuffers()
 {
 	// Generate vertex array object, vertex position and colour and element buffer objects
 	glGenVertexArrays(1, &m_vaoID);
-	glGenBuffers(1, &m_positionBufferID);
+	glGenBuffers(1, &m_posBuffID);
 	glGenBuffers(1, &m_texBufferID);
 	glGenBuffers(1, &m_eboID);
 
@@ -51,7 +45,7 @@ void Block::generateBuffers()
 
 	// Put vertex position data into VAO attribute 0
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, m_positionBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, m_posBuffID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)0);
 

@@ -7,6 +7,7 @@
 #include "GLM/GTC/matrix_transform.hpp"
 
 #include "TextureManager.h"
+#include "Drawable.h"
 
 
 // The translational sweep is made from a profile polyline with p vertices and a trajectory polyline with t vertices, for a total of p * t vertices. The sweep itself
@@ -193,4 +194,34 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 		newVertices.push_back(vertex + translation);
 	}
 	return newVertices;
+}
+
+
+Drawable genPolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
+{
+	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
+	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
+
+	std::vector<glm::vec3> verticalTrajectory;					// Represents height of the building
+	verticalTrajectory.push_back(glm::vec3());
+	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, height));
+
+	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
+	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
+
+	// Wrap texture around, one width for each side
+	std::vector<glm::vec2> textureCoords(vertices.size());
+	for (int i = 0; i < vertices.size() / 2; i++)
+	{
+		textureCoords[i] = glm::vec2(i, 0.0f);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
+	}
+	
+	glm::vec3 colour; // Black
+
+	Shader shader("Building.vs", "Building.frag");
+
+	Texture texture = getTexture("building1.jpg");
+
+	return Drawable(vertices, indices, colour, textureCoords, shader, texture);
 }

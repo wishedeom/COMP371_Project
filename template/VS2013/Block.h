@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <array>
 
 #include "glew.h"
 #include "glfw3.h"		
@@ -14,7 +15,7 @@
 #include "SOIL.h"
 #include "Texture.h"
 #include "TextureManager.h"
-#include "Structure.h"
+#include "Drawable.h"
 
 
 class Block
@@ -30,11 +31,11 @@ class Block
 	std::vector<GLuint> m_indices;
 
 	GLuint m_vaoID;
-	GLuint m_positionBufferID;
+	GLuint m_posBuffID;
 	GLuint m_texBufferID;
 	GLuint m_eboID;
 
-	std::array<Structure, 4> structures;
+	//std::array<Drawable, 4> structures;
 
 	const Texture& roadTexture;
 	const Texture& sidewalkGrassTexture;
