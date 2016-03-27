@@ -149,7 +149,7 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
-	Drawable structure = makeRegularPolygonalPrism(10, 1.0f, 5.0f, "../Images/building1.jpg");
+	World world(3, 3);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -163,7 +163,7 @@ int main()
 
 		
 		auto transformation = proj_matrix * view_matrix;
-		structure.draw(camera);
+		world.draw(camera);
 
 		// update other events like input handling
 		glfwPollEvents();
