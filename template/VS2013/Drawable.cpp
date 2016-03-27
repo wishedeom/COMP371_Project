@@ -8,6 +8,7 @@
 #include "glew.h"
 #include "glm.hpp"
 #include "gtc/type_ptr.hpp"
+#include "gtc/matrix_transform.hpp"
 #include "SOIL.h"
 
 // Project
@@ -86,6 +87,28 @@ void Drawable::fill(const glm::vec3& colour)
 }
 
 
+void Drawable::setOrigin(const glm::vec3& origin)
+{
+	m_origin = origin;
+	m_modelMatrix = glm::translate(id4, origin);
+}
+
+
+void Drawable::setModelMatrix(const glm::mat4& modelMatrix) { m_modelMatrix = modelMatrix; }
+
+
+glm::vec3 Drawable::origin() const { return m_origin; }
+
+
+glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
+
+
+void Drawable::setTexture(const std::string& path)
+{
+	m_texture = getTexture(path);
+}
+
+
 void Drawable::draw(const glm::mat4& projViewMatrix)
 {
 	if (!m_upToDate)
@@ -98,16 +121,4 @@ void Drawable::draw(const glm::mat4& projViewMatrix)
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
-}
-
-
-void Drawable::setModelMatrix(const glm::mat4& modelMatrix) { m_modelMatrix = modelMatrix; }
-
-
-glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
-
-
-void Drawable::setTexture(const std::string& path)
-{
-	m_texture = getTexture(path);
 }

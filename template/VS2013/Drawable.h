@@ -15,7 +15,7 @@
 #include "TextureManager.h"
 
 
-// A Drawable represents a single free-standing building with a polygonal base and a certain height.
+// A Drawable represents a single mesh.
 class Drawable
 {	
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates in model space
@@ -35,18 +35,18 @@ class Drawable
 	Texture m_texture;
 
 	glm::mat4 m_modelMatrix;
+
+	glm::vec3 m_origin;		// Origin of model coordinate system in world coordinates
 	
+
 	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
 	void generateBuffers();
-
 
 	// Fills buffers
 	void fillBuffers();
 
-
 	// Fills the structure with a constant colour
 	void fill(const glm::vec3& colour);
-
 
 public:
 
@@ -61,8 +61,14 @@ public:
 	// Sets the model matrix
 	void setModelMatrix(const glm::mat4& modelMatrix);
 
+	// Translates the drawable to a new origin.
+	void setOrigin(const glm::vec3& origin);
+
 	// Returns the model matrix
 	glm::mat4 modelMatrix() const;
+
+	// Returs the origin of the coordinate system
+	glm::vec3 origin() const;
 
 	// Draws the drawable.
 	virtual void draw(const glm::mat4& projViewMatrix);
