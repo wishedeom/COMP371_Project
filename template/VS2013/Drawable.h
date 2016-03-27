@@ -13,6 +13,7 @@
 #include "utility.h"
 #include "Shader.h"
 #include "TextureManager.h"
+#include "Camera.h"
 
 
 // A Drawable represents a single mesh.
@@ -70,6 +71,6 @@ public:
 	// Returs the origin of the coordinate system
 	glm::vec3 origin() const;
 
-	// Draws the drawable.
-	virtual void draw(const glm::mat4& projViewMatrix);
+	// Draws the drawable, as seen by a given camera.
+	virtual void draw(const Camera& camera);
 };

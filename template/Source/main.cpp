@@ -164,7 +164,7 @@ int main()
 
 		
 		auto transformation = proj_matrix * view_matrix;
-		structure.draw(transformation);
+		structure.draw(*cameraptr);
 
 		// update other events like input handling
 		glfwPollEvents();

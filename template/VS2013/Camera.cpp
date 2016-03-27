@@ -76,6 +76,11 @@ glm::mat4 Camera::view() const
 	return glm::lookAt(m_position, m_position + m_orientation, up);
 }
 
+glm::mat4 Camera::projView() const
+{
+	return projection() * view();
+}
+
 
 void Camera::setPosition(const glm::vec3& position) { m_position = position; }
 
