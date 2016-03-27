@@ -71,7 +71,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 // Generates a polygonal prism.
 // baseVertices: The vertices of the base polygon.
 // height: The height of the prism.
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height);
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath = "");
 
 // Gnerates a prism with a regular polygonal base.
-Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height);
+Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height, const std::string& texturePath = "");

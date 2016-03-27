@@ -197,7 +197,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 }
 
 
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -219,13 +219,17 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	
 	glm::vec3 colour(1.0f); // Black
 
-	//Shader shader("StandardDrawable.vs", "StandardDrawable.frag");
+	Drawable prism(vertices, indices, colour, textureCoords);
+	if (texturePath != "")
+	{
+		prism.setTexture(texturePath);
+	}
 
-	return Drawable(vertices, indices, colour, textureCoords/*, shader*/);
+	return prism;
 }
 
 
-Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height)
+Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height, const std::string& texturePath)
 {
-	return makePolygonalPrism(makeRegularPolygon(sides, apothem), height);
+	return makePolygonalPrism(makeRegularPolygon(sides, apothem), height, texturePath);
 }
