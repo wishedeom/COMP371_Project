@@ -45,7 +45,7 @@ public:
 	GLuint programID() const;
 	
 	// Returns the ID of the transformation matrix uniform
-	GLuint transformationMatrixID() const;
+	GLuint projViewMatrixID() const;
 
 	// Returns true if and only if the shader program has been created.
 	bool isInitialized() const;

@@ -23,6 +23,7 @@ Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLu
 	, m_textureCoords(textureCoords)
 	, m_shader(shader)
 	, m_texture(texture)
+	, m_modelMatrix(id4)
 	, m_upToDate(false)
 {
 	fill(colour);
@@ -85,7 +86,7 @@ void Drawable::fill(const glm::vec3& colour)
 }
 
 
-void Drawable::draw(const glm::mat4& transformation)
+void Drawable::draw(const glm::mat4& projViewMatrix)
 {
 	if (!m_upToDate)
 	{
@@ -93,11 +94,17 @@ void Drawable::draw(const glm::mat4& transformation)
 	}
 	m_texture.bind();
 	m_shader.use();
-	glUniformMatrix4fv(m_shader.transformationMatrixID(), 1, GL_FALSE, glm::value_ptr(transformation));
+	glUniformMatrix4fv(m_shader.projViewMatrixID(), 1, GL_FALSE, glm::value_ptr(projViewMatrix * m_modelMatrix));
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
 }
+
+
+void Drawable::setModelMatrix(const glm::mat4& modelMatrix) { m_modelMatrix = modelMatrix; }
+
+
+glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
 
 
 void Drawable::setTexture(const std::string& path)

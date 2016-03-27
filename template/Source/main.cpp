@@ -33,7 +33,6 @@ GLFWwindow* window = 0x00;
 ///Transformations
 glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
-glm::mat4 model_matrix;
 
 
 Camera* cameraptr;
@@ -164,7 +163,7 @@ int main()
 		glPointSize(point_size);
 
 		
-		auto transformation = proj_matrix * view_matrix * model_matrix;
+		auto transformation = proj_matrix * view_matrix;
 		structure.draw(transformation);
 
 		// update other events like input handling

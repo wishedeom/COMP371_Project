@@ -35,7 +35,7 @@ class Block
 	GLuint m_texBufferID;
 	GLuint m_eboID;
 
-	//std::array<Drawable, 4> structures;
+	//std::array<Drawable, 4> buildings;
 
 	const Texture& roadTexture;
 	const Texture& sidewalkGrassTexture;

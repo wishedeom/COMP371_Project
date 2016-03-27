@@ -93,8 +93,8 @@
     <None Include="..\Source\COMP371_hw1.vs" />
     <None Include="..\Source\SUN_FRAG_SHADER.frag" />
     <None Include="..\Source\SUN_VERTEX_SHADER.vs" />
-    <None Include="Building.frag" />
-    <None Include="Building.vs" />
+    <None Include="StandardDrawable.frag" />
+    <None Include="StandardDrawable.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />

@@ -18,7 +18,7 @@
 // A Drawable represents a single free-standing building with a polygonal base and a certain height.
 class Drawable
 {	
-	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates
+	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates in model space
 	std::vector<glm::vec3> m_colours;		// The colour of each vertex
 	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
 	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
@@ -33,6 +33,8 @@ class Drawable
 
 	Shader m_shader;
 	Texture m_texture;
+
+	glm::mat4 m_modelMatrix;
 	
 	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
 	void generateBuffers();
@@ -56,7 +58,12 @@ public:
 	// Sets the texture
 	void setTexture(const std::string& path);
 
+	// Sets the model matrix
+	void setModelMatrix(const glm::mat4& modelMatrix);
+
+	// Returns the model matrix
+	glm::mat4 modelMatrix() const;
 
 	// Draws the drawable.
-	virtual void draw(const glm::mat4& transformation);
+	virtual void draw(const glm::mat4& projViewMatrix);
 };

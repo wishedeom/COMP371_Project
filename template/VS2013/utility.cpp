@@ -219,7 +219,7 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	
 	glm::vec3 colour(1.0f); // Black
 
-	Shader shader("Building.vs", "Building.frag");
+	Shader shader("StandardDrawable.vs", "StandardDrawable.frag");
 
 	return Drawable(vertices, indices, colour, textureCoords, shader);
 }
