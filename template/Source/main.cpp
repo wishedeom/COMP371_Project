@@ -150,8 +150,8 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
-	Drawable structure = genPolygonalPrism(regularPolygon(10, 1.0f), 5.0f);
-
+	Drawable structure = makeRegularPolygonalPrism(10, 1.0f, 5.0f);
+	structure.setTexture("../Images/building1.jpg");
 
 	while (!glfwWindowShouldClose(window))
 	{

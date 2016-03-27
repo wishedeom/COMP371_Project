@@ -98,3 +98,9 @@ void Drawable::draw(const glm::mat4& transformation)
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
 }
+
+
+void Drawable::setTexture(const std::string& path)
+{
+	m_texture = getTexture(path);
+}

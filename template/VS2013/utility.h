@@ -51,7 +51,7 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices);
 std::vector<GLfloat> flatten(const std::vector<glm::vec3> vertices);
 
 // Produces a collection of vec2s representing a regular n-gon with a given apothem length, centred at the origin, with a point on the positive x-axis.
-std::vector<glm::vec2> regularPolygon(const int sides, const float apothem);
+std::vector<glm::vec2> makeRegularPolygon(const int sides, const float apothem);
 
 // Given a transformation matrix and a collection of vertices representing a polygon in 2D, applies the transformation matrix to each vertex
 std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, const glm::mat4& matrix);
@@ -71,4 +71,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 // Generates a polygonal prism.
 // baseVertices: The vertices of the base polygon.
 // height: The height of the prism.
-Drawable genPolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height);
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height);
+
+// Gnerates a prism with a regular polygonal base.
+Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height);

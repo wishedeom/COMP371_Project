@@ -133,7 +133,7 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices)
 }
 
 
-std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
+std::vector<glm::vec2> makeRegularPolygon(const int sides, const float apothem)
 {
 	// Triangle is the polygon with least number of sides
 	if (sides < 3)
@@ -197,7 +197,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 }
 
 
-Drawable genPolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -217,11 +217,15 @@ Drawable genPolygonalPrism(const std::vector<glm::vec2>& baseVertices, const flo
 		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
 	}
 	
-	glm::vec3 colour; // Black
+	glm::vec3 colour(1.0f); // Black
 
 	Shader shader("Building.vs", "Building.frag");
 
-	Texture texture = getTexture("building1.jpg");
+	return Drawable(vertices, indices, colour, textureCoords, shader);
+}
 
-	return Drawable(vertices, indices, colour, textureCoords, shader, texture);
+
+Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height)
+{
+	return makePolygonalPrism(makeRegularPolygon(sides, apothem), height);
 }

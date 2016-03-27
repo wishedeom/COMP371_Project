@@ -23,17 +23,16 @@ class Drawable
 	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
 	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
 
-	Texture m_texture;
-	Shader m_shader;
-
 	GLuint m_vaoID;			// Vertex array object
 	GLuint m_posBuffID;		// Vertex position buffer object
 	GLuint m_colBuffID;		// Vertex colour buffer object
 	GLuint m_texBuffID;		// Vertex texture buffer object
 	GLuint m_eboID;			// Element buffer object, for vertex draw indices
 
-	bool m_upToDate; // True if and only if all buffers are up-to-date
+	bool m_upToDate;		// True if and only if all buffers are up-to-date
 
+	Shader m_shader;
+	Texture m_texture;
 	
 	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
 	void generateBuffers();
@@ -49,14 +48,15 @@ class Drawable
 
 public:
 
-	// Constructs a structure with a polygonal base and a constant height.
-	// baseVertices: The vertices of the base polygon.
-	// height: The height of the structure.
+	// Constructs a drawable.
 	Drawable(const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(), const std::vector<GLuint>& indices = std::vector<GLuint>(),
 		const glm::vec3& colour = glm::vec3(), const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
 		const Shader& shader = Shader(), const Texture& texture = Texture());
 
+	// Sets the texture
+	void setTexture(const std::string& path);
 
-	// Draws the structure.
+
+	// Draws the drawable.
 	virtual void draw(const glm::mat4& transformation);
 };
