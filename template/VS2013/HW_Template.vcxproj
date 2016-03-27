@@ -78,8 +78,8 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Structure.cpp" />
     <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -100,10 +100,10 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="building.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Drawable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SOIL.h" />
-    <ClInclude Include="Structure.h" />
     <ClInclude Include="Sun.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
