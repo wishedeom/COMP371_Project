@@ -23,8 +23,8 @@
 #include <algorithm>
 #include <vector>
 #include <cctype>
-
-
+#include "../ThirdParty/glm/gtc/matrix_transform.hpp"
+#include "Camera.h"
 using namespace std;
 
 class building {
@@ -106,8 +106,13 @@ class building {
 		static Shader* buildingShaderptr;
 		void loadTextures();
 		void Draw();
+		void setLighting();
+		GLuint LightVAO;
+		Shader lightingShader;
 
+		static Camera * cameraptr;
 
+		building(Camera *);
 };
 #endif
 
