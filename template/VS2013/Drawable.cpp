@@ -18,15 +18,16 @@
 
 
 Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLuint>& indices, const glm::vec3& colour, const std::vector<glm::vec2>& textureCoords,
-	const Shader& shader, const Texture& texture)
+	const glm::vec3& origin, const Shader& shader, const std::string& texturePath)
 	: m_vertices(vertices)
 	, m_indices(indices)
 	, m_textureCoords(textureCoords)
 	, m_shader(shader)
-	, m_texture(texture)
+	, m_texture(getTexture(texturePath))
 	, m_modelMatrix(id4)
 	, m_upToDate(false)
 {
+	setOrigin(origin);
 	fill(colour);
 	generateBuffers();
 }
@@ -87,10 +88,11 @@ void Drawable::fill(const glm::vec3& colour)
 }
 
 
-void Drawable::setOrigin(const glm::vec3& origin)
+Drawable& Drawable::setOrigin(const glm::vec3& origin)
 {
 	m_origin = origin;
 	m_modelMatrix = glm::translate(id4, origin);
+	return *this;
 }
 
 
@@ -106,6 +108,11 @@ glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
 void Drawable::setTexture(const std::string& path)
 {
 	m_texture = getTexture(path);
+}
+
+void Drawable::setTexture(const Texture& texture)
+{
+	m_texture = texture;
 }
 
 

@@ -19,6 +19,9 @@
 // A Drawable represents a single mesh.
 class Drawable
 {	
+
+protected:
+
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates in model space
 	std::vector<glm::vec3> m_colours;		// The colour of each vertex
 	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
@@ -49,21 +52,30 @@ class Drawable
 	// Fills the structure with a constant colour
 	void fill(const glm::vec3& colour);
 
+
 public:
 
 	// Constructs a drawable.
-	Drawable(const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(), const std::vector<GLuint>& indices = std::vector<GLuint>(),
-		const glm::vec3& colour = glm::vec3(), const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
-		const Shader& shader = Shader("StandardDrawable.vs", "StandardDrawable.frag"), const Texture& texture = Texture());
+	Drawable
+	(
+		const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(),
+		const std::vector<GLuint>& indices = std::vector<GLuint>(),
+		const glm::vec3& colour = glm::vec3(),
+		const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
+		const glm::vec3& origin = glm::vec3(),
+		const Shader& shader = Shader("StandardDrawable.vs", "StandardDrawable.frag"),
+		const std::string& texturePath = ""
+	);
 
 	// Sets the texture
 	void setTexture(const std::string& path);
+	void setTexture(const Texture& texture);
 
 	// Sets the model matrix
 	void setModelMatrix(const glm::mat4& modelMatrix);
 
 	// Translates the drawable to a new origin.
-	void setOrigin(const glm::vec3& origin);
+	Drawable& setOrigin(const glm::vec3& origin);
 
 	// Returns the model matrix
 	glm::mat4 modelMatrix() const;

@@ -1,49 +1,20 @@
-#pragma once
 #include "World.h"
 
-vector<Block*> World::blocks;
-building* World::buildingsptr = NULL;
-
-World::World(){
-	//set the camera here
-	//set sun here: note current sun.cpp doesnt work
-	sunptr = new Sun();
-
-	//building buildings;
-	buildingsptr = new building;
-	buildingsptr->BuildCity();
-
-	//populates the world with a # of blocks
-	//can be changed to have a random number of blocks, or take input 
-
-	for (GLuint i = 0; i < WORLD_HEIGHT; i++){
-		for (int j = 0; j < WORLD_LENGTH; j++){
-			Block* b = (new Block(glm::vec3()));
-			blocks.push_back(b);
+World::World(const int length, const int width)
+{
+	for (int x = 1; x <= length; x++)
+	{
+		for (int y = 1; y <= width; y++)
+		{
+			m_blocks.push_back(Block(glm::vec3(Block::length * x, Block::width * y, 0.0f)));
 		}
 	}
 }
 
-World::~World(){
-	for (GLuint i = 0; i < blocks.size(); i++){
-		delete blocks.at(i);
-		blocks.at(i) = nullptr;
+void World::draw(const Camera& camera)
+{
+	for (auto block : m_blocks)
+	{
+		block.draw(camera);
 	}
-	blocks.clear();
-	delete buildingsptr;
-	buildingsptr = nullptr;
-}
-
-
-void World::Draw(){
-	//gotta find a more efficient way to draw the blocks
-	//sunptr->Draw();
-
-	buildingsptr->Draw();
-
-	for (int i = 0; i < blocks.size(); i++){
-		blocks.at(i)->draw(glm::mat4());
-	}
-	
-	
 }

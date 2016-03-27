@@ -51,13 +51,16 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices);
 std::vector<GLfloat> flatten(const std::vector<glm::vec3> vertices);
 
 // Produces a collection of vec2s representing a regular n-gon with a given apothem length, centred at the origin, with a point on the positive x-axis.
-std::vector<glm::vec2> makeRegularPolygon(const int sides, const float apothem);
+std::vector<glm::vec2> makeRegularPolygon(const int sides, const float radius);
+
+std::vector<glm::vec2> randomRegularPolygon(const int maxSides, const float maxRadius);
 
 // Given a transformation matrix and a collection of vertices representing a polygon in 2D, applies the transformation matrix to each vertex
 std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, const glm::mat4& matrix);
 
 // Generates a random float from 0.0f to 1.0f
-float randomFloat();
+float randomFloat(const float min, const float max);
+float randomFloat(const float max = 1.0f);
 
 // Generates a random RGB colour
 glm::vec3 randomColour();
@@ -74,4 +77,8 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath = "");
 
 // Gnerates a prism with a regular polygonal base.
-Drawable makeRegularPolygonalPrism(const int sides, const float apothem, const float height, const std::string& texturePath = "");
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height, const std::string& texturePath = "");
+
+Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float maxRadius = 0.4f, const float minHeight = 1.0f, const float maxHeight = 2.0f, const std::string& texturePath = "");
+
+Drawable makeQuad(const float length = 1.0f, const float width = 1.0f, const std::string& texturePath = "");

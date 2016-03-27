@@ -20,32 +20,15 @@
 
 class Block
 {
-	static Shader shader;
-	static GLuint transformationMatrixID;	// The location of the transformation matrix in the shader program
-	
-	static const float width;
-	static const float length;
-
-	std::vector<glm::vec3> m_vertices;
-	std::vector<glm::vec2> m_textureCoords;
-	std::vector<GLuint> m_indices;
-
-	GLuint m_vaoID;
-	GLuint m_posBuffID;
-	GLuint m_texBufferID;
-	GLuint m_eboID;
-
-	//std::array<Drawable, 4> buildings;
-
-	const Texture& roadTexture;
-	const Texture& sidewalkGrassTexture;
+	Drawable m_quad;
+	std::array<Drawable, 4> m_buildings;
 
 public:
 
+	static const float width;
+	static const float length;
+
 	Block(const glm::vec3& centre);
 
-	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
-	void generateBuffers();
-
-	void draw(const glm::mat4& transformation);
+	void draw(const Camera& camera);
 };

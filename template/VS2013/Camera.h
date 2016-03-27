@@ -30,11 +30,15 @@ public:
 	// nearPlane: The distance between the camera and the near image plane.
 	// farPlane: The distance between the camera and the far image plane.
 	// window: The window the camera will be displaying to.
-	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window);
-
-	// Constructs a camera with default parameters displaying to a given window.
-	// window: The window the camera will be displaying to.
-	Camera(GLFWwindow& window);
+	Camera
+	(
+		GLFWwindow& window,
+		const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.05f),
+		const glm::vec3& orientation = glm::vec3(1.0f, 0.0f, 0.0f),
+		const float fov = 1.0f,
+		const float nearPlane = 0.05f,
+		const float farPlane = 100.0f
+	);
 
 
 	// Returns the camera's position.

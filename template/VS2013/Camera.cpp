@@ -10,7 +10,7 @@ const float Camera::mouseSensitivity = 0.001f;
 const float Camera::movementSpeed = 0.1f;
 
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window)
+Camera::Camera(GLFWwindow& window, const glm::vec3& position, const glm::vec3& orientation, const float fov, const float nearPlane, const float farPlane)
 	: m_position(position)
 {
 	setOrientation(orientation);
@@ -29,10 +29,6 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fo
 	m_xCursorPos = x;
 	m_yCursorPos = y;
 }
-
-
-Camera::Camera(GLFWwindow& window)
-	: Camera(glm::vec3(0.0f, 0.0f, 0.2f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 0.2f, 100.0f, window) {}
 
 
 glm::vec3 Camera::position() const { return m_position; }
