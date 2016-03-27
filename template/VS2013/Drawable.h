@@ -54,7 +54,7 @@ public:
 	// Constructs a drawable.
 	Drawable(const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(), const std::vector<GLuint>& indices = std::vector<GLuint>(),
 		const glm::vec3& colour = glm::vec3(), const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
-		const Shader& shader = Shader(), const Texture& texture = Texture());
+		const Shader& shader = Shader("StandardDrawable.vs", "StandardDrawable.frag"), const Texture& texture = Texture());
 
 	// Sets the texture
 	void setTexture(const std::string& path);
