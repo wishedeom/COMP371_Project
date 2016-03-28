@@ -43,7 +43,7 @@
     <OutDir>$(SolutionDir)/../Bin/.</OutDir>
     <IntDir>$(SolutionDir)/../Build/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
-    <IncludePath>C:\Users\Wishe\Source\Repos\Mega City One\template\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>..\ThirdParty;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
