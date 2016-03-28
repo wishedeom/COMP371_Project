@@ -47,9 +47,20 @@ vector<GLuint> building::indexes;
 
 int building::randomnumber;
 
+Shader building::lightingShader;
+GLuint building::loopCounter = 0;
+
 building::building(Camera * cam){
+
+	if (!lightingShader.initialized())
+	{
+		lightingShader = Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag");
+		//viewMatrixID = glGetUniformLocation(shader.programID(), "view_matrix");
+		//modelMatrixID = glGetUniformLocation(shader.programID(), "model_matrix");
+		//projMatrixID = glGetUniformLocation(shader.programID(), "proj_matrix");
+	}
 	cameraptr = cam;
-	lightingShader = Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag");
+	
 }
 
 void building::buildings4x4C(GLfloat posx, GLfloat posy)
@@ -716,11 +727,11 @@ void building::Draw(){
 	GLint viewPosLoc = glGetUniformLocation(lightingShader.programID(), "viewPos");
 
 	//glUniform3f(lightDirLoc, -0.2f, -1.0f, -0.3f);
-	glUniform3f(lightDirLoc, 0.f, 0.0f, -10.f);
+	glUniform3f(lightDirLoc, 0.f, -10.0f, -100.f);
 	glUniform3f(viewPosLoc, cameraptr->position().x, cameraptr->position().y, cameraptr->position().z);
 
-	glUniform3f(glGetUniformLocation(lightingShader.programID(), "light.ambient"), 0.2f, 0.2f, 0.2f);
-	glUniform3f(glGetUniformLocation(lightingShader.programID(), "light.diffuse"), 0.5f, 0.5f, 0.5f);
+	glUniform3f(glGetUniformLocation(lightingShader.programID(), "light.ambient"), 0.4f, 0.4f, 0.4f);
+	glUniform3f(glGetUniformLocation(lightingShader.programID(), "light.diffuse"), 0.7f, 0.7f, 0.7f);
 	glUniform3f(glGetUniformLocation(lightingShader.programID(), "light.specular"), 1.0f, 1.0f, 1.0f);
 	glm::mat4 model;
 
@@ -736,13 +747,10 @@ void building::Draw(){
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-
-	//buildingShaderptr->use();
+		
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES,indexes.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-
 
 }
 

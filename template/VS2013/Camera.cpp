@@ -1,6 +1,6 @@
 #include "camera.h"
 #include <stdexcept>
-#include "GLM/GTC/matrix_transform.hpp"
+#include "../ThirdParty/glm/gtc/matrix_transform.hpp"
 
 
 const glm::vec3 Camera::up(0.0f, 0.0f, 1.0f);

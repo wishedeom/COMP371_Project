@@ -4,13 +4,13 @@
 vector<Block*> World::blocks;
 building* World::buildingsptr = NULL;
 
-World::World(){
+World::World(Camera * camptr){
 	//set the camera here
 	//set sun here: note current sun.cpp doesnt work
-	sunptr = new Sun();
+	//sunptr = new Sun();
 
 	//building buildings;
-	buildingsptr = new building;
+	buildingsptr = new building(camptr);
 	buildingsptr->BuildCity();
 
 	//populates the world with a # of blocks
@@ -47,3 +47,4 @@ void World::Draw(){
 	
 	
 }
+

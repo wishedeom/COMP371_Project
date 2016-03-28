@@ -108,10 +108,10 @@ class building {
 		void Draw();
 		void setLighting();
 		GLuint LightVAO;
-		Shader lightingShader;
+		static Shader lightingShader;
 
 		static Camera * cameraptr;
-
+		static GLuint loopCounter;
 		building(Camera *);
 };
 #endif
