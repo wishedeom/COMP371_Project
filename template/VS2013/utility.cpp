@@ -286,5 +286,5 @@ Drawable makeQuad(const float length, const float width, const std::string& text
 	texCoords.push_back(glm::vec2(1.0f, 1.0f));
 	texCoords.push_back(glm::vec2(1.0f, 0.0f));
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("StandardDrawable.vs", "StandardDrawable.frag"), "../Images/block.png");
+	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/.frag"), "../Images/block.png");
 }

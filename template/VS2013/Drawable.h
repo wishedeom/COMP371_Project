@@ -63,7 +63,7 @@ public:
 		const glm::vec3& colour = glm::vec3(),
 		const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
 		const glm::vec3& origin = glm::vec3(),
-		const Shader& shader = Shader("StandardDrawable.vs", "StandardDrawable.frag"),
+		const Shader& shader = Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"),
 		const std::string& texturePath = ""
 	);
 
