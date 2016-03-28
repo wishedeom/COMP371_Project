@@ -4,11 +4,10 @@
 
 #include "Block.h"
 #include "Sun.h"
-#include "Building.h"
 
 class World
 {
-	vector<Block> m_blocks;
+	std::vector<Block> m_blocks;
 
 public:
 	World(const int length, const int width);

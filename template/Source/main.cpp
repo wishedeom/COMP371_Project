@@ -23,7 +23,6 @@
 // Project
 #include "../VS2013/Block.h"
 #include "../VS2013/World.h"
-#include "../VS2013/Building.h"
 #include "../VS2013/Camera.h"
 #include "../VS2013/Drawable.h"
 #include "../VS2013/utility.h"
@@ -115,7 +114,7 @@ bool initialize() {
 	glewExperimental = GL_TRUE;	///Needed to get the latest version of OpenGL
 	glewInit();
 
-	/// Get the current OpenGL version
+	/// Get the current Open	GL version
 	const GLubyte* renderer = glGetString(GL_RENDERER); /// Get renderer string
 	const GLubyte* version = glGetString(GL_VERSION); /// Version as a string
 	printf("Renderer: %s\n", renderer);
