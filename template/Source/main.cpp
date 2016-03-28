@@ -129,15 +129,7 @@ bool initialize() {
 }
 
 bool cleanUp() {
-	glDisableVertexAttribArray(0);
-	//Properly de-allocate all resources once they've outlived their purpose
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
-	//glDeleteBuffers(1, &EBO);
-
-	// Close GL context and any other GLFW resources
 	glfwTerminate();
-
 	return true;
 }
 
