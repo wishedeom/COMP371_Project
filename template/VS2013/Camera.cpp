@@ -18,18 +18,21 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& orientation, float fo
 	setFarPlane(farPlane);
 	setNearPlane(nearPlane);
 
-	// Set initial cursor positions
+	// Set aspect ratio
 	int width, height;
 	glfwGetWindowSize(&window, &width, &height);
-	m_xCursorPos = width / 2;
-	m_yCursorPos = height / 2;
-
 	m_aspectRatio = width / height;
+
+	// Set initial cursor positions
+	double x, y;
+	glfwGetCursorPos(&window, &x, &y);
+	m_xCursorPos = x;
+	m_yCursorPos = y;
 }
 
 
 Camera::Camera(GLFWwindow& window)
-	: Camera(glm::vec3(0.0f, 0.0f, 0.7f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 1.0f, 100.0f, window) {}
+	: Camera(glm::vec3(0.0f, 0.0f, 0.2f), glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 0.1f, 100.0f, window) {}
 
 
 glm::vec3 Camera::position() const { return m_position; }
@@ -113,6 +116,10 @@ void Camera::setNearPlane(const float nearPlane)
 	{
 		throw std::logic_error("Near plane distance must be strictly positive.");
 	}
+	if (!(nearPlane < m_farPlane))
+	{
+		throw std::logic_error("Near plane must be nearer than the far plane.");
+	}
 	m_nearPlane = nearPlane;
 }
 
@@ -122,6 +129,10 @@ void Camera::setFarPlane(const float farPlane)
 	if (!(0.f < farPlane))
 	{
 		throw std::logic_error("Far plane distance must be strictly positive.");
+	}
+	if (!(m_nearPlane < farPlane))
+	{
+		throw std::logic_error("Far plane must be farther then the near plane.");
 	}
 	m_farPlane = farPlane;
 }

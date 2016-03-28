@@ -4,12 +4,12 @@
 //const char* Block::filepath = "../ThirdParty/Simple OpenGL Image Library/test_block.png";
 const char* Block::filepath1 = "../Images/road.png";
 const char* Block::filepath2 = "../Images/sidewalk.png";
-vector<glm::vec3> Block::blockCoordinates;
-vector<GLuint> Block::blockIndices;
+std::vector<glm::vec3> Block::blockCoordinates;
+std::vector<GLuint> Block::blockIndices;
 Shader * Block::blockShaderptr = NULL;
 GLuint Block::boardTexture;
 GLuint Block::sidewalkGrassTexture;
-vector<Block> Block::blocks;
+std::vector<Block> Block::blocks;
 //Shader Block::lightingShader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag");
 
 
@@ -53,7 +53,7 @@ Block::~Block(){
 	filepath1 = NULL;
 	filepath2 = NULL;
 }
-vector<glm::vec3> Block::getBlockCoordinates(){
+std::vector<glm::vec3> Block::getBlockCoordinates(){
 	return blockCoordinates;
 }
 
@@ -64,10 +64,10 @@ void Block::draw(){
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, boardTexture);
-	glUniform1i(glGetUniformLocation(blockShaderptr->Program, "ourTexture1"), 0);
+	glUniform1i(glGetUniformLocation(blockShaderptr->programID(), "ourTexture1"), 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, sidewalkGrassTexture);
-	glUniform1i(glGetUniformLocation(blockShaderptr->Program, "ourTexture2"), 1);
+	glUniform1i(glGetUniformLocation(blockShaderptr->programID(), "ourTexture2"), 1);
 
 	//sun stuff; WHY ISNT IT WORKIN
 	/*
