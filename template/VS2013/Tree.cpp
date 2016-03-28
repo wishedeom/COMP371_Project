@@ -17,7 +17,7 @@ Tree::Tree(float w, float h, const char* filepath)
 	VBO = 0;
 	EBO = 0;
 	treeShaderptr = (new Shader("../Source/TREE_VERTEX_SHADER.vs", "../Source/TREE_FRAG_SHADER.frag"));
-	shader_program = 0;
+	shader_program = treeShaderptr->Program;
 
 //	defineVertices();
 	// xy-axis
@@ -161,7 +161,7 @@ void Tree::draw()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(treeShaderptr->Program, "ourTexture"), 0);
-	glDrawElements(GL_TRIANGLES, treeInd.size(), GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_TRIANGLES, treeInd.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	//glEnable(GL_CULL_FACE);
 }
@@ -197,4 +197,30 @@ void Tree::loadTexture()
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
 	
+}
+
+// Copy of buildCity
+// Define the boundary of potential park = inner section of a block
+void Tree::buildPark()
+{
+	GLuint i = 0;
+	GLuint x = 0;
+	GLfloat posx = 0;
+	GLfloat posy = 0;
+	GLfloat blockwidth = 1.0f;
+	GLfloat blockdepth = 1.0f;
+
+	for (i = 0; i < 4; i++)
+	{
+		posy = i * blockwidth - 0.35f;
+		for (x = 0; x < 4; x++)
+		{
+			posx = x * blockdepth - 0.35f;
+
+		//	buildings4x4C(posy, posx);
+
+		}
+	}
+	cout << "IM IN BUILD CITY\n";
+	//indexCube();
 }

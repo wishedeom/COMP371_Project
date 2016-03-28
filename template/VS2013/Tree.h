@@ -21,7 +21,7 @@ public:
 	void createBuffers();
 	void draw();
 	GLuint getShaderProgram();
-
+	void buildPark();
 private:
 	static vector<GLfloat> treeV;
 	static vector<GLuint> treeInd;
