@@ -149,21 +149,24 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
-	World world(3, 3);
+	std::vector<Drawable> buildings;
+	for (int sides = 3; sides <= 10; sides++)
+	{
+		buildings.push_back(makeRegularPolygonalPrism(sides, 0.5f, 2.0f, "../Images/building1.jpg").setOrigin(glm::vec3(1.0f, -2.0f * (sides - 8), 0.0f)));
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
-		proj_matrix = cameraptr->projection();
-		view_matrix = cameraptr->view();
 
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		
-		auto transformation = proj_matrix * view_matrix;
-		world.draw(camera);
+		for (auto building : buildings)
+		{
+			building.draw(camera);
+		}
 
 		// update other events like input handling
 		glfwPollEvents();
