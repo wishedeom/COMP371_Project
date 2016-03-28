@@ -27,7 +27,6 @@
 #include "../VS2013/Camera.h"
 #include "../VS2013/Structure.h"
 #include "../VS2013/utility.h"
-#include "../VS2013/Sun.h"
 #include "../VS2013/Shader.h"
 
 GLFWwindow* window = 0x00;
@@ -166,10 +165,10 @@ int main() {
 	Camera camera(*window);
 	cameraptr = &camera;
 
-	Sun sun(cameraptr);
-	Sun *sunptr = &sun;
+	//Sun sun(cameraptr);
+	//Sun *sunptr = &sun;
 
-	World world;
+	World world(cameraptr);
 	World* worldptr = &world;
 
 	/*
@@ -216,8 +215,8 @@ int main() {
 		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
-		lighting_shader.use();
-		sunptr->Draw();
+		//lighting_shader.use();
+		//sunptr->Draw();
 
 		block_shader.use();
 		worldptr->Draw();
