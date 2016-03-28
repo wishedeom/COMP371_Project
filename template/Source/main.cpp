@@ -140,6 +140,7 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
+	// Only a test
 	std::vector<Drawable> buildings;
 	for (int sides = 3; sides <= 10; sides++)
 	{
