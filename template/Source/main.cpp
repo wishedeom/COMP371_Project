@@ -144,7 +144,7 @@ int main()
 	std::vector<Drawable> buildings;
 	for (int sides = 3; sides <= 10; sides++)
 	{
-		buildings.push_back(makeRegularPolygonalPrism(sides, 0.5f, 2.0f, "../Images/building1.jpg").setOrigin(glm::vec3(1.0f, -2.0f * (sides - 8), 0.0f)));
+		buildings.push_back(makeRegularPolygonalPrism(sides, 0.5f, 1.0f + sides / 4.0f, "../Images/building2.jpg").setOrigin(glm::vec3(1.0f, -2.0f * (sides - 8), 0.0f)));
 	}
 
 	while (!glfwWindowShouldClose(window))
