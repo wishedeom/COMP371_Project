@@ -141,11 +141,7 @@ int main()
 	cameraptr = &camera;
 	
 	// Only a test
-	std::vector<Drawable> buildings;
-	for (int sides = 3; sides <= 10; sides++)
-	{
-		buildings.push_back(makeRegularPolygonalPrism(sides, 0.5f, 1.0f + sides / 4.0f, "../Images/building2.jpg").setOrigin(glm::vec3(1.0f, -2.0f * (sides - 8), 0.0f)));
-	}
+	auto quad = makeQuad();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -155,10 +151,7 @@ int main()
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		for (auto building : buildings)
-		{
-			building.draw(camera);
-		}
+		quad.draw(camera);
 
 		// update other events like input handling
 		glfwPollEvents();
