@@ -269,22 +269,96 @@ Drawable makeQuad(const float length, const float width, const std::string& text
 	std::vector<glm::vec3> vertices;
 	vertices.push_back(glm::vec3(-x, -y, 0.0f));
 	vertices.push_back(glm::vec3(x, -y, 0.0f));
-	vertices.push_back(glm::vec3(x, y, 0.0f));
 	vertices.push_back(glm::vec3(-x, y, 0.0f));
+	vertices.push_back(glm::vec3(x, y, 0.0f));
 
 	std::vector<GLuint> indices;
 	indices.push_back(0);
 	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(0);
-	indices.push_back(2);
 	indices.push_back(3);
+	indices.push_back(0);
+	indices.push_back(3);
+	indices.push_back(2);
 
 	std::vector<glm::vec2> texCoords;
 	texCoords.push_back(glm::vec2(0.0f, 0.0f));
 	texCoords.push_back(glm::vec2(1.0f, 0.0f));
+	texCoords.push_back(glm::vec2(0.0f, 1.0f));
 	texCoords.push_back(glm::vec2(1.0f, 1.0f));
-	texCoords.push_back(glm::vec2(1.0f, 0.0f));
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/block.png");
+	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/road.png");
+}
+
+
+Drawable makeOldQuad()
+{
+	glm::vec3 centre;
+
+	std::vector<glm::vec3> vertices;
+	
+	vertices.push_back(centre + glm::vec3(-0.5f, 0.5f, 0.0f));
+	vertices.push_back(centre + glm::vec3(-0.5f, -0.5f, 0.0f));
+	vertices.push_back(centre + glm::vec3(0.5f, 0.5f, 0.0f));
+	vertices.push_back(centre + glm::vec3(-0.5f, -0.5f, 0.0f));
+
+	vertices.push_back(centre + glm::vec3(-0.35f, 0.35f, 0.0f));
+	vertices.push_back(centre + glm::vec3(-0.35f, -0.35f, 0.0f));
+	vertices.push_back(centre + glm::vec3(0.35f, 0.35f, 0.0f));
+	vertices.push_back(centre + glm::vec3(0.35f, -0.35f, 0.0f));
+
+	vertices.push_back(centre + glm::vec3(-0.35f, 0.35f, 0.0125f));
+	vertices.push_back(centre + glm::vec3(-0.35f, -0.35f, 0.0125f));
+	vertices.push_back(centre + glm::vec3(0.35f, 0.35f, 0.0125f));
+	vertices.push_back(centre + glm::vec3(0.35f, -0.35f, 0.0125f));
+
+	std::vector<glm::vec3> colours;
+
+	colours.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
+	colours.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+
+	colours.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+
+	std::vector<glm::vec2> textures;
+
+	textures.push_back(glm::vec2(0.0f, 1.0f));
+	textures.push_back(glm::vec2(0.0f, 0.0f));
+	textures.push_back(glm::vec2(1.0f, 1.0f));
+	textures.push_back(glm::vec2(1.0f, 0.0f));
+
+	textures.push_back(glm::vec2(0.1375f, 0.8625f));
+	textures.push_back(glm::vec2(0.1375f, 0.1375f));
+	textures.push_back(glm::vec2(0.8625f, 0.8625f));
+	textures.push_back(glm::vec2(0.8625f, 0.1375f));
+
+	textures.push_back(glm::vec2(0.15f, 0.85f));
+	textures.push_back(glm::vec2(0.15f, 0.15f));
+	textures.push_back(glm::vec2(0.85f, 0.85f));
+	textures.push_back(glm::vec2(0.85f, 0.15f));
+
+	std::vector<GLuint> indices = {  // Note that we start from 0!
+		0, 1, 2, // Road
+		2, 1, 3,
+		8, 4, 9,
+		9, 4, 5,
+		9, 5, 11,
+		11, 5, 7,
+		11, 7, 10,
+		10, 7, 6,
+		10, 6, 8,
+		8, 6, 4,
+		8, 9, 10,
+		10, 9, 11
+	};
+
+	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/block.png");
 }

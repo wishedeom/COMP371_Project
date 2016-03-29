@@ -82,3 +82,6 @@ Drawable makeRegularPolygonalPrism(const int sides, const float radius, const fl
 Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float maxRadius = 0.4f, const float minHeight = 1.0f, const float maxHeight = 2.0f, const std::string& texturePath = "");
 
 Drawable makeQuad(const float length = 1.0f, const float width = 1.0f, const std::string& texturePath = "");
+
+// TEST
+Drawable makeOldQuad();
