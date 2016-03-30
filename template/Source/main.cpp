@@ -170,9 +170,9 @@ int main() {
 
 	/* TREE POSITION TEST */
 	glm::vec3 pos[] = {
-		glm::vec3(0.0f, 0.0f, 0.0f)/*,
+		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.5f, -0.5f, 0.0f),
-		glm::vec3(0.0f, 0.5f, 0.0f)*/
+		glm::vec3(0.0f, 0.5f, 0.0f)
 	};
 
 	/* END OF TREE POSITION TEST */
@@ -199,142 +199,106 @@ int main() {
 		glm::mat4 proj_matrix;
 		glm::mat4 view_matrix;
 		glm::mat4 model_matrix;
-	//	glm::mat4 model_view_matrix;
 
 		view_matrix_id = glGetUniformLocation(tree_shader.programID(), "view_matrix");
 		model_matrix_id = glGetUniformLocation(tree_shader.programID(), "model_matrix");
-	//	model_view_matrix_id = glGetUniformLocation(tree_shader.programID(), "model_view_matrix");
 		proj_matrix_id = glGetUniformLocation(tree_shader.programID(), "proj_matrix");
 
 
-		/* Method #5: With the assumption that the billboard is parallel to xz-plane */
+		/* Method #5: With the assumption that the billboard is parallel to xz-plane & rotating around the y-axis at the camera position */
 
-		view_matrix = cameraptr->view();
-		glm::vec3 camRight = glm::normalize(glm::vec3(view_matrix[0][0], view_matrix[0][1], view_matrix[0][2]));
-		glm::vec3 camUp = glm::normalize(glm::vec3(view_matrix[1][0], view_matrix[1][1], view_matrix[1][2]));
-		//glm::vec3 camRight = cameraptr->right();
-		//glm::vec3 camUp = glm::cross(cameraptr->forward(), camRight);
-		glm::vec3 camPos = cameraptr->position();
+	//	for (int i = 0; i < sizeof(pos); i++)
+	//	{
+	/*		view_matrix = cameraptr->view();
+			glm::vec3 camRight = glm::normalize(glm::vec3(view_matrix[0][0], view_matrix[0][1], view_matrix[0][2]));
+			glm::vec3 camUp = glm::normalize(glm::vec3(view_matrix[1][0], view_matrix[1][1], 1.0));
+			glm::vec3 camPos = cameraptr->position();
 
-		glm::vec3 billFront = camPos - pos[0];
-		glm::vec3 billFrontNorm = glm::normalize(billFront);
-		glm::vec3 billRight = glm::normalize(glm::cross(camUp, billFront));
-		glm::vec3 billUp = glm::normalize(glm::cross(billFront, billRight));
+			glm::vec3 posOri = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 billFront = camPos - pos[0];
+			glm::vec3 billFrontNorm = glm::normalize(billFront);
+			glm::vec3 billRight = glm::normalize(glm::cross(camUp, billFrontNorm));
+			glm::vec3 billUp = glm::normalize(glm::cross(billFrontNorm, billRight));
 
-		// Place the tree in the world
-		model_matrix = glm::translate(model_matrix, pos[0]);
+			// Place the tree in the world
+			model_matrix = glm::translate(model_matrix, pos[0]);
 
-		// Temporarily move the tree to the camera
-//		model_matrix = glm::translate(model_matrix, billFront);
+			// Temporarily move the tree to the camera
+			model_matrix = glm::translate(model_matrix, billFront);
 
-		// Find the rotation angle
-		GLfloat dot = glm::dot(camRight, billRight);
-		GLfloat camRightMag = glm::length(camRight);
-		GLfloat billRightMag = glm::length(billRight);
-		GLfloat angle = glm::acos(dot / (camRightMag * billRightMag));
+			// Find the rotation angle
+			GLfloat dot = glm::dot(camRight, billRight);
+			GLfloat camRightMag = glm::length(camRight);
+			GLfloat billRightMag = glm::length(billRight);
+			GLfloat angle = glm::acos(dot / (camRightMag * billRightMag));
 
-		// Perform the rotation
-		glm::vec3 rotAxis = glm::vec3(camUp.x, camUp.y, 1.0);
-//		model_matrix = glm::rotate(model_matrix, angle, camUp);
+			// Perform the rotation
+			model_matrix = glm::rotate(model_matrix, angle, billUp);
 
-		// Move the tree back
-//		model_matrix = glm::translate(model_matrix, glm::vec3(billFront.x * -1, billFront.y * -1, billFront.z * -1));
+			// Move the tree back
+			model_matrix = glm::translate(model_matrix, glm::vec3(billFront.x * -1, billFront.y * -1, billFront.z * -1));
 
-		//model_matrix = model_matrix * billTrans;
-		proj_matrix = cameraptr->projection();
-		
-		
-		/* Method #4 */
-	/*	view_matrix = cameraptr->view();
-		glm::vec3 camRight = glm::vec3(view_matrix[0][0], view_matrix[0][1], view_matrix[0][2]);
-		glm::vec3 camUp = glm::vec3(view_matrix[1][0], view_matrix[1][1], view_matrix[1][2]);
-		glm::vec3 camPos = cameraptr->position();
-		
-		glm::vec3 billFront = glm::normalize(camPos - pos[0]);
-		glm::vec3 billRight = glm::normalize(glm::cross(camUp, billFront));
-		glm::vec3 billUp = glm::normalize(glm::cross(billFront, billRight));
-		glm::mat4 billTrans; // r1: Right, r2: Up, r3: Front, c4: billPos
-		billTrans[0][0] = billRight.x; // Right
-		billTrans[0][1] = billRight.y;
-		billTrans[0][2] = billRight.z;
-		billTrans[1][0] = billUp.x; // Up
-		billTrans[1][1] = billUp.y;
-		billTrans[1][2] = billUp.z;
-		billTrans[2][0] = billFront.x; // Front
-		billTrans[2][1] = billFront.y;
-		billTrans[2][2] = billFront.z;
-		billTrans[0][3] = pos[0].x; // Pos
-		billTrans[1][3] = pos[0].y;
-		billTrans[2][3] = pos[0].z;
-		billTrans[3][0] = 0; // Zero
-		billTrans[3][1] = 0;
-		billTrans[3][2] = 0;
-		billTrans[3][2] = 0;
+			proj_matrix = cameraptr->projection();
+
+			glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+			glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+			glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	*/	
+
+			treeptr->billboarding(cameraptr, view_matrix, model_matrix, proj_matrix, pos[0]);
+
+			treeptr->draw();
+	//	}
+
+		/* End of Method #5: rotate around the origin than place in the world final location */
 
 
-		model_matrix = glm::translate(model_matrix, pos[0]);
-		model_matrix = model_matrix * billTrans;
-		proj_matrix = cameraptr->projection();
-		
-		*/
-		/* End of Method #4 */
+			/* Method #5b: With the assumption that the billboard is parallel to xz-plane & rotating around the y-axis at the camera position */
+
+			//	for (int i = 0; i < sizeof(pos); i++)
+			//	{
+	/*		view_matrix = cameraptr->view();
+			glm::vec3 camRight = glm::normalize(glm::vec3(view_matrix[0][0], view_matrix[0][1], view_matrix[0][2]));
+			glm::vec3 camUp = glm::normalize(glm::vec3(view_matrix[1][0], view_matrix[1][1], 1.0));
+			glm::vec3 camPos = cameraptr->position();
+
+			glm::vec3 ori = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 billFront = glm::vec3(0.0f, 0.0f, 1.0);
+			//glm::vec3 billFrontNorm = glm::normalize(billFront);
+			glm::vec3 billRight = glm::vec3(-1.0f, 0.0f, 0.0f);
+			glm::vec3 billUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+			// Place the tree in the world
+		//	model_matrix = glm::translate(model_matrix, pos[0]);
+
+			// Temporarily move the tree to the camera
+		//	model_matrix = glm::translate(model_matrix, billFront);
+
+			// Find the rotation angle
+			glm::vec3 camRightToOri = camRight - ori;
+			GLfloat dot = glm::dot(camRightToOri, billRight);
+			GLfloat camRightMag = glm::length(camRightToOri);
+			GLfloat billRightMag = glm::length(billRight);
+			GLfloat angle = glm::acos(dot / (camRightMag * billRightMag));
+
+			// Perform the rotation
+			model_matrix = glm::translate(model_matrix, pos[0]);
+			model_matrix = glm::rotate(model_matrix, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+			
+			// Move the tree back
+			//model_matrix = glm::translate(model_matrix, glm::vec3(billFront.x * -1, billFront.y * -1, billFront.z * -1));
+
+			proj_matrix = cameraptr->projection();
+
+			glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+			glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+			glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+
+			treeptr->draw();
+	*/		//	}
+		/* End of Method #5b */
 
 
-		/* Method #3 */
-	/*	glm::vec3 treeToCam = cameraptr->position() - pos[0];
-		treeToCam.y = 0.0f;
-		treeToCam = glm::normalize(treeToCam);
-
-		cameraptr->orientation.x = 0;
-		cameraptr->orientation.y = 0;
-		cameraptr->orientation.z = 1;
-		cameraptr->orientation = glm::normalize(cameraptr->orientation());
-
-		glm::vec3 cross = glm::cross(cameraptr->orientation(), treeToCam);
-
-		GLfloat ang = glm::dot(cameraptr->orientation(), treeToCam);
-
-		if (ang < 0.99990 && ang > -0.9999)
-		{
-			cout << "!!! BILLBOARD ROTATE  !!!" << endl;
-			model_matrix = glm::rotate(model_matrix, (GLfloat)(glm::acos(ang) * 180 / pi), cross);
-		}
-
-		proj_matrix = cameraptr->projection();
-		view_matrix = cameraptr->view();
-*/
-		/* End of Method #3 */
-
-	//	model_view_matrix = view_matrix * model_matrix;
-
-		
-	/*	model_view_matrix = view_matrix * model_matrix;
-
-		model_view_matrix[0][0] = 1;
-		model_view_matrix[0][1] = 0;
-		model_view_matrix[0][2] = 0;
-
-		model_view_matrix[2][0] = 0;
-		model_view_matrix[2][1] = 0;
-		model_view_matrix[2][2] = 1;
-*/
-		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
-//		glUniformMatrix4fv(model_view_matrix_id, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
-
-		block_shader.use();
-		treeptr->draw();
-
-		/*TEST*/
-		/*	glUniformMatrix4fv(Structure::projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		glUniformMatrix4fv(Structure::viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(Structure::modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
-		s1.draw();
-		s2.draw();
-		s3.draw();
-		s4.draw();
-		*/	/*UNTEST*/
 
 		// update other events like input handling
 		glfwPollEvents();

@@ -267,23 +267,57 @@ void Tree::createBuffers()
 	glBindVertexArray(0);*/
 }
 
+
+void Tree::billboarding(Camera* cameraptr, glm::mat4 view_matrix, glm::mat4 model_matrix, glm::mat4 proj_matrix, glm::vec3 pos)
+{
+
+	view_matrix = cameraptr->view();
+	glm::vec3 camRight = glm::normalize(glm::vec3(view_matrix[0], view_matrix[1], view_matrix[2]));
+	glm::vec3 camUp = glm::normalize(glm::vec3(view_matrix[3], view_matrix[4], 1.0));
+	glm::vec3 camPos = cameraptr->position();
+
+	glm::vec3 billFront = glm::vec3(camPos.x * -1, camPos.y * -1, camPos.z) - pos;
+//	glm::vec3 billFront = camPos - pos;
+//	billFront = glm::vec3(billFront.x * -1, billFront.y * -1, billFront.z);
+	glm::vec3 billFrontNorm = glm::normalize(billFront);
+	glm::vec3 billRight = glm::normalize(glm::cross(camUp, billFrontNorm));
+	glm::vec3 billUp = glm::normalize(glm::cross(billFrontNorm, billRight));
+
+	// Place the tree in the world
+	model_matrix = glm::translate(model_matrix, pos);
+
+	// Temporarily move the tree to the camera
+	model_matrix = glm::translate(model_matrix, billFront);
+
+	// Find the rotation angle
+	GLfloat dot = glm::dot(camRight, billRight);
+	GLfloat camRightMag = glm::length(camRight);
+	GLfloat billRightMag = glm::length(billRight);
+	GLfloat angle = glm::acos(dot / (camRightMag * billRightMag));
+
+	// Perform the rotation
+	//glm::vec3 rotAxis = glm::normalize(glm::vec3(camUp.x, camUp.y, 1.0));
+	model_matrix = glm::rotate(model_matrix, angle, camUp);
+
+	// Move the tree back
+	model_matrix = glm::translate(model_matrix, glm::vec3(billFront.x * -1, billFront.y * -1, billFront.z * -1));
+
+	proj_matrix = cameraptr->projection();
+
+	glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+	glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+}
+
 void Tree::draw()
 {
-/*	view_matrix_id = glGetUniformLocation(treeShaderptr->programID(), "view_matrix");
-	model_matrix_id = glGetUniformLocation(treeShaderptr->programID(), "model_matrix");
-	proj_matrix_id = glGetUniformLocation(treeShaderptr->programID(), "proj_matrix");
-*/
 
-/*	blockptr->loadTextures(0, 0);
-	blockptr->draw();
-*/
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	treeShaderptr->use();
 	createBuffers();
 	loadTexture();
-	
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -294,8 +328,6 @@ void Tree::draw()
 	glBindVertexArray(0);
 
 	glDisable(GL_BLEND);
-
-	//glEnable(GL_CULL_FACE);
 }
 
 GLuint Tree::getShaderProgram()
