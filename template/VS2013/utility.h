@@ -84,4 +84,4 @@ Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float ma
 Drawable makeQuad(const float length = 1.0f, const float width = 1.0f, const std::string& texturePath = "");
 
 // TEST
-Drawable makeOldQuad();
+Drawable makeOldQuad(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);

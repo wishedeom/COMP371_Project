@@ -290,26 +290,36 @@ Drawable makeQuad(const float length, const float width, const std::string& text
 }
 
 
-Drawable makeOldQuad()
+Drawable makeOldQuad(const glm::vec3& centre, const float size, const float height)
 {
-	glm::vec3 centre;
+	const float edge = 0.5f;
+	const float sidewalk = 0.4f;
 
 	std::vector<glm::vec3> vertices;
 	
-	vertices.push_back(centre + glm::vec3(-0.5f, 0.5f, 0.0f));
-	vertices.push_back(centre + glm::vec3(-0.5f, -0.5f, 0.0f));
-	vertices.push_back(centre + glm::vec3(0.5f, 0.5f, 0.0f));
-	vertices.push_back(centre + glm::vec3(-0.5f, -0.5f, 0.0f));
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * edge, j * edge, 0.0f));
+		}
+	}
 
-	vertices.push_back(centre + glm::vec3(-0.35f, 0.35f, 0.0f));
-	vertices.push_back(centre + glm::vec3(-0.35f, -0.35f, 0.0f));
-	vertices.push_back(centre + glm::vec3(0.35f, 0.35f, 0.0f));
-	vertices.push_back(centre + glm::vec3(0.35f, -0.35f, 0.0f));
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, 0.0f));
+		}
+	}
 
-	vertices.push_back(centre + glm::vec3(-0.35f, 0.35f, 0.0125f));
-	vertices.push_back(centre + glm::vec3(-0.35f, -0.35f, 0.0125f));
-	vertices.push_back(centre + glm::vec3(0.35f, 0.35f, 0.0125f));
-	vertices.push_back(centre + glm::vec3(0.35f, -0.35f, 0.0125f));
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, height));
+		}
+	}
 
 	std::vector<glm::vec3> colours;
 
@@ -360,5 +370,5 @@ Drawable makeOldQuad()
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/block.png");
+	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/block_base.png");
 }

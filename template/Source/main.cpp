@@ -141,7 +141,7 @@ int main()
 	cameraptr = &camera;
 	
 	// Only a test
-	auto quad = makeQuad();
+	auto quad = makeOldQuad();
 
 	while (!glfwWindowShouldClose(window))
 	{

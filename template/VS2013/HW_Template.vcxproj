@@ -117,7 +117,7 @@
     <Image Include="..\Images\building3.jpg" />
     <Image Include="..\Images\container.jpg" />
     <Image Include="..\Images\road.png" />
-    <Image Include="..\Images\sidewalk.png" />
+    <Image Include="..\Images\block_base.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HW_Template.rc" />
