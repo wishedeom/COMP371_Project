@@ -25,10 +25,10 @@ class Block
 
 public:
 
-	static const float width;
-	static const float length;
+	static const float size;
+	static const float height;
 
-	Block(const glm::vec3& centre);
+	Block(const glm::vec3& centre = glm::vec3());
 
 	void draw(const Camera& camera);
 };

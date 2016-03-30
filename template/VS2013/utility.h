@@ -81,7 +81,4 @@ Drawable makeRegularPolygonalPrism(const int sides, const float radius, const fl
 
 Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float maxRadius = 0.4f, const float minHeight = 1.0f, const float maxHeight = 2.0f, const std::string& texturePath = "");
 
-Drawable makeQuad(const float length = 1.0f, const float width = 1.0f, const std::string& texturePath = "");
-
-// TEST
-Drawable makeOldQuad(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);
+Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f, const std::string& texturePath = "../Images/block_base.png");

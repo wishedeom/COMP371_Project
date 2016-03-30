@@ -1,17 +1,20 @@
 #include "Block.h"
 
-const float Block::width = 1.0f;
-const float Block::length = 1.0f;
+const float Block::size = 1.0f;
+const float Block::height = 0.0125f;
 
 
 Block::Block(const glm::vec3& centre)
-	: m_quad(makeQuad(length, width, "../Images/block.png"))
+	: m_quad(makeBlockBase(centre, size, height, "../Images/block_base.png"))
 {
-	m_quad.setOrigin(centre);
-	m_buildings[0] = makeRandomRegularPolygonalPrism(10, 0.5f, 2.0f).setOrigin(centre + glm::vec3(-length / 6, -width / 6, 0.0f));
-	m_buildings[1] = makeRandomRegularPolygonalPrism(10, 0.5f, 2.0f).setOrigin(centre + glm::vec3(length / 6, -width / 6, 0.0f));
-	m_buildings[2] = makeRandomRegularPolygonalPrism(10, 0.5f, 2.0f).setOrigin(centre + glm::vec3(-length / 6, width / 6, 0.0f));
-	m_buildings[3] = makeRandomRegularPolygonalPrism(10, 0.5f, 2.0f).setOrigin(centre + glm::vec3(length / 6, width / 6, 0.0f));
+	const float offset = size / 6;
+	const int maxSides = 10;
+	const float maxRadius = 0.1f;
+	const float maxHeight = 1.0f;
+	m_buildings[0] = makeRandomRegularPolygonalPrism(maxSides, maxRadius, maxHeight).setOrigin(centre + glm::vec3(-offset, -offset, height));
+	m_buildings[1] = makeRandomRegularPolygonalPrism(maxSides, maxRadius, maxHeight).setOrigin(centre + glm::vec3(-offset, offset, height));
+	m_buildings[2] = makeRandomRegularPolygonalPrism(maxSides, maxRadius, maxHeight).setOrigin(centre + glm::vec3(offset, -offset, height));
+	m_buildings[3] = makeRandomRegularPolygonalPrism(maxSides, maxRadius, maxHeight).setOrigin(centre + glm::vec3(offset, offset, height));
 }
 
 

@@ -223,12 +223,14 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
 	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
+	const float length = glm::distance(baseVertices[0], baseVertices[1]);
+
 	// Wrap texture around, one width for each side
 	std::vector<glm::vec2> textureCoords(vertices.size());
 	for (int i = 0; i < vertices.size() / 2; i++)
 	{
-		textureCoords[i] = glm::vec2(i, 0.0f);
-		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
+		textureCoords[i] = glm::vec2(i * length, 0.0f);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i * length, height);
 	}
 	
 	glm::vec3 colour(1.0f);		// White, all texture
@@ -261,36 +263,7 @@ Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadi
 }
 
 
-Drawable makeQuad(const float length, const float width, const std::string& texturePath)
-{
-	const float x = length / 2;
-	const float y = width / 2;
-	
-	std::vector<glm::vec3> vertices;
-	vertices.push_back(glm::vec3(-x, -y, 0.0f));
-	vertices.push_back(glm::vec3(x, -y, 0.0f));
-	vertices.push_back(glm::vec3(-x, y, 0.0f));
-	vertices.push_back(glm::vec3(x, y, 0.0f));
-
-	std::vector<GLuint> indices;
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(3);
-	indices.push_back(0);
-	indices.push_back(3);
-	indices.push_back(2);
-
-	std::vector<glm::vec2> texCoords;
-	texCoords.push_back(glm::vec2(0.0f, 0.0f));
-	texCoords.push_back(glm::vec2(1.0f, 0.0f));
-	texCoords.push_back(glm::vec2(0.0f, 1.0f));
-	texCoords.push_back(glm::vec2(1.0f, 1.0f));
-
-	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/road.png");
-}
-
-
-Drawable makeOldQuad(const glm::vec3& centre, const float size, const float height)
+Drawable makeBlockBase(const glm::vec3& centre, const float size, const float height, const std::string& texturePath)
 {
 	const float edge = 0.5f;
 	const float sidewalk = 0.4f;
@@ -355,8 +328,9 @@ Drawable makeOldQuad(const glm::vec3& centre, const float size, const float heig
 	textures.push_back(glm::vec2(0.85f, 0.85f));
 	textures.push_back(glm::vec2(0.85f, 0.15f));
 
-	std::vector<GLuint> indices = {  // Note that we start from 0!
-		0, 1, 2, // Road
+	std::vector<GLuint> indices =
+	{
+		0, 1, 2,
 		2, 1, 3,
 		8, 4, 9,
 		9, 4, 5,
@@ -370,5 +344,5 @@ Drawable makeOldQuad(const glm::vec3& centre, const float size, const float heig
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), "../Images/block_base.png");
+	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), texturePath);
 }

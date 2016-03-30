@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include <cctype>
+#include <ctime>
 
 // Standard C
 #include <stdio.h>
@@ -82,7 +83,10 @@ void cursorMoved(GLFWwindow* window, const double x, const double y)
 }
 
 
-bool initialize() {
+bool initialize()
+{
+	std::srand(std::time(0));
+
 	/// Initialize GL context and O/S window using the GLFW helper library
 	if (!glfwInit()) {
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
@@ -141,7 +145,7 @@ int main()
 	cameraptr = &camera;
 	
 	// Only a test
-	auto quad = makeOldQuad();
+	Block block;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -151,7 +155,7 @@ int main()
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		quad.draw(camera);
+		block.draw(camera);
 
 		// update other events like input handling
 		glfwPollEvents();
