@@ -8,6 +8,7 @@
 #include <iostream>
 #include "../VS2013/Shader.h"
 #include "SOIL.h"
+#include "Block.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ private:
 	GLuint view_matrix_id = 0;
 	GLuint model_matrix_id = 0;
 	GLuint proj_matrix_id = 0;
-
+	Block *blockptr;
 	//void writeColorCoord();
 };
 

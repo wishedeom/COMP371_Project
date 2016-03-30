@@ -1,10 +1,10 @@
 #pragma once
-#include "Block.h"
+#include "../VS2013/Block.h"
 //#include "Sun.h"
 #include <vector>
-#include "Building.h"
-#include "Skybox.h"
-#include "Tree.h"
+#include "../VS2013/Building.h"
+//#include "Skybox.h"
+#include "../VS2013/Tree.h"
 //size of the world in blocks, the world is currently a 2x2 world (4 blocks)
 #define WORLD_HEIGHT 4
 #define WORLD_LENGTH 4
@@ -21,6 +21,7 @@ private:
 	//static Sun* sunptr;
 	//static Block* blockptr;
 	static vector<Block*> blocks;
-	Skybox* skyptr;
-	static Tree* treeptr;
+	vector<Tree*> trees;
+//	Skybox* skyptr;
+	Tree* treeptr;
 };

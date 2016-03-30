@@ -17,10 +17,11 @@ Tree::Tree(float w, float h, const char* filepath)
 	VAO = 0;
 	VBO = 0;
 	EBO = 0;
-	
+	blockptr = new Block(0, 0);
+
 	//	defineVertices();
 	// xy-axis
-	treeV = {
+	/*treeV = {
 		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
 		-0.5f, 0.5f, 0.0f,	0.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
@@ -30,22 +31,22 @@ Tree::Tree(float w, float h, const char* filepath)
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
 		0.5f, -0.5f, 0.0f,	1.0f, 1.0f
 	};
-
+	*/
 
 	// xz-axis
-	/*treeV = {
+	treeV = {
 		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
-		-0.5f, 5.0f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 5.0f, -0.5f, 0.0f, 1.0f,
-		0.5f, 5.0f, 0.5f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-		0.5f, 5.0f, 0.5f, 1.0f, 0.0f,
-		-0.5f,5.0f, -0.5f, 0.0f, 1.0f,
-		0.5f, 5.0f, -0.5f, 1.0f, 1.0f
-	};*/
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		-0.5f,0.5f, -0.5f, 0.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 1.0f
+	};
+	
 
-
-/*	ground = {
+	/*ground = {
 		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
 		-0.5f, 0.5f, 0.0f, 0.0f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
@@ -249,9 +250,9 @@ void Tree::createBuffers()
 /*	glGenVertexArrays(1, &VAO2);
 	glGenBuffers(1, &VBO2);
 
-	glBindVertexArray(VAO2);*/
+	glBindVertexArray(VAO2);
 
-	/*glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ground[0]) * ground.size(), &ground[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
@@ -272,15 +273,17 @@ void Tree::draw()
 	model_matrix_id = glGetUniformLocation(treeShaderptr->programID(), "model_matrix");
 	proj_matrix_id = glGetUniformLocation(treeShaderptr->programID(), "proj_matrix");
 */
-	//glDisable(GL_CULL_FACE);
-	//cout << "size" << treeInd.size() << endl;
-/*	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+/*	blockptr->loadTextures(0, 0);
+	blockptr->draw();
 */
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	treeShaderptr->use();
 	createBuffers();
 	loadTexture();
-
+	
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -290,7 +293,8 @@ void Tree::draw()
 	glDrawElements(GL_TRIANGLES, treeInd.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	//glDisable(GL_BLEND);
+	glDisable(GL_BLEND);
+
 	//glEnable(GL_CULL_FACE);
 }
 
@@ -314,13 +318,13 @@ void Tree::loadTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// Load image, create texture and generate mipmaps
 	int width, height;
-	unsigned char* image = SOIL_load_image(filepath, &width, &height, 0, SOIL_LOAD_RGB);
+	unsigned char* image = SOIL_load_image(filepath, &width, &height, 0, SOIL_LOAD_RGBA);
 	if (image == '\0')
 	{
 		cout << "Unable to load image." << endl;
 	}
 	cout << "LOADED TREE IMAGE" << endl;
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.

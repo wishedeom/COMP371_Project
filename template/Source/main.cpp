@@ -36,11 +36,8 @@ GLuint block_shader = 0;
 GLuint view_matrix_id = 0;
 GLuint model_matrix_id = 0;
 GLuint proj_matrix_id = 0;
+GLuint model_view_matrix_id = 0;
 
-///Transformations
-glm::mat4 proj_matrix;
-glm::mat4 view_matrix;
-glm::mat4 model_matrix;
 
 Camera* cameraptr;
 
@@ -77,7 +74,7 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 }
 
 void windowResize(GLFWwindow* window, int width, int height){
-	GLfloat aspectRatio = width / height;
+	GLfloat aspectRatio = (GLfloat)width / (GLfloat) height;
 	glViewport(0, 0, width, height);
 	//from http://stackoverflow.com/questions/26831962/opengl-orthographic-projection-oy-resizing
 	cameraptr->setAspectRatio(aspectRatio);
@@ -153,66 +150,115 @@ int main() {
 	initialize();
 
 	/*TEST*/
-	Structure s1 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+	/*	Structure s1 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 	Structure s2 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 0.0f, 0.0f));
 	Structure s3 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(5.0f, 5.0f, 0.0f));
 	Structure s4 = Structure::randomStructure(15, 3.0f, 100.0f, glm::vec3(0.0f, 5.0f, 0.0f));
-	/*UNTEST*/
+	*/	/*UNTEST*/
 
 	Camera camera(*window);
 	cameraptr = &camera;
 
 	World world;
 	World* worldptr = &world;
-
+	Tree* treeptr = new Tree(0.25f, 0.375f, "C:/Users/mimi/Desktop/template/MegaOne/Images/tree2.png");
 	building buildings;
 	building* buildingsptr = &buildings;
 	buildingsptr->BuildCity();
 	// This will identify our vertex buffer
 	GLuint vertexbuffer;
 
+	/* TREE POSITION TEST */
+	glm::vec3 pos[] = {
+		glm::vec3(0.0f, 0.0f, 0.0f)/*,
+		glm::vec3(0.5f, -0.5f, 0.0f),
+		glm::vec3(0.0f, 0.5f, 0.0f)*/
+	};
+
+	/* END OF TREE POSITION TEST */
+
 	//why does this take priority?
 	//shader_program = loadShaders("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
 	//shader_program = loadShaders("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	Shader building_shader("../Source/COMP371_hw1.vs", "../Source/COMP371_hw1.fss");
 	Shader block_shader("../Source/BLOCK_VERTEX_SHADER.vs", "../Source/BLOCK_FRAG_SHADER.frag");
+	Shader tree_shader("../Source/TREE_VERTEX_SHADER.vs", "../Source/TREE_FRAG_SHADER.frag");
 	//The three variables below hold the id of each of the variables in the shader
 	//If you read the vertex shader file you'll see that the same variable names are used.
-	view_matrix_id = glGetUniformLocation(block_shader.programID(), "view_matrix");
-	model_matrix_id = glGetUniformLocation(block_shader.programID(), "model_matrix");
-	proj_matrix_id = glGetUniformLocation(block_shader.programID(), "proj_matrix");
 	while (!glfwWindowShouldClose(window))
 	{
-		proj_matrix = cameraptr->projection();
-		view_matrix = cameraptr->view();
 
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		//glUseProgram(shader_program);
 		//Pass the values of the three matrices to the shaders
 		
-		//glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
-		//glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		//glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+		///Transformations
+		glm::mat4 proj_matrix;
+		glm::mat4 view_matrix;
+		glm::mat4 model_matrix;
+	//	glm::mat4 model_view_matrix;
 
-		//building_shader.use();
-		//buildingsptr->Draw();
+		view_matrix_id = glGetUniformLocation(tree_shader.programID(), "view_matrix");
+		model_matrix_id = glGetUniformLocation(tree_shader.programID(), "model_matrix");
+	//	model_view_matrix_id = glGetUniformLocation(tree_shader.programID(), "model_view_matrix");
+		proj_matrix_id = glGetUniformLocation(tree_shader.programID(), "proj_matrix");
 
-		//block_shader.use();
-		//worldptr->Draw();
+		model_matrix = glm::translate(model_matrix, pos[0]);
+
+		glm::vec3 treeToCam = cameraptr->position() - pos[0];
+		treeToCam.y = 0.0f;
+		treeToCam = glm::normalize(treeToCam);
+
+		cameraptr->orientation.x = 0;
+		cameraptr->orientation.y = 0;
+		cameraptr->orientation.z = 1;
+		cameraptr->orientation = glm::normalize(cameraptr->orientation());
+
+		glm::vec3 cross = glm::cross(cameraptr->orientation(), treeToCam);
+
+		GLfloat ang = glm::dot(cameraptr->orientation(), treeToCam);
+
+		if (ang < 0.99990 && ang > -0.9999)
+		{
+			cout << "!!! BILLBOARD ROTATE  !!!" << endl;
+			model_matrix = glm::rotate(model_matrix, (GLfloat)(glm::acos(ang) * 180 / pi), cross);
+		}
+
+		proj_matrix = cameraptr->projection();
+		view_matrix = cameraptr->view();
+	//	model_view_matrix = view_matrix * model_matrix;
+
 		
+	/*	model_view_matrix = view_matrix * model_matrix;
+
+		model_view_matrix[0][0] = 1;
+		model_view_matrix[0][1] = 0;
+		model_view_matrix[0][2] = 0;
+
+		model_view_matrix[2][0] = 0;
+		model_view_matrix[2][1] = 0;
+		model_view_matrix[2][2] = 1;
+*/
+		glUniformMatrix4fv(proj_matrix_id, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		glUniformMatrix4fv(view_matrix_id, 1, GL_FALSE, glm::value_ptr(view_matrix));
+		glUniformMatrix4fv(model_matrix_id, 1, GL_FALSE, glm::value_ptr(model_matrix));
+//		glUniformMatrix4fv(model_view_matrix_id, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
+
+		block_shader.use();
+		treeptr->draw();
+
 		/*TEST*/
-		glUniformMatrix4fv(Structure::projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		/*	glUniformMatrix4fv(Structure::projMatrixID, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 		glUniformMatrix4fv(Structure::viewMatrixID, 1, GL_FALSE, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(Structure::modelMatrixID, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		s1.draw();
 		s2.draw();
 		s3.draw();
 		s4.draw();
-		/*UNTEST*/
+		*/	/*UNTEST*/
 
 		// update other events like input handling
 		glfwPollEvents();
