@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,7 +13,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BC42F5CD-7364-43BA-AC05-A2EB6F048B0C}</ProjectGuid>
     <RootNamespace>HW_Template</RootNamespace>
-    <ProjectName>COMP371 Project</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -25,7 +24,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -43,7 +42,7 @@
     <OutDir>$(SolutionDir)/../Bin/.</OutDir>
     <IntDir>$(SolutionDir)/../Build/$(Configuration)/</IntDir>
     <TargetName>$(ProjectName)-$(Configuration)</TargetName>
-    <IncludePath>C:\Users\Wishe\Source\Repos\Mega City One\template\ThirdParty;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Andy Chen\Desktop\371-proj\template\ThirdParty\Simple OpenGL Image Library;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -51,11 +50,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../ThirdParty/glew;../ThirdParty/glm;../ThirdParty/glfw;../ThirdParty/cimg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>/NODEFAULTLIB:library;../ThirdParty/glew;../ThirdParty/glfw/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../ThirdParty/glew;../ThirdParty/glfw/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32s.lib;glew32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -79,48 +77,55 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Structure.cpp" />
     <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Source\Block.frag" />
-    <None Include="..\Source\Block.vs" />
+    <None Include="..\Source\BLOCK_FRAG_SHADER.frag" />
+    <None Include="..\Source\BLOCK_SHADER.fss" />
+    <None Include="..\Source\BLOCK_VERTEX_SHADER.vs" />
     <None Include="..\Source\COMP371_hw1.fss" />
     <None Include="..\Source\COMP371_hw1.vs" />
+    <None Include="..\Source\SKY_FRAG_SHADER.frag" />
+    <None Include="..\Source\SKY_VERTEX_SHADER.vs" />
     <None Include="..\Source\SUN_FRAG_SHADER.frag" />
     <None Include="..\Source\SUN_VERTEX_SHADER.vs" />
-    <None Include="Building.frag" />
-    <None Include="Building.vs" />
+    <None Include="..\Source\TREE_FRAG_SHADER.frag" />
+    <None Include="..\Source\TREE_VERTEX_SHADER.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="building.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="SOIL.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Structure.h" />
     <ClInclude Include="Sun.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Images\back.jpg" />
+    <Image Include="..\Images\birch_tree_small.png" />
     <Image Include="..\Images\BLOCK.png" />
-    <Image Include="..\Images\building1.jpg" />
-    <Image Include="..\Images\building2.jpg" />
-    <Image Include="..\Images\building3.jpg" />
+    <Image Include="..\Images\bottom.jpg" />
     <Image Include="..\Images\container.jpg" />
+    <Image Include="..\Images\front.jpg" />
+    <Image Include="..\Images\left.jpg" />
+    <Image Include="..\Images\right.jpg" />
     <Image Include="..\Images\road.png" />
     <Image Include="..\Images\sidewalk.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="HW_Template.rc" />
+    <Image Include="..\Images\top.jpg" />
+    <Image Include="..\Images\tree.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
