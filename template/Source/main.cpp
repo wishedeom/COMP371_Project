@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <cctype>
+#include <cctype>	
 #include <ctime>
 
 // Standard C
