@@ -77,6 +77,7 @@
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sun.cpp" />
@@ -98,6 +99,7 @@
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
