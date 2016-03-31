@@ -13,12 +13,12 @@
 class DirectionalLight
 {
 public:
-	DirectionalLight(Camera);
+	DirectionalLight(const Camera& camera);
 	void UseShader() const;
 	const Shader& getShader() const;
 
 private:
-	static Shader shader;
-	Camera& camera;
+	Shader m_shader;
+	const Camera& m_camera;
 
 };

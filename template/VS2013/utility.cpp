@@ -223,6 +223,13 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
 	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
+	// Normals
+	std::vector<glm::vec3> normals;
+	for (const auto vertex : vertices)
+	{
+		normals.push_back(glm::vec3(vertex.x, vertex.y, 0.0f));
+	}
+
 	const float length = glm::distance(baseVertices[0], baseVertices[1]);
 
 	// Wrap texture around, one width for each side
@@ -235,7 +242,7 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	
 	glm::vec3 colour(1.0f);		// White, all texture
 
-	Drawable prism(vertices, indices, colour, textureCoords);
+	Drawable prism(vertices, indices, normals, textureCoords);
 	
 	if (texturePath != "")
 	{
@@ -294,22 +301,22 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 		}
 	}
 
-	std::vector<glm::vec3> colours;
+	std::vector<glm::vec3> normals;
 
-	colours.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
-	colours.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
 
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
 
-	colours.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
-	colours.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
-	colours.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
 
 	std::vector<glm::vec2> textures;
 
@@ -344,5 +351,5 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, texturePath);
+	return Drawable(vertices, indices, normals, textures, centre, texturePath);
 }

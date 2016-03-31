@@ -115,7 +115,7 @@ GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std:
 bool Shader::isInitialized() const { return m_initialized; }
 
 
-GLuint Shader::projMatrixID() const { return glGetUniformLocation(m_programID, "proj"); }
+GLuint Shader::projMatrixID() const { return glGetUniformLocation(m_programID, "projection"); }
 
 GLuint Shader::viewMatrixID() const { return glGetUniformLocation(m_programID, "view"); }
 
