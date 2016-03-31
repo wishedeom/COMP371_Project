@@ -154,7 +154,8 @@ int main()
 		buildings.push_back(makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg").setOrigin(glm::vec3(1.5 * i, 0.0f, 0.0f)));
 	}*/
 
-	Block block;
+	//Block block;
+	World world;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -169,7 +170,7 @@ int main()
 			building.draw(camera);
 		}*/
 
-		block.draw(camera);
+		world.draw(camera);
 
 		// update other events like input handling
 		glfwPollEvents();
