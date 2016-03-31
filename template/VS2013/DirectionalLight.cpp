@@ -6,7 +6,11 @@ DirectionalLight::DirectionalLight(const Camera& camera)
 	, m_diffuseColour(1.0f, 1.0f, 1.0f)
 	, m_specularColour(1.0f, 1.0f, 1.0f)
 	, m_camera(camera)
-	, m_shader(Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag")) {}
+	, m_shader(Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag"))
+{
+	glUniform1i(glGetUniformLocation(m_shader.programID(), "material.diffuse"), 0);
+	glUniform1i(glGetUniformLocation(m_shader.programID(), "material.specular"), 1);
+}
  
 
 void DirectionalLight::UseShader() const

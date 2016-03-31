@@ -129,8 +129,17 @@ void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 	{
 		fillBuffers();		// Put position, colour, and texture data into buffers
 	}
-	m_diffuseTexture.bind();
+	
 	light.UseShader();
+
+	glActiveTexture(GL_TEXTURE0 + 0);
+	m_diffuseTexture.bind();
+
+	glActiveTexture(GL_TEXTURE0 + 1);
+	m_specularTexture.bind();
+
+	glUniform1f(glGetUniformLocation(light.getShader().programID(), "material.shininess"), m_shininess);
+
 	glUniformMatrix4fv(light.getShader().projMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.projection()));
 	glUniformMatrix4fv(light.getShader().viewMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.view()));
 	glUniformMatrix4fv(light.getShader().modelMatrixID(), 1, GL_FALSE, glm::value_ptr(m_modelMatrix));
