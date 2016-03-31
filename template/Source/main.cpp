@@ -148,7 +148,7 @@ int main()
 	
 	DirectionalLight light(camera);
 
-	auto building = makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg");
+	World world;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -163,7 +163,7 @@ int main()
 			building.draw(camera);
 		}*/
 
-		building.draw(camera, light);
+		world.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();

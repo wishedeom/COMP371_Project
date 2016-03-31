@@ -18,12 +18,14 @@
 
 
 Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLuint>& indices, const std::vector<glm::vec3>& normals, const std::vector<glm::vec2>& textureCoords,
-	const glm::vec3& origin, const std::string& texturePath)
+	const glm::vec3& origin, const std::string& diffuseTexturePath,	const float shininess)
 	: m_vertices(vertices)
 	, m_indices(indices)
 	, m_textureCoords(textureCoords)
 	, m_normals(normals)
-	, m_texture(getTexture(texturePath))
+	, m_diffuseTexture(getTexture(diffuseTexturePath))
+	, m_specularTexture(getTexture(diffuseTexturePath))
+	, m_shininess(shininess)
 	, m_modelMatrix(id4)
 	, m_upToDate(false)
 {
@@ -110,12 +112,14 @@ glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
 
 void Drawable::setTexture(const std::string& path)
 {
-	m_texture = getTexture(path);
+	m_diffuseTexture = getTexture(path);
+	m_specularTexture = getTexture(path);
 }
 
 void Drawable::setTexture(const Texture& texture)
 {
-	m_texture = texture;
+	m_diffuseTexture = texture;
+	m_specularTexture = texture;
 }
 
 
@@ -125,7 +129,7 @@ void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 	{
 		fillBuffers();		// Put position, colour, and texture data into buffers
 	}
-	m_texture.bind();
+	m_diffuseTexture.bind();
 	light.UseShader();
 	glUniformMatrix4fv(light.getShader().projMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.projection()));
 	glUniformMatrix4fv(light.getShader().viewMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.view()));
@@ -133,5 +137,5 @@ void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
-	m_texture.unbind();
+	Texture::unbind();
 }

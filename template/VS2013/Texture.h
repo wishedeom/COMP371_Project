@@ -26,6 +26,6 @@ public:
 	void bind() const;
 
 	// Unbinds to allow next texture to be bound.
-	void unbind() const;
+	static void unbind();
 };
 

@@ -36,7 +36,9 @@ protected:
 
 	bool m_upToDate;		// True if and only if all buffers are up-to-date
 
-	Texture m_texture;
+	Texture m_diffuseTexture;
+	Texture m_specularTexture;
+	float m_shininess;
 
 	glm::mat4 m_modelMatrix;
 
@@ -57,13 +59,14 @@ public:
 
 	// Constructs a drawable.
 	Drawable
-	(
+		(
 		const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(),
 		const std::vector<GLuint>& indices = std::vector<GLuint>(),
 		const std::vector<glm::vec3>& normals = std::vector<glm::vec3>(),
 		const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
 		const glm::vec3& origin = glm::vec3(),
-		const std::string& texturePath = ""
+		const std::string& diffuseTexturePath = "",
+		const float shininess = 1.0f
 	);
 
 	// Sets the texture
