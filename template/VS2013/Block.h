@@ -4,12 +4,21 @@
 #include <iostream>
 #include <array>
 
+<<<<<<< HEAD
 #include "../ThirdParty/glew/glew.h"
 #include "../ThirdParty/glfw/glfw3.h"		
 #include "../ThirdParty/glm/glm.hpp"
 #include "../ThirdParty/gtc/matrix_transform.hpp"
 #include "../ThirdParty/gtc/type_ptr.hpp"
 #include "../ThirdParty/gtc/constants.hpp"
+=======
+#include "glew.h"
+#include "glfw3.h"		
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
+#include "gtc/constants.hpp"
+>>>>>>> refs/remotes/origin/master
 
 #include "Shader.h"
 #include "SOIL.h"
