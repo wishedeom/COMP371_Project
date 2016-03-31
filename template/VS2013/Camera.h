@@ -30,11 +30,15 @@ public:
 	// nearPlane: The distance between the camera and the near image plane.
 	// farPlane: The distance between the camera and the far image plane.
 	// window: The window the camera will be displaying to.
-	Camera(const glm::vec3& position, const glm::vec3& orientation, float fov, const float nearPlane, const float farPlane, GLFWwindow& window);
-
-	// Constructs a camera with default parameters displaying to a given window.
-	// window: The window the camera will be displaying to.
-	Camera(GLFWwindow& window);
+	Camera
+	(
+		GLFWwindow& window,
+		const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.05f),
+		const glm::vec3& orientation = glm::vec3(1.0f, 0.0f, 0.0f),
+		const float fov = 1.0f,
+		const float nearPlane = 0.05f,
+		const float farPlane = 100.0f
+	);
 
 
 	// Returns the camera's position.
@@ -72,44 +76,38 @@ public:
 	// Returns the camera's projection matrix.
 	glm::mat4 projection() const;
 
-
 	// Returns the camera's view matrix.
 	glm::mat4 view() const;
 
+	// Returns the product of the camera's projection and view matrices.
+	glm::mat4 projView() const;
 
 	// Moves the camera to a new position.
 	// position: The camera's new position.
 	void setPosition(const glm::vec3& position);
 
-
 	// Sets the camera to a new orientation.
 	// orientation: The camera's new orientation. Cannot be the zero vector.
 	void setOrientation(const glm::vec3& orientation);
-
 
 	// Sets the camera's field of view angle.
 	// fov: The camera's new field-of-view angle, in degrees. Must be between 0 and 180, exclusive.
 	void setFOV(const float fov);
 
-
 	// Sets the camera's aspect ratio.
 	// fov: The camera's new aspect ratio. Must be positive.
 	void setAspectRatio(const float aspectRatio);
-
 
 	// Sets the camera's near plane distance.
 	// nearPlane: The camera's new near plane distance. Must be positive and less than the far plane distance.
 	void setNearPlane(const float nearPlane);
 
-
 	// Sets the camera's far plane distance.
 	// farPlane: The camera's new far plane distance. Must be positive and greater than the near plane distance.
 	void setFarPlane(const float farPlane);
 
-
 	// Translates the camera by the given vector.
 	void translate(const glm::vec3& direction);
-
 
 	// Orients the camera based on new mouse cursor position, relative to the old cursor position.
 	// x: The mouse cursor's x-position.

@@ -112,4 +112,7 @@ GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std:
 }
 
 
-bool Shader::initialized() const { return m_initialized; }
+bool Shader::isInitialized() const { return m_initialized; }
+
+
+GLuint Shader::transformMatrixID() const { return glGetUniformLocation(m_programID, "transform"); }

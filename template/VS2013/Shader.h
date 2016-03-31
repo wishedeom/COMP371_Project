@@ -38,19 +38,18 @@ public:
 	// fragmentPath: Path name for fragment shader souce code.
 	Shader(const std::string& vertexPath, const std::string& fragmentPath);
 	
-
 	// Constructs an uninitialized Shader.
 	Shader();
 
 	// Returns the program ID of the shader program.
 	GLuint programID() const;
-
 	
-	// Returns true if and only if the shader program has been created.
-	bool initialized() const;
+	// Returns the ID of the transformation matrix uniform
+	GLuint transformMatrixID() const;
 
+	// Returns true if and only if the shader program has been created.
+	bool isInitialized() const;
 
     // Uses the current shader
 	void use() const;
-
 };

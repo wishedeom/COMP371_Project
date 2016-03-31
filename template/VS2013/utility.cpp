@@ -6,6 +6,9 @@
 #include "glm.hpp"
 #include "GLM/GTC/matrix_transform.hpp"
 
+#include "TextureManager.h"
+#include "Drawable.h"
+
 
 // The translational sweep is made from a profile polyline with p vertices and a trajectory polyline with t vertices, for a total of p * t vertices. The sweep itself
 // consists of (p - 1) * (t - 1) recangles, paramaterized from 0 to p - 2 along the profile curve and from 0 to t - 2 along the trajectory curve. Since the
@@ -130,7 +133,7 @@ std::vector<glm::vec3> embed(const std::vector<glm::vec2>& vertices)
 }
 
 
-std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
+std::vector<glm::vec2> makeRegularPolygon(const int sides, const float radius)
 {
 	// Triangle is the polygon with least number of sides
 	if (sides < 3)
@@ -140,7 +143,7 @@ std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
 	const float angle = 2 * pi / sides;						// Central angle between successive pairs of vertices
 	const auto rotMatrix = glm::rotate(id4, angle, up);		// To rotate our first vertex through each vertex of the polygon
 	std::vector<glm::vec2> vertices;						// To hold the vertices
-	glm::vec2 vertex(apothem, 0.0f);						// First vertex
+	glm::vec2 vertex(radius, 0.0f);						// First vertex
 	
 	// Construct the polygon
 	for (int i = 1; i <= sides; i++)
@@ -151,6 +154,14 @@ std::vector<glm::vec2> regularPolygon(const int sides, const float apothem)
 	}
 	
 	return vertices;
+}
+
+
+std::vector<glm::vec2> randomRegularPolygon(const int maxSides, const float maxRadius)
+{
+	const int sides = std::rand() % (maxSides - 2) + 3;
+	const float radius = maxRadius * std::rand() / RAND_MAX;
+	return makeRegularPolygon(sides, radius);
 }
 
 
@@ -165,15 +176,27 @@ std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, c
 }
 
 
-float randomFloat()
+float randomFloat(const float min, const float max)
 {
-	return static_cast<float>(std::rand()) / RAND_MAX;
+	return (max - min) * std::rand() / RAND_MAX + max;
+}
+
+
+float randomFloat(const float max)
+{
+	return randomFloat(0.0f, max);
 }
 
 
 glm::vec3 randomColour()
 {
 	return glm::vec3(randomFloat(), randomFloat(), randomFloat());
+}
+
+
+const Texture& randomBuildingTexture()
+{
+	return getTexture("../Images/building" + std::to_string(std::rand() % 3 + 1) + ".jpg");
 }
 
 
@@ -185,4 +208,83 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 		newVertices.push_back(vertex + translation);
 	}
 	return newVertices;
+}
+
+
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath)
+{
+	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
+	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
+
+	std::vector<glm::vec3> verticalTrajectory;					// Represents height of the building
+	verticalTrajectory.push_back(glm::vec3());
+	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, height));
+
+	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
+	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
+
+	// Wrap texture around, one width for each side
+	std::vector<glm::vec2> textureCoords(vertices.size());
+	for (int i = 0; i < vertices.size() / 2; i++)
+	{
+		textureCoords[i] = glm::vec2(i, 0.0f);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
+	}
+	
+	glm::vec3 colour(1.0f);		// White, all texture
+
+	Drawable prism(vertices, indices, colour, textureCoords);
+	
+	if (texturePath != "")
+	{
+		prism.setTexture(texturePath);
+	}
+	else
+	{
+		prism.setTexture(randomBuildingTexture());
+	}
+
+	return prism;
+}
+
+
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height, const std::string& texturePath)
+{
+	return makePolygonalPrism(makeRegularPolygon(sides, radius), height, texturePath);
+}
+
+
+Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight, const std::string& texturePath)
+{
+	const float height = maxHeight * std::rand() / RAND_MAX;
+	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height, texturePath);
+}
+
+
+Drawable makeQuad(const float length, const float width, const std::string& texturePath)
+{
+	const float x = length / 2;
+	const float y = width / 2;
+	
+	std::vector<glm::vec3> vertices;
+	vertices.push_back(glm::vec3(-x, -y, 0.0f));
+	vertices.push_back(glm::vec3(x, -y, 0.0f));
+	vertices.push_back(glm::vec3(x, y, 0.0f));
+	vertices.push_back(glm::vec3(-x, y, 0.0f));
+
+	std::vector<GLuint> indices;
+	indices.push_back(0);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(0);
+	indices.push_back(2);
+	indices.push_back(3);
+
+	std::vector<glm::vec2> texCoords;
+	texCoords.push_back(glm::vec2(0.0f, 0.0f));
+	texCoords.push_back(glm::vec2(1.0f, 0.0f));
+	texCoords.push_back(glm::vec2(1.0f, 1.0f));
+	texCoords.push_back(glm::vec2(1.0f, 0.0f));
+
+	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/.frag"), "../Images/block.png");
 }

@@ -24,7 +24,7 @@ public:
 	void draw();
 	GLuint getShaderProgram();
 	void buildPark();
-	void billboarding(Camera* cameraptr, glm::mat4 view_matrix, glm::mat4 model_matrix, glm::mat4 proj_matrix, glm::vec3 pos);
+	void billboarding(Camera* cameraptr, glm::vec3 pos);
 private:
 	vector<GLfloat> treeV;
 	vector<GLfloat> ground;

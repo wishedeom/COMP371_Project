@@ -1,46 +1,34 @@
 #pragma once
 
 #include <vector>
-#include "glew.h"		
-#include "glfw3.h"		
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
-#include "gtc/constants.hpp"
 #include <iostream>
+#include <array>
+
+#include "../ThirdParty/glew/glew.h"
+#include "../ThirdParty/glfw/glfw3.h"		
+#include "../ThirdParty/glm/glm.hpp"
+#include "../ThirdParty/gtc/matrix_transform.hpp"
+#include "../ThirdParty/gtc/type_ptr.hpp"
+#include "../ThirdParty/gtc/constants.hpp"
+
 #include "Shader.h"
 #include "SOIL.h"
+#include "Texture.h"
+#include "TextureManager.h"
+#include "Drawable.h"
 
-#define BLOCK_WIDTH 20
-#define BLOCK_HEIGHT 20
 
+class Block
+{
+	Drawable m_quad;
+	std::array<Drawable, 4> m_buildings;
 
-class Block{
-	public:
-		Block();
-		Block(GLuint,GLuint);
-		~Block();
+public:
 
-		static Block* getBlocks();
-		std::vector<glm::vec3> getBlockCoordinates();
-		void draw();
-		void loadTextures(GLuint,GLuint);
+	static const float width;
+	static const float length;
 
-	private:
-		static const char* filepath1;
-		static const char* filepath2;
-		//static const char* filepath;
-		static GLuint boardTexture;
-		static GLuint sidewalkGrassTexture;
+	Block(const glm::vec3& centre);
 
-		static Shader *blockShaderptr;
-		static std::vector<glm::vec3> blockCoordinates;
-		static std::vector<GLuint> blockIndices;
-		static std::vector<Block> blocks;
-		static Shader lightingShader;
-
-		GLuint VAO, VBO, EBO;
-		void createVAO();
-		GLuint numInd;
-		GLuint shader_program;
+	void draw(const Camera& camera);
 };

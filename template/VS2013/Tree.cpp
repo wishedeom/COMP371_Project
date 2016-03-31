@@ -268,8 +268,16 @@ void Tree::createBuffers()
 }
 
 
-void Tree::billboarding(Camera* cameraptr, glm::mat4 view_matrix, glm::mat4 model_matrix, glm::mat4 proj_matrix, glm::vec3 pos)
+void Tree::billboarding(Camera* cameraptr, glm::vec3 pos)
 {
+	///Transformations
+	glm::mat4 proj_matrix;
+	glm::mat4 view_matrix;
+	glm::mat4 model_matrix;
+
+	view_matrix_id = glGetUniformLocation(shader_program, "view_matrix");
+	model_matrix_id = glGetUniformLocation(shader_program, "model_matrix");
+	proj_matrix_id = glGetUniformLocation(shader_program, "proj_matrix");
 
 	view_matrix = cameraptr->view();
 	glm::vec3 camRight = glm::normalize(glm::vec3(view_matrix[0], view_matrix[1], view_matrix[2]));
@@ -311,7 +319,12 @@ void Tree::billboarding(Camera* cameraptr, glm::mat4 view_matrix, glm::mat4 mode
 
 void Tree::draw()
 {
+	/* BLOCK */
 
+	//blockptr->loadTextures(0,0);
+	blockptr->draw();
+
+	/* TREE */
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
