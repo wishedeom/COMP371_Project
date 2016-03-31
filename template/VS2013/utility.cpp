@@ -318,10 +318,10 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 	textures.push_back(glm::vec2(1.0f, 1.0f));
 	textures.push_back(glm::vec2(1.0f, 0.0f));
 
-	textures.push_back(glm::vec2(0.1375f, 0.8625f));
-	textures.push_back(glm::vec2(0.1375f, 0.1375f));
-	textures.push_back(glm::vec2(0.8625f, 0.8625f));
-	textures.push_back(glm::vec2(0.8625f, 0.1375f));
+	textures.push_back(glm::vec2(0.15f, 0.85f));
+	textures.push_back(glm::vec2(0.15f, 0.15f));
+	textures.push_back(glm::vec2(0.85f, 0.85f));
+	textures.push_back(glm::vec2(0.85f, 0.15f));
 
 	textures.push_back(glm::vec2(0.15f, 0.85f));
 	textures.push_back(glm::vec2(0.15f, 0.15f));
