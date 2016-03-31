@@ -18,11 +18,11 @@ Block::Block(const glm::vec3& centre)
 }
 
 
-void Block::draw(const Camera& camera)
+void Block::draw(const Camera& camera, const DirectionalLight& light)
 {
-	m_quad.draw(camera);
+	m_quad.draw(camera, light);
 	for (auto building : m_buildings)
 	{
-		building.draw(camera);
+		building.draw(camera, light);
 	}
 }

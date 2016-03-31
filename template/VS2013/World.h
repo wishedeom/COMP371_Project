@@ -11,5 +11,5 @@ class World
 
 public:
 	World(const int length = 2, const int width = 2);
-	void draw(const Camera& camera);
+	void draw(const Camera& camera, const DirectionalLight& light);
 };

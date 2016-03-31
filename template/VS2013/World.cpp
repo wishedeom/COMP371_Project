@@ -11,10 +11,10 @@ World::World(const int length, const int width)
 	}
 }
 
-void World::draw(const Camera& camera)
+void World::draw(const Camera& camera, const DirectionalLight& light)
 {
 	for (auto block : m_blocks)
 	{
-		block.draw(camera);
+		block.draw(camera, light);
 	}
 }

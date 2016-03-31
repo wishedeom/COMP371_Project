@@ -17,18 +17,17 @@
 #include "TextureManager.h"
 
 
-Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLuint>& indices, const glm::vec3& colour, const std::vector<glm::vec2>& textureCoords,
-	const glm::vec3& origin, const Shader& shader, const std::string& texturePath)
+Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLuint>& indices, const std::vector<glm::vec3>& normals, const std::vector<glm::vec2>& textureCoords,
+	const glm::vec3& origin, const std::string& texturePath)
 	: m_vertices(vertices)
 	, m_indices(indices)
 	, m_textureCoords(textureCoords)
-	, m_shader(shader)
+	, m_normals(normals)
 	, m_texture(getTexture(texturePath))
 	, m_modelMatrix(id4)
 	, m_upToDate(false)
 {
 	setOrigin(origin);
-	fill(colour);
 	generateBuffers();
 }
 
@@ -52,21 +51,21 @@ void Drawable::fillBuffers()
 	// Put vertex position data into VAO attribute 0
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_posBuffID);
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);	// Invalidate old data
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)0);
 
-	// Put vertex position data into VAO attribute 1
+	// Put vertex normal data into VAO attribute 1
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, m_colBuffID);
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(m_colours[0]) * m_colours.size(), m_colours.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(m_colours[0]), (GLvoid*)0);
+	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // Invalidate old data
+	glBufferData(GL_ARRAY_BUFFER, sizeof(m_normals[0]) * m_normals.size(), m_normals.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(m_normals[0]), (GLvoid*)0);
 
 	// Put vertex texture coordinate data into VAO attribute 2
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, m_texBuffID);
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // Invalidate old data
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_textureCoords[0]) * m_textureCoords.size(), m_textureCoords.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_textureCoords[0]), (GLvoid*)0);
 
@@ -82,14 +81,14 @@ void Drawable::fillBuffers()
 }
 
 
-void Drawable::fill(const glm::vec3& colour)
-{
-	m_upToDate = false;
-	for (int i = 0; i < m_vertices.size(); i++)
-	{
-		m_colours.push_back(colour);
-	}
-}
+//void Drawable::fill(const glm::vec3& colour)
+//{
+//	m_upToDate = false;
+//	for (int i = 0; i < m_vertices.size(); i++)
+//	{
+//		m_colours.push_back(colour);
+//	}
+//}
 
 
 Drawable& Drawable::setOrigin(const glm::vec3& origin)
@@ -120,15 +119,17 @@ void Drawable::setTexture(const Texture& texture)
 }
 
 
-void Drawable::draw(const Camera& camera)
+void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 {
 	if (!m_upToDate)
 	{
 		fillBuffers();		// Put position, colour, and texture data into buffers
 	}
 	m_texture.bind();
-	m_shader.use();
-	glUniformMatrix4fv(m_shader.transformMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.projView() * m_modelMatrix));
+	light.UseShader();
+	glUniformMatrix4fv(light.getShader().projMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.projection()));
+	glUniformMatrix4fv(light.getShader().viewMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.view()));
+	glUniformMatrix4fv(light.getShader().modelMatrixID(), 1, GL_FALSE, glm::value_ptr(m_modelMatrix));
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);

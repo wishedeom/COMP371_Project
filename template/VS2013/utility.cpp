@@ -344,5 +344,5 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"), texturePath);
+	return Drawable(vertices, indices, glm::vec3(1.0f), textures, centre, texturePath);
 }

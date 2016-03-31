@@ -13,7 +13,8 @@ DirectionalLight::DirectionalLight(Camera cam)
 }
  
 
-void DirectionalLight::UseShader(){
+void DirectionalLight::UseShader() const
+{
 	shader.use();
 	GLint lightDirLoc = glGetUniformLocation(shader.programID(), "light.direction");
 	GLint viewPosLoc = glGetUniformLocation(shader.programID(), "viewPos");
@@ -39,4 +40,10 @@ void DirectionalLight::UseShader(){
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+
+const Shader& DirectionalLight::getShader() const
+{
+	return shader;
 }

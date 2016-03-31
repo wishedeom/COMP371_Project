@@ -30,5 +30,5 @@ public:
 
 	Block(const glm::vec3& centre = glm::vec3());
 
-	void draw(const Camera& camera);
+	void draw(const Camera& camera, const DirectionalLight& light);
 };

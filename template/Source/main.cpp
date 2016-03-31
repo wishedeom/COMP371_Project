@@ -144,18 +144,11 @@ int main()
 	initialize();
 
 	Camera camera(*window);
-	// Light sun(camera);
 	cameraptr = &camera;
 	
-	// Only a test
-	/*std::vector<Drawable> buildings;
-	for (int i = 1; i <= 10; i++)
-	{
-		buildings.push_back(makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg").setOrigin(glm::vec3(1.5 * i, 0.0f, 0.0f)));
-	}*/
+	DirectionalLight light(camera);
 
-	//Block block;
-	World world;
+	auto building = makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg");
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -170,7 +163,7 @@ int main()
 			building.draw(camera);
 		}*/
 
-		world.draw(camera);
+		building.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();
