@@ -132,4 +132,5 @@ void Drawable::draw(const Camera& camera)
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
+	m_texture.unbind();
 }

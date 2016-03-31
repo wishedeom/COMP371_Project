@@ -24,5 +24,8 @@ public:
 
 	// Binds the texture for drawing
 	void bind() const;
+
+	// Unbinds to allow next texture to be bound.
+	void unbind() const;
 };
 

@@ -148,8 +148,13 @@ int main()
 	cameraptr = &camera;
 	
 	// Only a test
-	//auto building = makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg");
-	auto block = makeBlockBase();
+	/*std::vector<Drawable> buildings;
+	for (int i = 1; i <= 10; i++)
+	{
+		buildings.push_back(makeRandomRegularPolygonalPrism(3, 0.4f, 1.0f, 2.0f, "../Images/building1.jpg").setOrigin(glm::vec3(1.5 * i, 0.0f, 0.0f)));
+	}*/
+
+	Block block;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -158,6 +163,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
+
+		/*for (auto building : buildings)
+		{
+			building.draw(camera);
+		}*/
 
 		block.draw(camera);
 
