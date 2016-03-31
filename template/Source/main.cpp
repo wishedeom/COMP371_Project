@@ -146,6 +146,8 @@ int main()
 	
 	// Only a test
 	Block block;
+	/*Block block2(glm::vec3(0.0f, 2.0f, 0.0f));
+	Block block3(glm::vec3(0.0f, -2.0f, 0.0f));*/
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -156,6 +158,8 @@ int main()
 		glPointSize(point_size);
 
 		block.draw(camera);
+		/*block2.draw(camera);
+		block3.draw(camera);*/
 
 		// update other events like input handling
 		glfwPollEvents();
