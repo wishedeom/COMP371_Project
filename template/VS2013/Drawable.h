@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "TextureManager.h"
 #include "Camera.h"
+#include "DirectionalLight.h"
 
 
 // A Drawable represents a single mesh.
@@ -23,7 +24,7 @@ class Drawable
 protected:
 
 	std::vector<glm::vec3> m_vertices;		// The structure's vertex coordinates in model space
-	std::vector<glm::vec3> m_colours;		// The colour of each vertex
+	std::vector<glm::vec3> m_normals;		// The normal of each vertex
 	std::vector<glm::vec2> m_textureCoords;	// The texture coordinates of each vertex
 	std::vector<GLuint> m_indices;			// The indices to draw the structure as triangles
 
@@ -35,8 +36,11 @@ protected:
 
 	bool m_upToDate;		// True if and only if all buffers are up-to-date
 
-	Shader m_shader;
-	Texture m_texture;
+	Texture m_texture;		// Texture
+	glm::vec3 m_ambientColour;	// Ambient colour
+	glm::vec3 m_diffuseColour;	// Diffuse colour
+	glm::vec3 m_specularColour;	// Specular colour
+	float m_shininess;
 
 	glm::mat4 m_modelMatrix;
 
@@ -50,29 +54,36 @@ protected:
 	void fillBuffers();
 
 	// Fills the structure with a constant colour
-	void fill(const glm::vec3& colour);
+	//void fill(const glm::vec3& colour);
 
 
 public:
 
 	// Constructs a drawable.
 	Drawable
-	(
+		(
 		const std::vector<glm::vec3>& vertices = std::vector<glm::vec3>(),
 		const std::vector<GLuint>& indices = std::vector<GLuint>(),
-		const glm::vec3& colour = glm::vec3(),
+		const std::vector<glm::vec3>& normals = std::vector<glm::vec3>(),
 		const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
 		const glm::vec3& origin = glm::vec3(),
-		const Shader& shader = Shader("../Source/StandardDrawable.vs", "../Source/StandardDrawable.frag"),
-		const std::string& texturePath = ""
+		const std::string& diffuseTexturePath = "",
+		const float shininess = 0.0f
 	);
 
-	// Sets the texture
-	void setTexture(const std::string& path);
-	void setTexture(const Texture& texture);
+	Drawable& setVertices(const std::vector<glm::vec3> vertices);
+	Drawable& setNormals(const std::vector<glm::vec3> normals);
+	Drawable& setTextureCoords(const std::vector<glm::vec2> texCoords);
+	Drawable& setIndices(const std::vector<GLuint> indices);
+	Drawable& setShininess(const float shininess);
 
-	// Sets the model matrix
-	void setModelMatrix(const glm::mat4& modelMatrix);
+	Drawable& setAmbientColour(const glm::vec3& ambientColour);
+	Drawable& setDiffuseColour(const glm::vec3& diffuseColour);
+	Drawable& setSpecularColour(const glm::vec3& specularColour);
+
+	// Sets the texture
+	Drawable& setTexture(const std::string& path);
+	Drawable& setTexture(const Texture& texture);
 
 	// Translates the drawable to a new origin.
 	Drawable& setOrigin(const glm::vec3& origin);
@@ -80,9 +91,9 @@ public:
 	// Returns the model matrix
 	glm::mat4 modelMatrix() const;
 
-	// Returs the origin of the coordinate system
+	// Returns the origin of the coordinate system
 	glm::vec3 origin() const;
 
 	// Draws the drawable, as seen by a given camera.
-	virtual void draw(const Camera& camera);
+	virtual void draw(const Camera& camera, const DirectionalLight& light);
 };

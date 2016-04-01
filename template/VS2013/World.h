@@ -10,6 +10,6 @@ class World
 	std::vector<Block> m_blocks;
 
 public:
-	World(const int length, const int width);
-	void draw(const Camera& camera);
+	World(const int length = 2, const int width = 2);
+	void draw(const Camera& camera, const DirectionalLight& light);
 };

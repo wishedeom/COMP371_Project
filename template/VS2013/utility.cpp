@@ -211,7 +211,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 }
 
 
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath)
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -223,68 +223,120 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
 	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
+	// Normals
+	std::vector<glm::vec3> normals;
+	for (const auto vertex : vertices)
+	{
+		normals.push_back(glm::vec3(vertex.x, vertex.y, 0.0f));
+	}
+
+	const float length = glm::distance(baseVertices[0], baseVertices[1]);
+
 	// Wrap texture around, one width for each side
 	std::vector<glm::vec2> textureCoords(vertices.size());
 	for (int i = 0; i < vertices.size() / 2; i++)
 	{
-		textureCoords[i] = glm::vec2(i, 0.0f);
-		textureCoords[i + vertices.size() / 2] = glm::vec2(i, height);
-	}
-	
-	glm::vec3 colour(1.0f);		// White, all texture
-
-	Drawable prism(vertices, indices, colour, textureCoords);
-	
-	if (texturePath != "")
-	{
-		prism.setTexture(texturePath);
-	}
-	else
-	{
-		prism.setTexture(randomBuildingTexture());
+		textureCoords[i] = glm::vec2(i * length, 0.0f);
+		textureCoords[i + vertices.size() / 2] = glm::vec2(i * length, height);
 	}
 
-	return prism;
+	return Drawable(vertices, indices, normals, textureCoords);
 }
 
 
-Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height, const std::string& texturePath)
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height)
 {
-	return makePolygonalPrism(makeRegularPolygon(sides, radius), height, texturePath);
+	return makePolygonalPrism(makeRegularPolygon(sides, radius), height);
 }
 
 
-Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight, const std::string& texturePath)
+Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight)
 {
 	const float height = maxHeight * std::rand() / RAND_MAX;
-	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height, texturePath);
+	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height);
 }
 
 
-Drawable makeQuad(const float length, const float width, const std::string& texturePath)
+Drawable makeBlockBase(const glm::vec3& centre, const float size, const float height)
 {
-	const float x = length / 2;
-	const float y = width / 2;
-	
+	const float edge = 0.5f;
+	const float sidewalk = 0.4f;
+
 	std::vector<glm::vec3> vertices;
-	vertices.push_back(glm::vec3(-x, -y, 0.0f));
-	vertices.push_back(glm::vec3(x, -y, 0.0f));
-	vertices.push_back(glm::vec3(x, y, 0.0f));
-	vertices.push_back(glm::vec3(-x, y, 0.0f));
+	
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * edge, j * edge, 0.0f));
+		}
+	}
 
-	std::vector<GLuint> indices;
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(0);
-	indices.push_back(2);
-	indices.push_back(3);
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, 0.0f));
+		}
+	}
 
-	std::vector<glm::vec2> texCoords;
-	texCoords.push_back(glm::vec2(0.0f, 0.0f));
-	texCoords.push_back(glm::vec2(1.0f, 0.0f));
-	texCoords.push_back(glm::vec2(1.0f, 1.0f));
-	texCoords.push_back(glm::vec2(1.0f, 0.0f));
+	for (int i = -1; i <= 1; i += 2)
+	{
+		for (int j = 1; j >= -1; j -= 2)
+		{
+			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, height));
+		}
+	}
 
-	return Drawable(vertices, indices, glm::vec3(1.0f), texCoords, glm::vec3(), Shader("../Source/StandardDrawable.vs", "../Source/.frag"), "../Images/block.png");
+	std::vector<glm::vec3> normals;
+
+	normals.push_back(glm::vec3(1.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+
+	normals.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+	normals.push_back(glm::vec3(0.0f, 0.0f, 1.0f));
+	normals.push_back(glm::vec3(1.0f, 1.0f, 0.0f));
+
+	std::vector<glm::vec2> textures;
+
+	textures.push_back(glm::vec2(0.0f, 1.0f));
+	textures.push_back(glm::vec2(0.0f, 0.0f));
+	textures.push_back(glm::vec2(1.0f, 1.0f));
+	textures.push_back(glm::vec2(1.0f, 0.0f));
+
+	textures.push_back(glm::vec2(0.15f, 0.85f));
+	textures.push_back(glm::vec2(0.15f, 0.15f));
+	textures.push_back(glm::vec2(0.85f, 0.85f));
+	textures.push_back(glm::vec2(0.85f, 0.15f));
+
+	textures.push_back(glm::vec2(0.15f, 0.85f));
+	textures.push_back(glm::vec2(0.15f, 0.15f));
+	textures.push_back(glm::vec2(0.85f, 0.85f));
+	textures.push_back(glm::vec2(0.85f, 0.15f));
+
+	std::vector<GLuint> indices =
+	{
+		0, 1, 2,
+		2, 1, 3,
+		8, 4, 9,
+		9, 4, 5,
+		9, 5, 11,
+		11, 5, 7,
+		11, 7, 10,
+		10, 7, 6,
+		10, 6, 8,
+		8, 6, 4,
+		8, 9, 10,
+		10, 9, 11
+	};
+
+	return Drawable(vertices, indices, normals, textures, centre, "../Images/block_base.png");
 }

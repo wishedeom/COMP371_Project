@@ -1,3 +1,5 @@
+#define GLEW_STATIC
+
 // Standard C++
 #include <vector>
 #include <string>
@@ -5,7 +7,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <cctype>
+#include <cctype>	
+#include <ctime>
 
 // Standard C
 #include <stdio.h>
@@ -82,7 +85,10 @@ void cursorMoved(GLFWwindow* window, const double x, const double y)
 }
 
 
-bool initialize() {
+bool initialize()
+{
+	std::srand(std::time(0));
+
 	/// Initialize GL context and O/S window using the GLFW helper library
 	if (!glfwInit()) {
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
@@ -107,6 +113,11 @@ bool initialize() {
 
 	// Hides the mouse cursor
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	glfwMakeContextCurrent(window);
 
@@ -140,12 +151,21 @@ int main()
 	Camera camera(*window);
 	cameraptr = &camera;
 	
-	// Only a test
+	DirectionalLight light(camera);
+
 	std::vector<Drawable> buildings;
-	for (int sides = 3; sides <= 10; sides++)
+	for (int i = -5; i <= 5; i++)
 	{
-		buildings.push_back(makeRegularPolygonalPrism(sides, 0.5f, 1.0f + sides / 4.0f, "../Images/building2.jpg").setOrigin(glm::vec3(1.0f, -2.0f * (sides - 8), 0.0f)));
+		buildings.push_back(makeRandomRegularPolygonalPrism()
+			.setOrigin(glm::vec3(i, 0.0f, 0.0f))
+			.setTexture("../Images/building1.jpg")
+			.setShininess(10.0f)
+			.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
+			.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
+			.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f)));
 	}
+
+	//Block block;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -157,8 +177,9 @@ int main()
 
 		for (auto building : buildings)
 		{
-			building.draw(camera);
+			building.draw(camera, light);
 		}
+		//block.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();
