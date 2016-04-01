@@ -32,11 +32,10 @@ void Drawable::generateBuffers()
 	glGenBuffers(1, &m_eboID);
 }
 
-
+// Only called by draw()
 void Drawable::fillBuffers()
 {
-	// Bind VAO
-	glBindVertexArray(m_vaoID);
+	// VAO is already bound in draw()
 
 	// Bind vertex data to VBO
 	glEnableVertexAttribArray(0);
@@ -61,8 +60,7 @@ void Drawable::fillBuffers()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)offsetof(Vertex, texCoords));
 
-	// Unbind VAO
-	glBindVertexArray(0);
+	// Proceed to draw()
 
 	m_upToDate = true;
 }
@@ -103,13 +101,14 @@ Material& Drawable::material() { return m_material; }
 
 void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 {
+	glBindVertexArray(m_vaoID);
+
 	// If buffers are not up to date, fill with position, normal, texture, and index data
 	if (!m_upToDate)
 	{
 		fillBuffers();
 	}
 	
-	glBindVertexArray(m_vaoID);
 	// Use the directional light shader
 	light.UseShader();
 

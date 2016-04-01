@@ -165,7 +165,7 @@ int main()
 	}*/
 
 	//Block block;
-	World world;
+	World world(5, 5);
 
 	while (!glfwWindowShouldClose(window))
 	{

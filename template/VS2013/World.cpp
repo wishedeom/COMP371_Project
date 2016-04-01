@@ -2,9 +2,9 @@
 
 World::World(const int length, const int width)
 {
-	for (int x = 1; x <= length; x++)
+	for (float x = 1.0f; x <= length; x++)
 	{
-		for (int y = 1; y <= width; y++)
+		for (float y = 1.0f; y <= width; y++)
 		{
 			m_blocks.push_back(Block(glm::vec3(Block::size * (x - length / 2), Block::size * (y - width / 2), 0.0f)));
 		}
