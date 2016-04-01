@@ -154,12 +154,13 @@ int main()
 	DirectionalLight light(camera);
 
 	std::vector<Drawable> buildings;
-	for (int i = -5; i <= 5; i++)
+	int n = 2;
+	for (int i = -n / 2; i <= n / 2; i++)
 	{
 		buildings.push_back(makeRandomRegularPolygonalPrism()
 			.setOrigin(glm::vec3(i, 0.0f, 0.0f))
 			.setTexture("../Images/building1.jpg")
-			.setShininess(10.0f)
+			.setShininess(n / 2 + i)
 			.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
 			.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
 			.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f)));
