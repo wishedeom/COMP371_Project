@@ -7,6 +7,12 @@ out vec3 Normal;
 out vec3 FragPos;
 out vec2 TexCoords;
 
+//fog stuff
+out vec4 viewSpace;
+out vec3 world_pos;
+
+
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -17,4 +23,9 @@ void main()
     FragPos = vec3(model * vec4(position, 1.0f));
     Normal = mat3(transpose(inverse(model))) * normal;  
     TexCoords = texCoords;
+	
+	
+	//fog stuff
+	viewSpace = view * model * vec4(position,1.0f);
+	
 } 

@@ -1,4 +1,7 @@
 #version 330 core
+
+
+
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
@@ -17,6 +20,14 @@ struct Light {
 in vec3 FragPos;  
 in vec3 Normal;  
 in vec2 TexCoords;
+in vec4 viewSpace;  
+
+  
+//values for fog
+//vec3 fogColor = vec3(0.5,0.5,0.5);
+//float distance = length(viewSpace);
+//float fogFactor = 0;
+  
   
 out vec4 color;
   
@@ -42,6 +53,13 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
             
-    color = vec4(ambient + diffuse + specular, 1.0f);  
+	//fogFactor = (80-distance)/(80-20);
+	//fogFactor = clamp (fogFactor, 0,1);
+			
+			
+	//vec3 finalColor = mix(fogColor, ambient, diffuse, specular);
+	//color = vec4(finalColor, 1);
+    color = vec4(ambient + diffuse + specular, 1);  
+
 } 
 
