@@ -153,14 +153,19 @@ int main()
 	
 	DirectionalLight light(camera);
 
-	auto building = makeRandomRegularPolygonalPrism()
-		.setTexture("../Images/building1.jpg")
-		.setShininess(10.0f)
-		.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
-		.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
-		.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f));
+	std::vector<Drawable> buildings;
+	for (int i = -5; i <= 5; i++)
+	{
+		buildings.push_back(makeRandomRegularPolygonalPrism()
+			.setOrigin(glm::vec3(i, 0.0f, 0.0f))
+			.setTexture("../Images/building1.jpg")
+			.setShininess(10.0f)
+			.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
+			.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
+			.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f)));
+	}
 
-	Block block;
+	//Block block;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -170,8 +175,11 @@ int main()
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		building.draw(camera, light);
-		block.draw(camera, light);
+		for (auto building : buildings)
+		{
+			building.draw(camera, light);
+		}
+		//block.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();

@@ -24,6 +24,9 @@ Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLu
 	, m_textureCoords(textureCoords)
 	, m_normals(normals)
 	, m_texture(getTexture(diffuseTexturePath))
+	, m_ambientColour(1.0f)
+	, m_diffuseColour(1.0f)
+	, m_specularColour(1.0f)
 	, m_shininess(shininess)
 	, m_upToDate(false)
 {
@@ -71,7 +74,7 @@ void Drawable::fillBuffers()
 
 	// Send index data to EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // Invalidate old data
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
 	// Unbind VAO
@@ -206,4 +209,6 @@ void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
+
+	m_texture.unbind();
 }

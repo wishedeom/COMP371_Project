@@ -20,6 +20,8 @@
 
 class Block
 {
+	static Drawable makeBuilding();
+
 	Drawable m_quad;
 	std::array<Drawable, 4> m_buildings;
 
@@ -27,6 +29,10 @@ public:
 
 	static const float size;
 	static const float height;
+	static const int maxSides;
+	static const float maxRadius;
+	static const float maxHeight;
+	static const float maxShininess;
 
 	Block(const glm::vec3& centre = glm::vec3());
 
