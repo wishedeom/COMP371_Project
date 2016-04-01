@@ -6,7 +6,7 @@ World::World(const int length, const int width)
 	{
 		for (int y = 1; y <= width; y++)
 		{
-			m_blocks.push_back(Block(glm::vec3(Block::size * x, Block::size * y, 0.0f)));
+			m_blocks.push_back(Block(glm::vec3(Block::size * (x - length / 2), Block::size * (y - width / 2), 0.0f)));
 		}
 	}
 }

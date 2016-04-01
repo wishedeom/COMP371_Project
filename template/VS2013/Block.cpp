@@ -1,7 +1,7 @@
 #include "Block.h"
 
 const float Block::size = 10.0f;
-const float Block::height = 0.00125f;
+const float Block::height = 0.005;
 const int Block::minSides = 3;
 const int Block::maxSides = 10;
 const float Block::minRadius = 0.5f;
@@ -14,6 +14,9 @@ Block::Block(const glm::vec3& centre)
 	: m_quad(makeBlockBase(centre, size, height))
 {
 	m_quad.material().texture = getTexture("../Images/block_base.png");
+	m_quad.material().ambientColour = { 1.0f, 1.0f, 1.0f };
+	m_quad.material().diffuseColour = { 0.0f, 0.0f, 0.0f };
+	m_quad.material().specularColour = { 0.0f, 0.0f, 1.0f };
 	m_quad.material().shininess = 1.0f;
 	const float offset = size / 6;
 	m_buildings[0] = makeBuilding().setOrigin(centre + glm::vec3(-offset, -offset, height));
