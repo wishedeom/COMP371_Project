@@ -153,19 +153,19 @@ int main()
 	
 	DirectionalLight light(camera);
 
-	std::vector<Drawable> buildings;
-	for (int i = -5; i <= 5; i++)
+	/*std::vector<Drawable> buildings;
+	const int n = 2;
+	const Material m = { getTexture("../Images/building1.jpg"), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f) };
+	for (int i = -n / 2; i <= n / 2; i++)
 	{
-		buildings.push_back(makeRandomRegularPolygonalPrism()
-			.setOrigin(glm::vec3(i, 0.0f, 0.0f))
-			.setTexture("../Images/building1.jpg")
-			.setShininess(10.0f)
-			.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
-			.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
-			.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f)));
-	}
+		auto building = makeRegularPolygonalPrism(3, 0.5f, 0.5f).setOrigin(glm::vec3(i, 0.0f, 0.0f));
+		building.material() = m;
+		building.material().shininess = i + n / 2;
+		buildings.push_back(building);
+	}*/
 
 	//Block block;
+	World world;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -175,11 +175,12 @@ int main()
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		for (auto building : buildings)
+		/*for (auto building : buildings)
 		{
 			building.draw(camera, light);
-		}
+		}*/
 		//block.draw(camera, light);
+		world.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();

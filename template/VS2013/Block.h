@@ -29,10 +29,12 @@ public:
 
 	static const float size;
 	static const float height;
+	static const int minSides;
 	static const int maxSides;
+	static const float minRadius;
 	static const float maxRadius;
+	static const float minHeight;
 	static const float maxHeight;
-	static const float maxShininess;
 
 	Block(const glm::vec3& centre = glm::vec3());
 

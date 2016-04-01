@@ -157,10 +157,10 @@ std::vector<glm::vec2> makeRegularPolygon(const int sides, const float radius)
 }
 
 
-std::vector<glm::vec2> randomRegularPolygon(const int maxSides, const float maxRadius)
+std::vector<glm::vec2> randomRegularPolygon(const int maxSides, const float minRadius, const float maxRadius)
 {
-	const int sides = std::rand() % (maxSides - 2) + 3;
-	const float radius = maxRadius * std::rand() / RAND_MAX;
+	const int sides = randomInt(3, maxSides);
+	const float radius = randomFloat(minRadius, maxRadius);
 	return makeRegularPolygon(sides, radius);
 }
 
@@ -175,6 +175,10 @@ std::vector<glm::vec2> transformPolygon(const std::vector<glm::vec2>& polygon, c
 	return transformedPolygon;
 }
 
+int randomInt(const int min, const int max)
+{
+	return std::rand() % (max - min + 1) + min;
+}
 
 float randomFloat(const float min, const float max)
 {
@@ -220,12 +224,12 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	verticalTrajectory.push_back(glm::vec3());
 	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, height));
 
-	auto vertices = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
+	auto positions = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
 	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
 
 	// Normals
 	std::vector<glm::vec3> normals;
-	for (const auto vertex : vertices)
+	for (const auto vertex : positions)
 	{
 		normals.push_back(glm::vec3(vertex.x, vertex.y, 0.0f));
 	}
@@ -233,14 +237,20 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 	const float length = glm::distance(baseVertices[0], baseVertices[1]);
 
 	// Wrap texture around, one width for each side
-	std::vector<glm::vec2> textureCoords(vertices.size());
-	for (int i = 0; i < vertices.size() / 2; i++)
+	std::vector<glm::vec2> textureCoords(positions.size());
+	for (int i = 0; i < positions.size() / 2; i++)
 	{
 		textureCoords[i] = glm::vec2(i * length, 0.0f);
-		textureCoords[i + vertices.size() / 2] = glm::vec2(i * length, height);
+		textureCoords[i + positions.size() / 2] = glm::vec2(i * length, height);
 	}
 
-	return Drawable(vertices, indices, normals, textureCoords);
+	std::vector<Vertex> vertices;
+	for (int i = 0; i < positions.size(); i++)
+	{
+		vertices.push_back({ positions[i], normals[i], textureCoords[i] });
+	}
+
+	return Drawable().setVertices(vertices).setIndices(indices);
 }
 
 
@@ -250,10 +260,10 @@ Drawable makeRegularPolygonalPrism(const int sides, const float radius, const fl
 }
 
 
-Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight)
+Drawable makeRandomRegularPolygonalPrism(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight)
 {
-	const float height = maxHeight * std::rand() / RAND_MAX;
-	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height);
+	const float height = randomFloat(minHeight, maxHeight);
+	return makePolygonalPrism(randomRegularPolygon(maxSides, minRadius, maxRadius), height);
 }
 
 
@@ -262,13 +272,13 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 	const float edge = 0.5f;
 	const float sidewalk = 0.4f;
 
-	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> positions;
 	
 	for (int i = -1; i <= 1; i += 2)
 	{
 		for (int j = 1; j >= -1; j -= 2)
 		{
-			vertices.push_back(centre + size * glm::vec3(i * edge, j * edge, 0.0f));
+			positions.push_back(centre + size * glm::vec3(i * edge, j * edge, 0.0f));
 		}
 	}
 
@@ -276,7 +286,7 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 	{
 		for (int j = 1; j >= -1; j -= 2)
 		{
-			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, 0.0f));
+			positions.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, 0.0f));
 		}
 	}
 
@@ -284,7 +294,7 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 	{
 		for (int j = 1; j >= -1; j -= 2)
 		{
-			vertices.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, height));
+			positions.push_back(centre + size * glm::vec3(i * sidewalk, j * sidewalk, height));
 		}
 	}
 
@@ -338,5 +348,11 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, normals, textures, centre, "../Images/block_base.png");
+	std::vector<Vertex> vertices;
+	for (int i = 0; i < positions.size(); i++)
+	{
+		vertices.push_back({ positions[i], normals[i], textures[i] });
+	}
+
+	return Drawable().setVertices(vertices).setIndices(indices);
 }
