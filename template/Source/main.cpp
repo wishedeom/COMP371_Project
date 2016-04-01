@@ -164,7 +164,8 @@ int main()
 		buildings.push_back(building);
 	}*/
 
-	Block block;
+	//Block block;
+	World world;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -178,7 +179,8 @@ int main()
 		{
 			building.draw(camera, light);
 		}*/
-		block.draw(camera, light);
+		//block.draw(camera, light);
+		world.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();

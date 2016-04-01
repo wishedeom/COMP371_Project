@@ -7,7 +7,7 @@ const int Block::maxSides = 10;
 const float Block::minRadius = 0.5f;
 const float Block::maxRadius = 1.0f;
 const float Block::minHeight = 0.5f;
-const float Block::maxHeight = 1.0f;
+const float Block::maxHeight = 10.0f;
 
 
 Block::Block(const glm::vec3& centre)
@@ -37,9 +37,9 @@ Drawable Block::makeBuilding()
 {
 	auto building = makeRandomRegularPolygonalPrism(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
 	building.material().texture = getTexture("../Images/building1.jpg");
-	building.material().ambientColour = randomColour();
-	building.material().diffuseColour = randomColour();
-	building.material().specularColour = randomColour();
+	building.material().ambientColour = { 1.0f, 1.0f, 1.0f };
+	building.material().diffuseColour = { 1.0f, 0.0f, 0.0f };
+	building.material().specularColour = { 0.0f, 0.0f, 1.0f };
 	building.material().shininess = 1.0f;
 	return building;
 }

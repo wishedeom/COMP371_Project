@@ -37,7 +37,7 @@ public:
 		const glm::vec3& orientation = glm::vec3(1.0f, 0.0f, 0.0f),
 		const float fov = 1.0f,
 		const float nearPlane = 0.01f,
-		const float farPlane = 10.0f
+		const float farPlane = 100.0f
 	);
 
 
