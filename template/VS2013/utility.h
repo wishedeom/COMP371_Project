@@ -74,11 +74,11 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 // Generates a polygonal prism.
 // baseVertices: The vertices of the base polygon.
 // height: The height of the prism.
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath = "");
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height);
 
 // Gnerates a prism with a regular polygonal base.
-Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height, const std::string& texturePath = "");
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height);
 
-Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float maxRadius = 0.4f, const float minHeight = 1.0f, const float maxHeight = 2.0f, const std::string& texturePath = "");
+Drawable makeRandomRegularPolygonalPrism(const int maxSides = 10, const float maxRadius = 0.4f, const float minHeight = 1.0f, const float maxHeight = 2.0f);
 
-Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f, const std::string& texturePath = "../Images/block_base.png");
+Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);

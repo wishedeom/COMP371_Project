@@ -8,8 +8,7 @@ DirectionalLight::DirectionalLight(const Camera& camera)
 	, m_camera(camera)
 	, m_shader(Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag"))
 {
-	glUniform1i(glGetUniformLocation(m_shader.programID(), "material.diffuse"), 0);
-	glUniform1i(glGetUniformLocation(m_shader.programID(), "material.specular"), 1);
+	glUniform1i(glGetUniformLocation(m_shader.programID(), "texture"), 0);
 }
  
 

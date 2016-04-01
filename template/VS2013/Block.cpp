@@ -5,7 +5,7 @@ const float Block::height = 0.0125f;
 
 
 Block::Block(const glm::vec3& centre)
-	: m_quad(makeBlockBase(centre, size, height, "../Images/block_base.png"))
+	: m_quad(makeBlockBase(centre, size, height).setShininess(1.0f))
 {
 	const float offset = size / 6;
 	const int maxSides = 10;

@@ -211,7 +211,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 }
 
 
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height, const std::string& texturePath)
+Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -239,38 +239,25 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 		textureCoords[i] = glm::vec2(i * length, 0.0f);
 		textureCoords[i + vertices.size() / 2] = glm::vec2(i * length, height);
 	}
-	
-	glm::vec3 colour(1.0f);		// White, all texture
 
-	Drawable prism(vertices, indices, normals, textureCoords);
-	
-	if (texturePath != "")
-	{
-		prism.setTexture(texturePath);
-	}
-	else
-	{
-		prism.setTexture(randomBuildingTexture());
-	}
-
-	return prism;
+	return Drawable(vertices, indices, normals, textureCoords);
 }
 
 
-Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height, const std::string& texturePath)
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height)
 {
-	return makePolygonalPrism(makeRegularPolygon(sides, radius), height, texturePath);
+	return makePolygonalPrism(makeRegularPolygon(sides, radius), height);
 }
 
 
-Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight, const std::string& texturePath)
+Drawable makeRandomRegularPolygonalPrism(const int maxSides, const float maxRadius, const float minHeight, const float maxHeight)
 {
 	const float height = maxHeight * std::rand() / RAND_MAX;
-	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height, texturePath);
+	return makePolygonalPrism(randomRegularPolygon(maxSides, maxRadius), height);
 }
 
 
-Drawable makeBlockBase(const glm::vec3& centre, const float size, const float height, const std::string& texturePath)
+Drawable makeBlockBase(const glm::vec3& centre, const float size, const float height)
 {
 	const float edge = 0.5f;
 	const float sidewalk = 0.4f;
@@ -351,5 +338,5 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 		10, 9, 11
 	};
 
-	return Drawable(vertices, indices, normals, textures, centre, texturePath);
+	return Drawable(vertices, indices, normals, textures, centre, "../Images/block_base.png");
 }

@@ -114,6 +114,11 @@ bool initialize()
 	// Hides the mouse cursor
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
 	glfwMakeContextCurrent(window);
 
 	/// Initialize GLEW extension handler
@@ -148,7 +153,14 @@ int main()
 	
 	DirectionalLight light(camera);
 
-	World world;
+	auto building = makeRandomRegularPolygonalPrism()
+		.setTexture("../Images/building1.jpg")
+		.setShininess(10.0f)
+		.setAmbientColour(glm::vec3(1.0f, 1.0f, 1.0f))
+		.setDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f))
+		.setSpecularColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	Block block;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -158,12 +170,8 @@ int main()
 		glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 		glPointSize(point_size);
 
-		/*for (auto building : buildings)
-		{
-			building.draw(camera);
-		}*/
-
-		world.draw(camera, light);
+		building.draw(camera, light);
+		block.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();

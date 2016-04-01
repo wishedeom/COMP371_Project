@@ -23,10 +23,8 @@ Drawable::Drawable(const std::vector<glm::vec3>& vertices, const std::vector<GLu
 	, m_indices(indices)
 	, m_textureCoords(textureCoords)
 	, m_normals(normals)
-	, m_diffuseTexture(getTexture(diffuseTexturePath))
-	, m_specularTexture(getTexture(diffuseTexturePath))
+	, m_texture(getTexture(diffuseTexturePath))
 	, m_shininess(shininess)
-	, m_modelMatrix(id4)
 	, m_upToDate(false)
 {
 	setOrigin(origin);
@@ -101,50 +99,111 @@ Drawable& Drawable::setOrigin(const glm::vec3& origin)
 }
 
 
-void Drawable::setModelMatrix(const glm::mat4& modelMatrix) { m_modelMatrix = modelMatrix; }
-
-
 glm::vec3 Drawable::origin() const { return m_origin; }
 
 
 glm::mat4 Drawable::modelMatrix() const { return m_modelMatrix; }
 
 
-void Drawable::setTexture(const std::string& path)
+Drawable& Drawable::setVertices(const std::vector<glm::vec3> vertices)
 {
-	m_diffuseTexture = getTexture(path);
-	m_specularTexture = getTexture(path);
+	m_upToDate = false;
+	m_vertices = vertices;
+	return *this;
 }
 
-void Drawable::setTexture(const Texture& texture)
+
+Drawable& Drawable::setNormals(const std::vector<glm::vec3> normals)
 {
-	m_diffuseTexture = texture;
-	m_specularTexture = texture;
+	m_upToDate = false;
+	m_normals = normals;
+	return *this;
+}
+
+
+Drawable& Drawable::setTextureCoords(const std::vector<glm::vec2> textureCoords)
+{
+	m_upToDate = false;
+	m_textureCoords = textureCoords;
+	return *this;
+}
+
+
+Drawable& Drawable::setIndices(const std::vector<GLuint> indices)
+{
+	m_upToDate = false;
+	m_indices = indices;
+	return *this;
+}
+
+
+Drawable& Drawable::setAmbientColour(const glm::vec3& ambientColour)
+{
+	m_ambientColour = ambientColour;
+	return *this;
+}
+
+
+Drawable& Drawable::setDiffuseColour(const glm::vec3& diffuseColour)
+{
+	m_diffuseColour = diffuseColour;
+	return *this;
+}
+
+
+Drawable& Drawable::setSpecularColour(const glm::vec3& specularColour)
+{
+	m_specularColour = specularColour;
+	return *this;
+}
+
+
+Drawable& Drawable::setShininess(const float shininess)
+{
+	m_shininess = shininess;
+	return *this;
+}
+
+
+Drawable& Drawable::setTexture(const std::string& path)
+{
+	return setTexture(getTexture(path));
+}
+
+Drawable& Drawable::setTexture(const Texture& texture)
+{
+	m_texture = texture;
+	return *this;
 }
 
 
 void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 {
+	// If buffers are not up to date, fill with position, normal, texture, and index data
 	if (!m_upToDate)
 	{
-		fillBuffers();		// Put position, colour, and texture data into buffers
+		fillBuffers();
 	}
 	
+	// Use the directional light shader
 	light.UseShader();
 
-	glActiveTexture(GL_TEXTURE0 + 0);
-	m_diffuseTexture.bind();
+	// Bind the object's texture to the "texture" uniform in the shader
+	m_texture.bind();
 
-	glActiveTexture(GL_TEXTURE0 + 1);
-	m_specularTexture.bind();
-
+	// Send the material properties of the object to the shader
+	glUniform3fv(glGetUniformLocation(light.getShader().programID(), "material.ambient"), 1, glm::value_ptr(m_ambientColour));
+	glUniform3fv(glGetUniformLocation(light.getShader().programID(), "material.diffuse"), 1, glm::value_ptr(m_diffuseColour));
+	glUniform3fv(glGetUniformLocation(light.getShader().programID(), "material.specular"), 1, glm::value_ptr(m_specularColour));
 	glUniform1f(glGetUniformLocation(light.getShader().programID(), "material.shininess"), m_shininess);
 
+	// Send the transformation matrices to the shader
 	glUniformMatrix4fv(light.getShader().projMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.projection()));
 	glUniformMatrix4fv(light.getShader().viewMatrixID(), 1, GL_FALSE, glm::value_ptr(camera.view()));
 	glUniformMatrix4fv(light.getShader().modelMatrixID(), 1, GL_FALSE, glm::value_ptr(m_modelMatrix));
+
+	// Bind the VAO, and draw the mesh
 	glBindVertexArray(m_vaoID);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glBindVertexArray(0);
-	Texture::unbind();
 }

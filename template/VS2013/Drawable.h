@@ -36,8 +36,10 @@ protected:
 
 	bool m_upToDate;		// True if and only if all buffers are up-to-date
 
-	Texture m_diffuseTexture;
-	Texture m_specularTexture;
+	Texture m_texture;		// Texture
+	glm::vec3 m_ambientColour;	// Ambient colour
+	glm::vec3 m_diffuseColour;	// Diffuse colour
+	glm::vec3 m_specularColour;	// Specular colour
 	float m_shininess;
 
 	glm::mat4 m_modelMatrix;
@@ -66,15 +68,22 @@ public:
 		const std::vector<glm::vec2>& textureCoords = std::vector<glm::vec2>(),
 		const glm::vec3& origin = glm::vec3(),
 		const std::string& diffuseTexturePath = "",
-		const float shininess = 1.0f
+		const float shininess = 0.0f
 	);
 
-	// Sets the texture
-	void setTexture(const std::string& path);
-	void setTexture(const Texture& texture);
+	Drawable& setVertices(const std::vector<glm::vec3> vertices);
+	Drawable& setNormals(const std::vector<glm::vec3> normals);
+	Drawable& setTextureCoords(const std::vector<glm::vec2> texCoords);
+	Drawable& setIndices(const std::vector<GLuint> indices);
+	Drawable& setShininess(const float shininess);
 
-	// Sets the model matrix
-	void setModelMatrix(const glm::mat4& modelMatrix);
+	Drawable& setAmbientColour(const glm::vec3& ambientColour);
+	Drawable& setDiffuseColour(const glm::vec3& diffuseColour);
+	Drawable& setSpecularColour(const glm::vec3& specularColour);
+
+	// Sets the texture
+	Drawable& setTexture(const std::string& path);
+	Drawable& setTexture(const Texture& texture);
 
 	// Translates the drawable to a new origin.
 	Drawable& setOrigin(const glm::vec3& origin);
