@@ -17,6 +17,26 @@
 #include "DirectionalLight.h"
 
 
+// Represents the data of a single vertex, in model coordinates
+struct Vertex
+{
+	glm::vec3 position;		// Position
+	glm::vec3 normal;		// Normal vector at position
+	glm::vec2 texCoords;	// Texture coordinate at position
+};
+
+
+// Represents a drawable's material properties
+struct Material
+{
+	Texture texture;			// Texture
+	glm::vec3 ambientColour;	// Ambient colour
+	glm::vec3 diffuseColour;	// Diffuse colour
+	glm::vec3 specularColour;	// Specular colour
+	float shininess;
+};
+
+
 // A Drawable represents a single mesh.
 class Drawable
 {	
@@ -26,18 +46,17 @@ protected:
 	std::vector<Vertex> m_vertices;		// Vertex data - positions, normals, texture coordinates
 	std::vector<GLuint> m_indices;		// The indices to draw the structure as triangles
 
-	GLuint m_vaoID;			// Vertex array object
-	GLuint m_vboID;			// Vertex buffer object
-	GLuint m_eboID;			// Element buffer object, for vertex draw indices
-
-	bool m_upToDate;		// True if and only if all buffers are up-to-date
-
 	Material m_material;	// Material properties
 
-	glm::mat4 m_modelMatrix;
-
 	glm::vec3 m_origin;		// Origin of model coordinate system in world coordinates
-	
+
+	GLuint m_vaoID;		// Vertex array object
+	GLuint m_vboID;		// Vertex buffer object
+	GLuint m_eboID;		// Element buffer object, for vertex draw indices
+
+	bool m_upToDate;	// True if and only if all buffers are up-to-date
+
+	glm::mat4 m_modelMatrix;
 
 	// Generates and initializes the VAO, VBO, and EBO for drawing the structure.
 	void generateBuffers();
@@ -66,26 +85,9 @@ public:
 	// Returns the origin of the coordinate system
 	glm::vec3 origin() const;
 
+	// Returns a reference to the material of the drawable
+	Material& material();
+
 	// Draws the drawable, as seen by a given camera.
 	virtual void draw(const Camera& camera, const DirectionalLight& light);
-};
-
-
-// Represents the data of a single vertex, in model coordinates
-struct Vertex
-{
-	glm::vec3 position;		// Position
-	glm::vec3 normal;		// Normal vector at position
-	glm::vec2 texCoords;	// Texture coordinate at position
-};
-
-
-// Represents a drawable's material properties
-struct Material
-{
-	Texture texture;			// Texture
-	glm::vec3 ambientColour;	// Ambient colour
-	glm::vec3 diffuseColour;	// Diffuse colour
-	glm::vec3 specularColour;	// Specular colour
-	float shininess;
 };

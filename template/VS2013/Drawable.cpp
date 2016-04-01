@@ -98,6 +98,9 @@ Drawable& Drawable::setIndices(const std::vector<GLuint> indices)
 }
 
 
+Material& Drawable::material() { return m_material; }
+
+
 void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 {
 	// If buffers are not up to date, fill with position, normal, texture, and index data
