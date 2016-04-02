@@ -172,7 +172,7 @@ int main()
 
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.819f, 0.435f, 0.019f, 1.0f);
+		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glPointSize(point_size);
 
 		/*for (auto building : buildings)
