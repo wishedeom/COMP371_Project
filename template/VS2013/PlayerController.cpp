@@ -12,6 +12,7 @@
 
 const double PlayerController::maxSpeed = 5.0f;
 const double PlayerController::acceleration = 15.0f;
+const double PlayerController::runFactor = 2.0f;
 
 
 PlayerController::PlayerController(Camera& camera)
@@ -19,6 +20,7 @@ PlayerController::PlayerController(Camera& camera)
 	, m_axial(AxialDirection::Null)
 	, m_lateral(LateralDirection::Null)
 	, m_lastFrameTime(glfwGetTime())
+	, m_isRunning(false)
 {}
 
 
@@ -72,7 +74,7 @@ void PlayerController::updatePosition(const double deltaT)
 {
 	const float theta = angle(m_camera.forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 worldVelocity = glm::vec3(glm::rotate(id4, theta, up) * glm::vec4(m_velocity, 0.0f));
-	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT);
+	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT) * static_cast<float>(m_isRunning ? runFactor : 1.0f);
 	m_camera.translate(displacement);
 }
 
@@ -124,4 +126,10 @@ void PlayerController::updateVelocity(const double deltaT)
 Camera& PlayerController::camera()
 {
 	return m_camera;
+}
+
+
+void PlayerController::setRunning(const bool isRunning)
+{
+	m_isRunning = isRunning;
 }

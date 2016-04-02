@@ -30,6 +30,7 @@ class PlayerController
 	LateralDirection m_lateral;
 
 	glm::vec3 m_velocity;	// Player velocity in egocentric coordinates
+	bool m_isRunning;
 
 	double m_lastFrameTime;
 
@@ -40,6 +41,7 @@ public:
 
 	static const double maxSpeed;
 	static const double acceleration;
+	static const double runFactor;
 
 	PlayerController(Camera& camera);
 
@@ -49,6 +51,8 @@ public:
 	void moveLeft();
 	void moveRight();
 	void stopLateral();
+
+	void setRunning(const bool isRunning);
 
 	Camera& camera();
 

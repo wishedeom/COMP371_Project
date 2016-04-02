@@ -96,6 +96,16 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 			playerController->stopLateral();
 		}
 		break;
+	case GLFW_KEY_LEFT_SHIFT:
+		if (action == GLFW_PRESS)
+		{
+			playerController->setRunning(true);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->setRunning(false);
+		}
+		break;
 	default:
 		break;
 	}
