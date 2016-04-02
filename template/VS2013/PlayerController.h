@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "glew.h"
 #include "glm.hpp"
 
 #include "Camera.h"
@@ -28,7 +29,7 @@ class PlayerController
 	AxialDirection m_axial;
 	LateralDirection m_lateral;
 
-	glm::vec3 m_velocity;
+	glm::vec3 m_velocity;	// Player velocity in egocentric coordinates
 
 	double m_lastFrameTime;
 
@@ -48,6 +49,8 @@ public:
 	void moveLeft();
 	void moveRight();
 	void stopLateral();
+
+	Camera& camera();
 
 	void update();
 };

@@ -356,3 +356,32 @@ Drawable makeBlockBase(const glm::vec3& centre, const float size, const float he
 
 	return Drawable().setVertices(vertices).setIndices(indices);
 }
+
+
+float angle(const glm::vec3& u, const glm::vec3& v)
+{
+	const glm::vec3 nu = glm::normalize(u);
+	const glm::vec3 nv = glm::normalize(v);
+	const GLfloat dotProduct = glm::dot(nu, nv);
+	const glm::vec3 crossProduct = glm::cross(nu, nv);
+	return -acos(dotProduct) * signum(crossProduct.z);
+}
+
+
+float signum(const float x)
+{
+	float sign;
+	if (x > 0.0f)
+	{
+		sign = +1.0f;
+	}
+	else if (x == 0.0f)
+	{
+		sign = 0.0f;
+	}
+	else
+	{
+		sign = -1.0f;
+	}
+	return sign;
+}
