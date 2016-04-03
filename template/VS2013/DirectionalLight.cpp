@@ -16,8 +16,10 @@ void DirectionalLight::UseShader() const
 {
 	m_shader.use();
 
+	// Send camera info
 	glUniform3fv(glGetUniformLocation(m_shader.programID(), "viewPos"), 1, glm::value_ptr(m_camera.position()));
 
+	// Send light info
 	glUniform3fv(glGetUniformLocation(m_shader.programID(), "light.direction"), 1, glm::value_ptr(m_direction));
 	glUniform3fv(glGetUniformLocation(m_shader.programID(), "light.ambient"), 1, glm::value_ptr(m_ambientColour));
 	glUniform3fv(glGetUniformLocation(m_shader.programID(), "light.diffuse"), 1, glm::value_ptr(m_diffuseColour));

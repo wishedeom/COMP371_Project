@@ -85,10 +85,6 @@ GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std:
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, fragmentShaderID);
 
-	// Bind inputs
-	glBindAttribLocation(programID, 0, "in_Position");
-	glBindAttribLocation(programID, 1, "in_Color");
-
 	// Link program
 	glLinkProgram(programID);
 

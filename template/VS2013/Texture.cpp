@@ -1,7 +1,11 @@
+#include "glew.h"
+
 #include "Texture.h"
-#include <stdexcept>
-#include "SOIL.h"
+
 #include <iostream>
+#include <stdexcept>
+
+#include "SOIL.h"
 
 
 Texture::Texture(const std::string& filePath)
@@ -21,7 +25,11 @@ Texture::Texture() { m_id = 0; }
 GLuint Texture::id() const { return m_id; }
 
 
-void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, m_id); }
+void Texture::bind() const
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_id);
+}
 
 
 void Texture::unbind() { glBindTexture(GL_TEXTURE_2D, 0); }

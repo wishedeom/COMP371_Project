@@ -39,11 +39,10 @@ void Drawable::fillBuffers()
 	// VAO is already bound in draw()
 
 	// Bind vertex data to VBO
-	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 	if (m_everFilled)
 	{
-		glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), nullptr, GL_STATIC_DRAW);	// Invalidate old data
+		glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), nullptr, GL_STATIC_DRAW);	// Invalidate old data, if there is old data to invalidate
 	}
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 
@@ -51,7 +50,7 @@ void Drawable::fillBuffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);
 	if (m_everFilled)
 	{
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), nullptr, GL_STATIC_DRAW); // Invalidate old data
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), nullptr, GL_STATIC_DRAW); // Invalidate old data, if there is old data to invalidate
 	}
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
@@ -139,7 +138,6 @@ void Drawable::draw(const Camera& camera, const DirectionalLight& light)
 
 	// Bind the VAO, and draw the mesh
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, (GLvoid*)0);
-	glBindVertexArray(0);
-
 	Texture::unbind();
+	glBindVertexArray(0);
 }
