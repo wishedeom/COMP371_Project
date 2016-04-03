@@ -37,11 +37,16 @@ class PlayerController
 	void updatePosition(const double deltaT);
 	void updateVelocity(const double deltaT);
 
+	bool isOnGround() const;
+
 public:
 
+	static const double height;
 	static const double maxSpeed;
 	static const double acceleration;
 	static const double runFactor;
+	static const double jumpSpeed;
+	static const double gravity;
 
 	PlayerController(Camera& camera);
 
@@ -53,6 +58,7 @@ public:
 	void stopLateral();
 
 	void setRunning(const bool isRunning);
+	void jump();
 
 	Camera& camera();
 

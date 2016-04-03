@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "glew.h"
 #include "glfw3.h"
@@ -10,9 +11,12 @@
 #include "utility.h"
 
 
-const double PlayerController::maxSpeed = 5.0f;
-const double PlayerController::acceleration = 15.0f;
-const double PlayerController::runFactor = 2.0f;
+const double PlayerController::height = 0.1;
+const double PlayerController::maxSpeed = 5.0;
+const double PlayerController::acceleration = 15.0;
+const double PlayerController::runFactor = 2.0;
+const double PlayerController::jumpSpeed = 3.0;
+const double PlayerController::gravity = -9.8;
 
 
 PlayerController::PlayerController(Camera& camera)
@@ -76,6 +80,12 @@ void PlayerController::updatePosition(const double deltaT)
 	glm::vec3 worldVelocity = glm::vec3(glm::rotate(id4, theta, up) * glm::vec4(m_velocity, 0.0f));
 	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT) * static_cast<float>(m_isRunning ? runFactor : 1.0f);
 	m_camera.translate(displacement);
+	if (m_camera.position().z < height)
+	{
+		auto newPosition = m_camera.position();
+		newPosition.z = height;
+		m_camera.setPosition(newPosition);
+	}
 }
 
 
@@ -120,6 +130,12 @@ void PlayerController::updateVelocity(const double deltaT)
 	{
 		m_velocity.x = 0.0f;
 	}
+
+	// Vertical deceleration
+	if (!isOnGround())
+	{
+		m_velocity.z += gravity * deltaT;
+	}
 }
 
 
@@ -132,4 +148,19 @@ Camera& PlayerController::camera()
 void PlayerController::setRunning(const bool isRunning)
 {
 	m_isRunning = isRunning;
+}
+
+
+bool PlayerController::isOnGround() const
+{
+	return std::abs(m_camera.position().z - height) / height < 0.1;
+}
+
+
+void PlayerController::jump()
+{
+	if (isOnGround())
+	{
+		m_velocity.z += jumpSpeed;
+	}
 }

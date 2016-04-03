@@ -106,6 +106,11 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 			playerController->setRunning(false);
 		}
 		break;
+	case GLFW_KEY_SPACE:
+		if (action == GLFW_PRESS)
+		{
+			playerController->jump();
+		}
 	default:
 		break;
 	}
@@ -181,7 +186,8 @@ bool initialize()
 	return true;
 }
 
-bool cleanUp() {
+bool cleanUp()
+{
 	glfwTerminate();
 	return true;
 }
