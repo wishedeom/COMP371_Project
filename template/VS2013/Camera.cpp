@@ -4,10 +4,7 @@
 
 
 const glm::vec3 Camera::up(0.0f, 0.0f, 1.0f);
-
 const float Camera::mouseSensitivity = 0.001f;
-
-const float Camera::movementSpeed = 0.1f;
 
 
 Camera::Camera(GLFWwindow& window, const glm::vec3& position, const glm::vec3& orientation, const float fov, const float nearPlane, const float farPlane)

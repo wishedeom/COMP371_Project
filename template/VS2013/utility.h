@@ -84,3 +84,9 @@ Drawable makeRegularPolygonalPrism(const int sides, const float radius, const fl
 Drawable makeRandomRegularPolygonalPrism(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight);
 
 Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);
+
+// Returns the signed angle between two vectors in the x-y plane
+float angle(const glm::vec3& u, const glm::vec3& v);
+
+// Returns the sign of a float
+float signum(const float x);

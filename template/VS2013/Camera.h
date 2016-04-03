@@ -20,8 +20,6 @@ class Camera
 
 public:
 
-	static const float movementSpeed;		// Speed of planar movement.
-
 	// Constructs a camera with a given initial position, orientation, FOV, aspect ratio, near plane, and far plane, displaying to a given window.
 	// position: The camera's initial position.
 	// orientation: The camera's new orientation. Cannot be the zero vector.

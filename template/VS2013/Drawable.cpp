@@ -19,6 +19,7 @@
 
 Drawable::Drawable()
 	: m_upToDate(false)
+	, m_everFilled(false)
 {
 	generateBuffers();
 }
@@ -40,12 +41,18 @@ void Drawable::fillBuffers()
 	// Bind vertex data to VBO
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);	// Invalidate old data
+	if (m_everFilled)
+	{
+		glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), nullptr, GL_STATIC_DRAW);	// Invalidate old data
+	}
 	glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
 
 	// Bind index data to EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // Invalidate old data
+	if (m_everFilled)
+	{
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), nullptr, GL_STATIC_DRAW); // Invalidate old data
+	}
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_indices[0]) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW);
 
 	// Point VAO attribute 0 to vertex position data
@@ -58,11 +65,15 @@ void Drawable::fillBuffers()
 
 	// Point VAO attribute 2 to vertex texture coordinate data
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)offsetof(Vertex, texCoords));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]), (GLvoid*)offsetof(Vertex, texCoords));
 
 	// Proceed to draw()
 
 	m_upToDate = true;
+	if (!m_everFilled)
+	{
+		m_everFilled = true;
+	}
 }
 
 

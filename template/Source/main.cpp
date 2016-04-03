@@ -9,6 +9,7 @@
 #include <vector>
 #include <cctype>	
 #include <ctime>
+#include <memory>
 
 // Standard C
 #include <stdio.h>
@@ -29,6 +30,7 @@
 #include "../VS2013/Camera.h"
 #include "../VS2013/Drawable.h"
 #include "../VS2013/utility.h"
+#include "../VS2013/PlayerController.h"
 
 GLFWwindow* window = 0x00;
 
@@ -37,7 +39,7 @@ glm::mat4 proj_matrix;
 glm::mat4 view_matrix;
 
 
-Camera* cameraptr;
+std::unique_ptr<PlayerController> playerController;
 
 
 //GLuint VBO, VAO, EBO;
@@ -54,17 +56,55 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
 		break;
-	case GLFW_KEY_A:
-		cameraptr->translate(-cameraptr->right() * cameraptr->movementSpeed);
-		break;
-	case GLFW_KEY_D:
-		cameraptr->translate(cameraptr->right() * cameraptr->movementSpeed);
-		break;
 	case GLFW_KEY_W:
-		cameraptr->translate(cameraptr->forward() * cameraptr->movementSpeed);
+		if (action == GLFW_PRESS)
+		{
+			playerController->moveForward();
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->stopAxial();
+		}
 		break;
 	case GLFW_KEY_S:
-		cameraptr->translate(-cameraptr->forward() * cameraptr->movementSpeed);
+		if (action == GLFW_PRESS)
+		{
+			playerController->moveBackward();
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->stopAxial();
+		}
+		break;
+	case GLFW_KEY_D:
+		if (action == GLFW_PRESS)
+		{
+			playerController->moveRight();
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->stopLateral();
+		}
+		break;
+	case GLFW_KEY_A:
+		if (action == GLFW_PRESS)
+		{
+			playerController->moveLeft();
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->stopLateral();
+		}
+		break;
+	case GLFW_KEY_LEFT_SHIFT:
+		if (action == GLFW_PRESS)
+		{
+			playerController->setRunning(true);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			playerController->setRunning(false);
+		}
 		break;
 	default:
 		break;
@@ -75,13 +115,13 @@ void windowResize(GLFWwindow* window, int width, int height){
 	GLfloat aspectRatio = width / height;
 	glViewport(0, 0, width, height);
 	//from http://stackoverflow.com/questions/26831962/opengl-orthographic-projection-oy-resizing
-	cameraptr->setAspectRatio(aspectRatio);
+	playerController->camera().setAspectRatio(aspectRatio);
 }
 
 
 void cursorMoved(GLFWwindow* window, const double x, const double y)
 {
-	cameraptr->orientToCursor(x, y);
+	playerController->camera().orientToCursor(x, y);
 }
 
 
@@ -149,22 +189,10 @@ int main()
 	initialize();
 
 	Camera camera(*window);
-	cameraptr = &camera;
+	playerController = std::make_unique<PlayerController>(camera);
 	
 	DirectionalLight light(camera);
 
-	/*std::vector<Drawable> buildings;
-	const int n = 2;
-	const Material m = { getTexture("../Images/building1.jpg"), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f) };
-	for (int i = -n / 2; i <= n / 2; i++)
-	{
-		auto building = makeRegularPolygonalPrism(3, 0.5f, 0.5f).setOrigin(glm::vec3(i, 0.0f, 0.0f));
-		building.material() = m;
-		building.material().shininess = i + n / 2;
-		buildings.push_back(building);
-	}*/
-
-	//Block block;
 	World world(5, 5);
 
 	while (!glfwWindowShouldClose(window))
@@ -172,20 +200,16 @@ int main()
 
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.819f, 0.435f, 0.019f, 1.0f);
+		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glPointSize(point_size);
 
-		/*for (auto building : buildings)
-		{
-			building.draw(camera, light);
-		}*/
-		//block.draw(camera, light);
 		world.draw(camera, light);
 
 		// update other events like input handling
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
+		playerController->update();
 	}
 
 	cleanUp();
