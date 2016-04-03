@@ -111,11 +111,14 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 	}
 }
 
-void windowResize(GLFWwindow* window, int width, int height){
-	GLfloat aspectRatio = width / height;
+void windowResize(GLFWwindow* window, int width, int height)
+{
 	glViewport(0, 0, width, height);
 	//from http://stackoverflow.com/questions/26831962/opengl-orthographic-projection-oy-resizing
-	playerController->camera().setAspectRatio(aspectRatio);
+	if (height != 0)
+	{
+		playerController->camera().setAspectRatio(width / height);
+	}
 }
 
 
@@ -130,15 +133,17 @@ bool initialize()
 	std::srand(std::time(0));
 
 	/// Initialize GL context and O/S window using the GLFW helper library
-	if (!glfwInit()) {
+	if (!glfwInit())
+	{
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
 		return false;
 	}
 
 	/// Create a window of size 640x480 and with title "Lecture 2: First Triangle"
 	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
-	window = glfwCreateWindow(800, 800, "COMP371: Team 8 Project", nullptr, nullptr);
-	if (!window) {
+	window = glfwCreateWindow(1600, 900, "COMP371: Team 8 Project", glfwGetPrimaryMonitor(), nullptr);
+	if (!window)
+	{
 		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
 		glfwTerminate();
 		return false;
@@ -157,7 +162,7 @@ bool initialize()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	glfwMakeContextCurrent(window);
 
@@ -165,11 +170,9 @@ bool initialize()
 	glewExperimental = GL_TRUE;	///Needed to get the latest version of OpenGL
 	glewInit();
 
-	/// Get the current Open	GL version
-	const GLubyte* renderer = glGetString(GL_RENDERER); /// Get renderer string
-	const GLubyte* version = glGetString(GL_VERSION); /// Version as a string
-	printf("Renderer: %s\n", renderer);
-	printf("OpenGL version supported %s\n", version);
+	/// Get the current OpenGL version
+	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+	std::cout << "OpenGL version supported: " << glGetString(GL_VERSION) << std::endl;
 
 	/// Enable the depth test i.e. draw a pixel if it's closer to the viewer
 	glEnable(GL_DEPTH_TEST); /// Enable depth-testing
@@ -193,7 +196,8 @@ int main()
 	
 	DirectionalLight light(camera);
 
-	World world(5, 5);
+	const int size = 5;
+	World world(size, size);
 
 	while (!glfwWindowShouldClose(window))
 	{
