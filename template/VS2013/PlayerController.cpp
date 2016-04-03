@@ -15,7 +15,7 @@ const double PlayerController::height = 0.1;
 const double PlayerController::maxSpeed = 5.0;
 const double PlayerController::acceleration = 15.0;
 const double PlayerController::runFactor = 2.0;
-const double PlayerController::jumpSpeed = 3.0;
+const double PlayerController::jumpSpeed = 4.0;
 const double PlayerController::gravity = -9.8;
 
 
@@ -28,40 +28,22 @@ PlayerController::PlayerController(Camera& camera)
 {}
 
 
-void PlayerController::moveForward()
-{
-	m_axial = AxialDirection::Forward;
-}
+void PlayerController::moveForward() { m_axial = AxialDirection::Forward; }
 
 
-void PlayerController::moveBackward()
-{
-	m_axial = AxialDirection::Backward;
-}
+void PlayerController::moveBackward() {	m_axial = AxialDirection::Backward; }
 
 
-void PlayerController::stopAxial()
-{
-	m_axial = AxialDirection::Null;
-}
+void PlayerController::stopAxial() { m_axial = AxialDirection::Null; }
 
 
-void PlayerController::moveLeft()
-{
-	m_lateral = LateralDirection::Left;
-}
+void PlayerController::moveLeft() {	m_lateral = LateralDirection::Left; }
 
 
-void PlayerController::moveRight()
-{
-	m_lateral = LateralDirection::Right;
-}
+void PlayerController::moveRight() { m_lateral = LateralDirection::Right; }
 
 
-void PlayerController::stopLateral()
-{
-	m_lateral = LateralDirection::Null;
-}
+void PlayerController::stopLateral() { m_lateral = LateralDirection::Null; }
 
 
 void PlayerController::update()
