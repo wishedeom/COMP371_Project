@@ -54,7 +54,8 @@ protected:
 	GLuint m_vboID;		// Vertex buffer object
 	GLuint m_eboID;		// Element buffer object, for vertex draw indices
 
-	bool m_upToDate;	// True if and only if all buffers are up-to-date
+	bool m_upToDate;	// True if and only if all buffers are up-to-date.
+	bool m_everFilled;	// True if and only if the buffers have ever been filled.
 
 	glm::mat4 m_modelMatrix;
 
