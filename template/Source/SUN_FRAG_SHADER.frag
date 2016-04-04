@@ -35,7 +35,7 @@ in vec4 viewSpace;
 vec3 fogColor = vec3(1,0,1);
 
 //length is multipled by 4 to limit how far you can see, multiply by bigger number to see closer
-float distance = length(viewSpace)*4;
+float distance = length(viewSpace)*2;
 
 float fogFactor = 0;
 
@@ -58,13 +58,10 @@ void main()
 	fogFactor = (80-distance)/(80-20);
 	fogFactor = clamp (fogFactor, 0,1);
 
-	//vec3 ads = vec3(ambient+diffuse+specular);
-
-	vec3 textureVec =  texture(texture1, TexCoords).rbg;
-	vec3 tempColor = specular+diffuse+textureVec;
-
-	color = vec4(mix(fogColor,tempColor,fogFactor),1.0f);
+	vec3 textureVec =  texture(texture1, TexCoords).rgb;
 	
+	vec3 ads = vec3(textureVec+diffuse);
+	color = vec4(mix(fogColor,ads,fogFactor),1.0f);
 
 
 } 
