@@ -107,10 +107,8 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 		}
 		break;
 	case GLFW_KEY_SPACE:
-		if (action == GLFW_PRESS)
-		{
-			playerController->jump();
-		}
+		playerController->jump();
+		break;
 	default:
 		break;
 	}
@@ -214,12 +212,12 @@ int main()
 		glPointSize(point_size);
 
 		world.draw(camera, light);
+		playerController->update();
 
 		// update other events like input handling
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
-		playerController->update();
 	}
 
 	cleanUp();

@@ -45,5 +45,4 @@ void main()
     vec3 specular = light.specular * spec * material.specular;
             
     color = vec4(ambient + diffuse + specular, 1.0f) * texture(texture, TexCoords);
-} 
-
+}

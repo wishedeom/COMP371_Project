@@ -135,7 +135,7 @@ void PlayerController::setRunning(const bool isRunning)
 
 bool PlayerController::isOnGround() const
 {
-	return std::abs(m_camera.position().z - height) / height < 0.1;
+	return (m_camera.position().z - height) / height < 0.1;
 }
 
 
