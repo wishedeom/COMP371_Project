@@ -26,7 +26,18 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
 
-uniform sampler2D texture;
+uniform sampler2D texture1;
+
+in vec4 viewSpace;
+
+//values for fog
+//FOG COLOR SHOULD MATCH BACKGROUND COLOR TO GIVE FADE-IN EFFECT
+vec3 fogColor = vec3(1,0,1);
+
+//length is multipled by 4 to limit how far you can see, multiply by bigger number to see closer
+float distance = length(viewSpace)*2;
+
+float fogFactor = 0;
 
 void main()
 {
@@ -44,5 +55,14 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * spec * material.specular;
             
-    color = vec4(ambient + diffuse + specular, 1.0f) * texture(texture, TexCoords);
-}
+	fogFactor = (80-distance)/(80-20);
+	fogFactor = clamp (fogFactor, 0,1);
+
+	vec3 textureVec =  texture(texture1, TexCoords).rgb;
+	
+	vec3 ads = vec3(textureVec+diffuse);
+	color = vec4(mix(fogColor,ads,fogFactor),1.0f);
+
+
+} 
+
