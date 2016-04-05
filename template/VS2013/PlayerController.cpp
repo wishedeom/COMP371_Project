@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <iostream>
-
+#include <math.h>
 #include "glew.h"
 #include "glfw3.h"
 #include "GLM/GTC/matrix_transform.hpp"
@@ -187,27 +187,29 @@ bool PlayerController::isOutsideBoundingBox(){
 		//it isnt currently checking all sides of the bounding box
 		//what if i subtract cam.position vector by the bounding box vectors?
 		glm::vec3 camPos = m_camera.position();
-		glm::vec3 side1(camPos - boundingBox.at(0));
-		glm::vec3 side2(camPos - boundingBox.at(1));
-		glm::vec3 side3(camPos - boundingBox.at(2));
-		glm::vec3 side4(camPos - boundingBox.at(3));
+		std::cout << boundingBox.size() << std::endl;
+	
+		glm::vec3 side1(boundingBox.at(0) - camPos);
+		glm::vec3 side2(boundingBox.at(1) - camPos);
+		glm::vec3 side3(boundingBox.at(2) - camPos);
+		glm::vec3 side4(boundingBox.at(3) - camPos);
 
-		if (side1.x >= 0.f && side1.y >= 0.f){
+		if (side1.x < 0.f && side1.y < 0.f){
 			isOutsideBox = false; 
 			break;
 		}
 
-		else if (side2.x >= 0.f && side2.y >= 0.f){
+		if (side2.x < 0.f && side2.y < 0.f){
 			isOutsideBox = false;
 			break;
 		}
 
-		else if (side3.x >= 0.f && side3.y >= 0.f){
+		if (side3.x < 0.f && side3.y < 0.f){
 			isOutsideBox = false;
 			break;
 		}
 
-		else if (side4.x >= 0.f && side4.y >= 0.f){
+		if (side4.x < 0.f && side4.y < 0.f){
 			isOutsideBox = false;
 			break;
 		}
