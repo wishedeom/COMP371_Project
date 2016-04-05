@@ -1,4 +1,32 @@
+//-------------------------------------------------------------------------------------------------------------------------
+//
+//													COMP 371  -  COMPUTER GRAPHICS
+//
+//														CONCORDIA UNIVERSITY
+//															TERM PROJECT
+//														    MEGA-CITY ONE
+//
+//
+//																Authors:
+//															   Andy Chen
+//															  Michael Deom
+//															 Adrian Gabriel
+//															 Sylvie Truong
+//
+//
+//																PRESENTED
+//															April 7th, 2016
+//																	to
+//														   Prof. Sudhir Mudur
+//																	and
+//														Prof. Charalambos Poullis
+//
+//-------------------------------------------------------------------------------------------------------------------------
+
+// Static linking to GLEW
 #define GLEW_STATIC
+
+															// - INCLUDES - //
 
 // Standard C++
 #include <vector>
@@ -32,22 +60,85 @@
 #include "../VS2013/utility.h"
 #include "../VS2013/PlayerController.h"
 
+
+															// - GLOBAL VARIABLES - //
+
+// A pointer to the OpenGL window
 GLFWwindow* window = 0x00;
 
-///Transformations
-glm::mat4 proj_matrix;
-glm::mat4 view_matrix;
-
-
+// Manages the player's movement in the world
 std::unique_ptr<PlayerController> playerController;
 
+// Determines the size of each point drawn by OpenGL
+const GLfloat pointSize = 3.0f;
 
-//GLuint VBO, VAO, EBO;
+// Background colour of world
+const glm::vec4 clearColour(1.0f, 0.0f, 1.0f, 1.0f); // Mauve
 
-GLfloat point_size = 3.0f;
+// Size of the world, in blocks
+const int worldSize = 5;
 
-///Handle the keyboard input
-void keyPressed(GLFWwindow *_window, const int key, const int scancode, const int action, const int mods) {
+
+														  // - FUNCTION DECLARATIONS - //
+
+void keyPressed(GLFWwindow *_window, const int key, const int scancode, const int action, const int mods);
+void windowResize(GLFWwindow* window, int width, int height);
+void cursorMoved(GLFWwindow* window, const double x, const double y);
+bool initialize();
+bool cleanUp();
+
+
+																	// - MAIN - //
+
+int main()
+{
+	// Set up OpenGL
+	initialize();
+
+	// Create a camera displaying to the window
+	Camera camera(*window);
+
+	// Initialize the player controller for user input
+	playerController = std::make_unique<PlayerController>(camera);
+
+	// Create the "sun"
+	DirectionalLight light(camera);
+
+	// Create the city
+	World world(worldSize, worldSize);
+
+	// Main game loop
+	while (!glfwWindowShouldClose(window))
+	{
+
+		// Wipe the drawing surface clear
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
+		glPointSize(pointSize);
+
+		// Draw everything
+		world.draw(camera, light);
+
+		// Update other events like input handling
+		glfwPollEvents();
+		playerController->update();
+
+		// Put the stuff we've been drawing onto the display
+		glfwSwapBuffers(window);
+	}
+
+	// End program
+	cleanUp();
+	return 0;
+}
+
+
+															// - GLOBAL FUNCTIONS - //
+
+
+// Handles keyboard input
+void keyPressed(GLFWwindow *_window, const int key, const int scancode, const int action, const int mods)
+{
 	switch (key)
 	{
 	case GLFW_KEY_ESCAPE:
@@ -114,6 +205,8 @@ void keyPressed(GLFWwindow *_window, const int key, const int scancode, const in
 	}
 }
 
+
+// Handles window resizing
 void windowResize(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -125,26 +218,30 @@ void windowResize(GLFWwindow* window, int width, int height)
 }
 
 
+// Handles mouse input
 void cursorMoved(GLFWwindow* window, const double x, const double y)
 {
 	playerController->camera().orientToCursor(x, y);
 }
 
 
+// Manages OpenGL set-up
 bool initialize()
 {
+	// Seed the random number generator. Used to generate the random buildings.
 	std::srand(std::time(0));
 
-	/// Initialize GL context and O/S window using the GLFW helper library
+	// Initialize GL context and OS window using the GLFW helper library
 	if (!glfwInit())
 	{
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
 		return false;
 	}
 
-	/// Create a window of size 640x480 and with title "Lecture 2: First Triangle"
-	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
-	window = glfwCreateWindow(1600, 900, "COMP371: Team 8 Project", glfwGetPrimaryMonitor(), nullptr);
+	// Create the window and set it to full-screen
+	window = glfwCreateWindow(1600, 900, "COMP371: Mega-City One", glfwGetPrimaryMonitor(), nullptr);
+	
+	// Check for errors
 	if (!window)
 	{
 		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
@@ -152,74 +249,43 @@ bool initialize()
 		return false;
 	}
 
-	int w, h;
-	glfwGetWindowSize(window, &w, &h);
-	///Register the keyboard callback function: keyPressed(...)
+	///Register the callback functions
 	glfwSetWindowSizeCallback(window, windowResize);
 	glfwSetKeyCallback(window, keyPressed);
 	glfwSetCursorPosCallback(window, cursorMoved);
 
-	// Hides the mouse cursor
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+	// Set window hints
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 
+	// Hides the mouse cursor
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// Bring window into focus
 	glfwMakeContextCurrent(window);
 
-	/// Initialize GLEW extension handler
-	glewExperimental = GL_TRUE;	///Needed to get the latest version of OpenGL
+	// Initialize GLEW extension handler
+	glewExperimental = GL_TRUE;		//Needed to get the latest version of OpenGL
 	glewInit();
 
-	/// Get the current OpenGL version
+	// Get the current OpenGL version
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "OpenGL version supported: " << glGetString(GL_VERSION) << std::endl;
 
-	/// Enable the depth test i.e. draw a pixel if it's closer to the viewer
-	glEnable(GL_DEPTH_TEST); /// Enable depth-testing
-	glDepthFunc(GL_LESS);	/// The type of testing i.e. a smaller value as "closer"
+	// Enable the depth test i.e. draw a pixel if it's closer to the viewer
+	glEnable(GL_DEPTH_TEST);	// Enable depth-testing
+	glDepthFunc(GL_LESS);		// The type of testing i.e. a smaller value as "closer"
 
 	return true;
 }
 
+
+// Terminates OpenGL
 bool cleanUp()
 {
 	glfwTerminate();
 	return true;
-}
-
-
-int main()
-{
-	initialize();
-
-	Camera camera(*window);
-	playerController = std::make_unique<PlayerController>(camera);
-	
-	DirectionalLight light(camera);
-
-	const int size = 5;
-	World world(size, size);
-
-	while (!glfwWindowShouldClose(window))
-	{
-
-		// wipe the drawing surface clear
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-		glPointSize(point_size);
-
-		world.draw(camera, light);
-		playerController->update();
-
-		// update other events like input handling
-		glfwPollEvents();
-		// put the stuff we've been drawing onto the display
-		glfwSwapBuffers(window);
-	}
-
-	cleanUp();
-	return 0;
 }
