@@ -9,7 +9,6 @@ const float Block::maxRadius = 1.0f;
 const float Block::minHeight = 0.5f;
 const float Block::maxHeight = 10.0f;
 
-
 Block::Block(const glm::vec3& centre)
 	: m_quad(makeBlockBase(centre, size, height))
 {
@@ -24,11 +23,12 @@ Block::Block(const glm::vec3& centre)
 	m_buildings[2] = makeBuilding().setOrigin(centre + glm::vec3(offset, -offset, height));
 	m_buildings[3] = makeBuilding().setOrigin(centre + glm::vec3(offset, offset, height));
 
-	//buildingOffset might need to be different from offset
+
 	const float boundingOffset = size/3;
 
 	//m_boundingBoxes is 4 points, so basically a square in a 2D plane
 	//the idea is to use this square as bounding box in PlayerController.isOutsideBoundingBox
+
 	m_boundingBoxes.push_back(centre + glm::vec3(-boundingOffset, -boundingOffset, height));
 	m_boundingBoxes.push_back(centre + glm::vec3(-boundingOffset, boundingOffset, height));
 	m_boundingBoxes.push_back(centre + glm::vec3(boundingOffset, -boundingOffset, height));
