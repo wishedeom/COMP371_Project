@@ -21,12 +21,13 @@
 class Block
 {
 	static Drawable makeBuilding();
-
 	Drawable m_quad;
 	std::array<Drawable, 4> m_buildings;
-
+	std::vector<glm::vec3> m_boundingBoxes;
+	
+	
 public:
-
+	std::vector<glm::vec3> getBoundingBoxes();
 	static const float size;
 	static const float height;
 	static const int minSides;

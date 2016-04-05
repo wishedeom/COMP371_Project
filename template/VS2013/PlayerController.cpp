@@ -19,6 +19,16 @@ const double PlayerController::jumpSpeed = 3.0;
 const double PlayerController::gravity = -9.8;
 
 
+PlayerController::PlayerController(Camera& camera, World& world)
+	: m_camera(camera)
+	, m_axial(AxialDirection::Null)
+	, m_lateral(LateralDirection::Null)
+	, m_lastFrameTime(glfwGetTime())
+	, m_isRunning(false)
+	, m_world(world)
+	, blocks(m_world.getBlocks())
+{}
+/*
 PlayerController::PlayerController(Camera& camera)
 	: m_camera(camera)
 	, m_axial(AxialDirection::Null)
@@ -26,8 +36,7 @@ PlayerController::PlayerController(Camera& camera)
 	, m_lastFrameTime(glfwGetTime())
 	, m_isRunning(false)
 {}
-
-
+*/
 void PlayerController::moveForward()
 {
 	m_axial = AxialDirection::Forward;
@@ -69,16 +78,19 @@ void PlayerController::update()
 	const double time = glfwGetTime();
 	const double deltaT = time - m_lastFrameTime;
 	updateVelocity(deltaT);
-	updatePosition(deltaT);
-	m_lastFrameTime = time;
-}
 
+	if (isOutsideBoundingBox()){
+		updatePosition(deltaT);
+	}
+	m_lastFrameTime = time;
+	
+}
 
 void PlayerController::updatePosition(const double deltaT)
 {
 	const float theta = angle(m_camera.forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 worldVelocity = glm::vec3(glm::rotate(id4, theta, up) * glm::vec4(m_velocity, 0.0f));
-	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT) * static_cast<float>(m_isRunning ? runFactor : 1.0f);
+	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT)* static_cast<float>(m_isRunning ? runFactor : 1.0f);
 	m_camera.translate(displacement);
 	if (m_camera.position().z < height)
 	{
@@ -163,4 +175,26 @@ void PlayerController::jump()
 	{
 		m_velocity.z += jumpSpeed;
 	}
+}
+
+bool PlayerController::isOutsideBoundingBox(){
+	bool isOutsideBox = true;
+	
+	for (GLuint i = 0; i<blocks.size(); i++){
+		std::vector<glm::vec3> boundingBox = blocks.at(i).getBoundingBoxes();
+
+		//this is work in progress; the idea is to check if cam is outside the 4 bounding points
+		//the logic/implementation needs improvement
+		//it isnt currently checking all sides of the bounding box
+		//what if i subtract cam.position vector by the bounding box vectors?
+
+		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().y > boundingBox.at(0).y) &&
+			(m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y)) || //the previous 2 lines check if the cam is touching 1 side; same logic for next 2 lines
+			((m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y) &&
+			(m_camera.position().x > boundingBox.at(2).x && m_camera.position().y > boundingBox.at(2).y))){
+			isOutsideBox = false;
+		}
+	}
+
+	return isOutsideBox;
 }
