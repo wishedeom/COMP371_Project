@@ -6,6 +6,7 @@ layout (location = 2) in vec2 texCoords;
 out vec3 FragPos;
 out vec3 Normal;
 out vec2 TexCoords;
+out vec4 viewSpace;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -17,4 +18,6 @@ void main()
     FragPos = vec3(model * vec4(position, 1.0f));
     Normal = normalize(normal);
     TexCoords = texCoords;
+	viewSpace = gl_Position;
+
 } 
