@@ -192,12 +192,6 @@ bool PlayerController::isOutsideBoundingBox(){
 		glm::vec3 side3(camPos - boundingBox.at(2));
 		glm::vec3 side4(camPos - boundingBox.at(3));
 
-		//std::cout << side1.x << std::endl;
-		//std::cout << side2.x << std::endl;
-		//std::cout << side3.x << std::endl;
-		//std::cout << side4.x << std::endl;
-
-
 		if (side1.x >= 0.f && side1.y >= 0.f){
 			isOutsideBox = false; 
 			break;
