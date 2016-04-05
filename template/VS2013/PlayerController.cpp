@@ -179,7 +179,6 @@ void PlayerController::jump()
 
 bool PlayerController::isOutsideBoundingBox(){
 	bool isOutsideBox = true;
-	
 	for (GLuint i = 0; i<blocks.size(); i++){
 		std::vector<glm::vec3> boundingBox = blocks.at(i).getBoundingBoxes();
 
@@ -187,13 +186,49 @@ bool PlayerController::isOutsideBoundingBox(){
 		//the logic/implementation needs improvement
 		//it isnt currently checking all sides of the bounding box
 		//what if i subtract cam.position vector by the bounding box vectors?
+		glm::vec3 camPos = m_camera.position();
+		glm::vec3 side1(camPos - boundingBox.at(0));
+		glm::vec3 side2(camPos - boundingBox.at(1));
+		glm::vec3 side3(camPos - boundingBox.at(2));
+		glm::vec3 side4(camPos - boundingBox.at(3));
 
-		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().y > boundingBox.at(0).y) &&
-			(m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y)) || //the previous 2 lines check if the cam is touching 1 side; same logic for next 2 lines
-			((m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y) &&
-			(m_camera.position().x > boundingBox.at(2).x && m_camera.position().y > boundingBox.at(2).y))){
-			isOutsideBox = false;
+		//std::cout << side1.x << std::endl;
+		//std::cout << side2.x << std::endl;
+		//std::cout << side3.x << std::endl;
+		//std::cout << side4.x << std::endl;
+
+
+		if (side1.x >= 0.f && side1.y >= 0.f){
+			isOutsideBox = false; 
+			break;
 		}
+
+		else if (side2.x >= 0.f && side2.y >= 0.f){
+			isOutsideBox = false;
+			break;
+		}
+
+		else if (side3.x >= 0.f && side3.y >= 0.f){
+			isOutsideBox = false;
+			break;
+		}
+
+		else if (side4.x >= 0.f && side4.y >= 0.f){
+			isOutsideBox = false;
+			break;
+		}
+
+		/*
+		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().y > boundingBox.at(0).y) &&
+			(m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y)))
+			
+			|| //the previous 2 lines check if the cam is touching 1 side; same logic for next 2 lines
+			((m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y) &&
+			(m_camera.position().x > boundingBox.at(2).x && m_camera.position().y > boundingBox.at(2).y)))
+			
+			{
+			isOutsideBox = false;
+		}*/
 	}
 
 	return isOutsideBox;
