@@ -186,34 +186,51 @@ bool PlayerController::isOutsideBoundingBox(){
 		//the logic/implementation needs improvement
 		//it isnt currently checking all sides of the bounding box
 		//what if i subtract cam.position vector by the bounding box vectors?
-		glm::vec3 camPos = m_camera.position();
-		std::cout << boundingBox.size() << std::endl;
-	
+		//glm::vec3 camPos = m_camera.position();
+		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().x < boundingBox.at(1).x) &&
+			(m_camera.position().y > boundingBox.at(0).y && m_camera.position().y < boundingBox.at(1).y))){
+			isOutsideBox = false;
+			break;
+		}
+
+		if (((m_camera.position().x > boundingBox.at(1).x && m_camera.position().x < boundingBox.at(2).x) &&
+			(m_camera.position().y > boundingBox.at(1).y && m_camera.position().y < boundingBox.at(2).y))){
+			isOutsideBox = false;
+			break;
+		}
+
+		if (((m_camera.position().x > boundingBox.at(3).x && m_camera.position().x < boundingBox.at(0).x) &&
+			(m_camera.position().y > boundingBox.at(3).y && m_camera.position().y < boundingBox.at(0).y))){
+			isOutsideBox = false;
+			break;
+		}
+
+		/*
 		glm::vec3 side1(boundingBox.at(0) - camPos);
 		glm::vec3 side2(boundingBox.at(1) - camPos);
 		glm::vec3 side3(boundingBox.at(2) - camPos);
 		glm::vec3 side4(boundingBox.at(3) - camPos);
 
-		if (side1.x < 0.f && side1.y < 0.f){
+		if (side1.x > 0.f && side1.y > 0.f){
 			isOutsideBox = false; 
 			break;
 		}
 
-		if (side2.x < 0.f && side2.y < 0.f){
+		if (side2.x > 0.f && side2.y > 0.f){
 			isOutsideBox = false;
 			break;
 		}
 
-		if (side3.x < 0.f && side3.y < 0.f){
+		if (side3.x > 0.f && side3.y > 0.f){
 			isOutsideBox = false;
 			break;
 		}
 
-		if (side4.x < 0.f && side4.y < 0.f){
+		if (side4.x > 0.f && side4.y > 0.f){
 			isOutsideBox = false;
 			break;
 		}
-
+		*/
 		/*
 		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().y > boundingBox.at(0).y) &&
 			(m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y)))
