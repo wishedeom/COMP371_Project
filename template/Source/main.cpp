@@ -197,14 +197,17 @@ int main()
 {
 	initialize();
 
-	Camera camera(*window);
-	playerController = std::make_unique<PlayerController>(camera);
-	
-	DirectionalLight light(camera);
-
 	const int size = 5;
 	World world(size, size);
 
+
+	Camera camera(*window);
+	//playerController = std::make_unique<PlayerController>(camera);
+	playerController = std::make_unique<PlayerController>(camera, world);
+	
+	DirectionalLight light(camera);
+
+	
 	while (!glfwWindowShouldClose(window))
 	{
 
