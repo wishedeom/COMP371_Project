@@ -81,7 +81,6 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -106,7 +105,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SOIL.h" />
-    <ClInclude Include="Sun.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="utility.h" />

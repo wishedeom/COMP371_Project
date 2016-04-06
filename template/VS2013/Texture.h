@@ -1,11 +1,15 @@
 #pragma once
+
 #include <string>
+
+#include "glew.h"
 #include "glfw3.h"
 
 // Represents a single texture.
 class Texture
 {
-	GLuint m_id;			// OpenGL id for the texture; 0 if not loaded
+
+	GLuint m_id;	// OpenGL id for the texture; 0 if not loaded
 
 public:
 
