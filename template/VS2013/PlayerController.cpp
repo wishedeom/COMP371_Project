@@ -78,9 +78,13 @@ void PlayerController::update()
 	const double time = glfwGetTime();
 	const double deltaT = time - m_lastFrameTime;
 	updateVelocity(deltaT);
-
 	if (isOutsideBoundingBox()){
 		updatePosition(deltaT);
+	}
+	else{
+		glm::vec3 camPos = m_camera.position();
+		glm::vec3 resetPosition = glm::vec3(camPos.x - 0.1f, camPos.y - 0.1f, camPos.z);
+		m_camera.setPosition(resetPosition);
 	}
 	m_lastFrameTime = time;
 	
@@ -90,14 +94,18 @@ void PlayerController::updatePosition(const double deltaT)
 {
 	const float theta = angle(m_camera.forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 worldVelocity = glm::vec3(glm::rotate(id4, theta, up) * glm::vec4(m_velocity, 0.0f));
-	const glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT)* static_cast<float>(m_isRunning ? runFactor : 1.0f);
+	glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT)* static_cast<float>(m_isRunning ? runFactor : 1.0f);
+	
 	m_camera.translate(displacement);
 	if (m_camera.position().z < height)
 	{
 		auto newPosition = m_camera.position();
 		newPosition.z = height;
+		
 		m_camera.setPosition(newPosition);
 	}
+	
+
 }
 
 
@@ -181,67 +189,31 @@ bool PlayerController::isOutsideBoundingBox(){
 	bool isOutsideBox = true;
 	for (GLuint i = 0; i<blocks.size(); i++){
 		std::vector<glm::vec3> boundingBox = blocks.at(i).getBoundingBoxes();
-
-		//this is work in progress; the idea is to check if cam is outside the 4 bounding points
-		//the logic/implementation needs improvement
-		//it isnt currently checking all sides of the bounding box
-		//what if i subtract cam.position vector by the bounding box vectors?
-		//glm::vec3 camPos = m_camera.position();
-		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().x < boundingBox.at(1).x) &&
-			(m_camera.position().y > boundingBox.at(0).y && m_camera.position().y < boundingBox.at(1).y))){
+	
+		//the 4 sides of the "square"
+		if (((m_camera.position().x < boundingBox.at(0).x && m_camera.position().x > boundingBox.at(1).x) &&
+			(m_camera.position().y < boundingBox.at(0).y && m_camera.position().y > boundingBox.at(1).y))){
 			isOutsideBox = false;
 			break;
 		}
 
-		if (((m_camera.position().x > boundingBox.at(1).x && m_camera.position().x < boundingBox.at(2).x) &&
-			(m_camera.position().y > boundingBox.at(1).y && m_camera.position().y < boundingBox.at(2).y))){
+		if (((m_camera.position().x < boundingBox.at(1).x && m_camera.position().x > boundingBox.at(2).x) &&
+			(m_camera.position().y < boundingBox.at(1).y && m_camera.position().y > boundingBox.at(2).y))){
 			isOutsideBox = false;
 			break;
 		}
 
-		if (((m_camera.position().x > boundingBox.at(3).x && m_camera.position().x < boundingBox.at(0).x) &&
-			(m_camera.position().y > boundingBox.at(3).y && m_camera.position().y < boundingBox.at(0).y))){
+		if (((m_camera.position().x < boundingBox.at(2).x && m_camera.position().x > boundingBox.at(3).x) &&
+			(m_camera.position().y < boundingBox.at(2).y && m_camera.position().y > boundingBox.at(3).y))){
 			isOutsideBox = false;
 			break;
 		}
 
-		/*
-		glm::vec3 side1(boundingBox.at(0) - camPos);
-		glm::vec3 side2(boundingBox.at(1) - camPos);
-		glm::vec3 side3(boundingBox.at(2) - camPos);
-		glm::vec3 side4(boundingBox.at(3) - camPos);
-
-		if (side1.x > 0.f && side1.y > 0.f){
-			isOutsideBox = false; 
-			break;
-		}
-
-		if (side2.x > 0.f && side2.y > 0.f){
+		if (((m_camera.position().x < boundingBox.at(3).x && m_camera.position().x > boundingBox.at(0).x) &&
+			(m_camera.position().y < boundingBox.at(3).y && m_camera.position().y > boundingBox.at(0).y))){
 			isOutsideBox = false;
 			break;
 		}
-
-		if (side3.x > 0.f && side3.y > 0.f){
-			isOutsideBox = false;
-			break;
-		}
-
-		if (side4.x > 0.f && side4.y > 0.f){
-			isOutsideBox = false;
-			break;
-		}
-		*/
-		/*
-		if (((m_camera.position().x > boundingBox.at(0).x && m_camera.position().y > boundingBox.at(0).y) &&
-			(m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y)))
-			
-			|| //the previous 2 lines check if the cam is touching 1 side; same logic for next 2 lines
-			((m_camera.position().x < boundingBox.at(1).x && m_camera.position().y < boundingBox.at(1).y) &&
-			(m_camera.position().x > boundingBox.at(2).x && m_camera.position().y > boundingBox.at(2).y)))
-			
-			{
-			isOutsideBox = false;
-		}*/
 	}
 
 	return isOutsideBox;
