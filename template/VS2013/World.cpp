@@ -23,7 +23,5 @@ std::vector<glm::vec3> World::getBoundingBoxVector(){
 	return boundingBoxVector;
 }
 
-std::vector<Block> World::getBlocks(){
-	return m_blocks;
-}
+std::vector<Block>& World::getBlocks() { return m_blocks; }
 

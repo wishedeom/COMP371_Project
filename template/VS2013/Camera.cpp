@@ -1,11 +1,17 @@
 #include "camera.h"
+
 #include <stdexcept>
+
 #include "GLM/GTC/matrix_transform.hpp"
 
+
+															// - STATIC CONSTANTS - //
 
 const glm::vec3 Camera::up(0.0f, 0.0f, 1.0f);
 const float Camera::mouseSensitivity = 0.001f;
 
+
+															// - MEMBER FUNCTIONS - //
 
 Camera::Camera(GLFWwindow& window, const glm::vec3& position, const glm::vec3& orientation, const float fov, const float nearPlane, const float farPlane)
 	: m_position(position)
@@ -58,21 +64,13 @@ float Camera::nearPlane() const { return m_nearPlane; }
 float Camera::farPlane() const { return m_farPlane; }
 
 
-glm::mat4 Camera::projection() const
-{
-	return glm::perspective(m_fov, m_aspectRatio, m_nearPlane, m_farPlane);
-}
+glm::mat4 Camera::projection() const { return glm::perspective(m_fov, m_aspectRatio, m_nearPlane, m_farPlane); }
 
 
-glm::mat4 Camera::view() const
-{
-	return glm::lookAt(m_position, m_position + m_orientation, up);
-}
+glm::mat4 Camera::view() const { return glm::lookAt(m_position, m_position + m_orientation, up); }
 
-glm::mat4 Camera::projView() const
-{
-	return projection() * view();
-}
+
+glm::mat4 Camera::projView() const { return projection() * view(); }
 
 
 void Camera::setPosition(const glm::vec3& position) { m_position = position; }
@@ -136,10 +134,7 @@ void Camera::setFarPlane(const float farPlane)
 }
 
 
-void Camera::translate(const glm::vec3& direction)
-{
-	m_position += direction;
-}
+void Camera::translate(const glm::vec3& direction) { m_position += direction; }
 
 
 void Camera::orientToCursor(const double x, const double y)
