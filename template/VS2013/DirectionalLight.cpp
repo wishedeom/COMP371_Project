@@ -1,5 +1,6 @@
 #include "DirectionalLight.h"
 
+
 DirectionalLight::DirectionalLight(const Camera& camera)
 	: m_direction(0.0f, -1.0f, -1.0f)
 	, m_ambientColour(1.0f, 1.0f, 1.0f)
@@ -27,7 +28,4 @@ void DirectionalLight::UseShader() const
 }
 
 
-const Shader& DirectionalLight::getShader() const
-{
-	return m_shader;
-}
+const Shader& DirectionalLight::getShader() const {	return m_shader; }
