@@ -157,7 +157,7 @@ void PlayerController::updateVelocity(const double deltaT)
 }
 
 
-Camera& PlayerController::camera() { return m_camera; }
+Camera& PlayerController::camera() const { return m_camera; }
 
 
 void PlayerController::setRunning(const bool isRunning) { m_isRunning = isRunning; }
