@@ -233,18 +233,10 @@ void PlayerController::isInsideCity()
 
 	glm::vec3 camPos = m_camera.position();
 
-	std::cout << "centerMin: " << centerMin.x << ", " << centerMin.y << ", " << centerMin.z << std::endl;
-	std::cout << "centerMax: " << centerMax.x << ", " << centerMax.y << ", " << centerMax.z << std::endl;
-
 	float pos_x = centerMax.x + (block_size / 2);
 	float neg_x = centerMin.x - (block_size / 2);
 	float pos_y = centerMax.y + (block_size / 2);
 	float neg_y = centerMin.y - (block_size / 2);
-
-	std::cout << "pos_x: " << pos_x << std::endl;
-	std::cout << "neg_x: " << neg_x << std::endl;
-	std::cout << "pos_y: " << pos_y << std::endl;
-	std::cout << "neg_y: " << neg_y << std::endl;
 
 	float cam_x = camPos.x;
 	float cam_y = camPos.y;
@@ -286,18 +278,10 @@ bool PlayerController::isOutsideWorld()
 
 	glm::vec3 camPos = m_camera.position();
 
-	std::cout << "centerMin: " << centerMin.x << ", " << centerMin.y << ", " << centerMin.z << std::endl;
-	std::cout << "centerMax: " << centerMax.x << ", " << centerMax.y << ", " << centerMax.z << std::endl;
-
 	float pos_x = centerMax.x + (block_size / 2);
 	float neg_x = centerMin.x - (block_size / 2);
 	float pos_y = centerMax.y + (block_size / 2);
 	float neg_y = centerMin.y - (block_size / 2);
-
-	std::cout << "pos_x: " << pos_x << std::endl;
-	std::cout << "neg_x: " << neg_x << std::endl;
-	std::cout << "pos_y: " << pos_y << std::endl;
-	std::cout << "neg_y: " << neg_y << std::endl;
 
 	float cam_x = camPos.x;
 	float cam_y = camPos.y;
@@ -307,8 +291,6 @@ bool PlayerController::isOutsideWorld()
 
 	if (cam_x >= pos_x || cam_x <= neg_x || cam_y >= pos_y || cam_y <= neg_y)
 	{
-		std::cout << "OUTSIDE" << std::endl;
-
 		glm::vec3 resetPosition = m_camera.position();
 
 		if (cam_x >= pos_x)
@@ -339,7 +321,6 @@ bool PlayerController::isOutsideWorld()
 	}
 	else
 	{
-		std::cout << "INSIDE" << std::endl;
 		return false;
 	}
 }

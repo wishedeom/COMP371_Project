@@ -104,6 +104,8 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(ProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		s.draw(camera);
 		
+		light.update();
+
 		// Draw everything
 		world.draw(camera, light);
 

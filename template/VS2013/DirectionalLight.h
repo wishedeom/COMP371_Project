@@ -22,6 +22,8 @@ class DirectionalLight
 	Shader m_shader;			// The shader object of the light
 	const Camera& m_camera;		// The camera that will view the world
 
+	double m_lastFrameTime;
+
 public:
 
 	// Constructs a directional light given the view camera
@@ -32,4 +34,6 @@ public:
 
 	// Returns the light's shader program
 	const Shader& getShader() const;
+
+	void update();
 };

@@ -1,5 +1,9 @@
 #include "DirectionalLight.h"
 
+#include "GLM/GTC/matrix_transform.hpp"
+
+#include "utility.h"
+
 
 DirectionalLight::DirectionalLight(const Camera& camera)
 	: m_direction(0.0f, -1.0f, -1.0f)
@@ -8,6 +12,7 @@ DirectionalLight::DirectionalLight(const Camera& camera)
 	, m_specularColour(1.0f, 1.0f, 1.0f)
 	, m_camera(camera)
 	, m_shader(Shader("../Source/SUN_VERTEX_SHADER.vs", "../Source/SUN_FRAG_SHADER.frag"))
+	, m_lastFrameTime(glfwGetTime())
 {
 	glUniform1i(glGetUniformLocation(m_shader.programID(), "texture"), 0);
 }
@@ -29,3 +34,15 @@ void DirectionalLight::UseShader() const
 
 
 const Shader& DirectionalLight::getShader() const {	return m_shader; }
+
+
+void DirectionalLight::update()
+{
+	double time = glfwGetTime();
+	double deltaT = time - m_lastFrameTime;
+	float theta = deltaT / 1;
+	m_direction = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_direction, 0.0f));
+	m_ambientColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_ambientColour, 0.0f));
+	m_lastFrameTime = time;
+	std::cout << m_direction.y << std::endl;
+}
