@@ -55,6 +55,7 @@
 #include "../VS2013/Drawable.h"
 #include "../VS2013/utility.h"
 #include "../VS2013/PlayerController.h"
+#include "../VS2013/Skybox.h"
 
 
 															// - GLOBAL VARIABLES - //
@@ -78,7 +79,7 @@ const int worldSize = 5;
 const bool fullScreen = false;
 
 
-														  // - FUNCTION DECLARATIONS - //
+														  // - FORWARD FUNCTION DECLARATIONS - //
 
 void keyPressed(GLFWwindow *_window, const int key, const int scancode, const int action, const int mods);
 void windowResize(GLFWwindow* window, int width, int height);
@@ -100,11 +101,17 @@ int main()
 	// Create a camera displaying to the window
 	Camera camera(*window);
 
+	Shader skyboxShader("../source/SKY_VERTEX_SHADER.vs", "../source/SKY_FRAG_SHADER.frag");
+
+	GLuint ProgramID = skyboxShader.programID();
+
 	// Initialize the player controller for user input
 	playerController = std::make_unique<PlayerController>(camera, world);
 
 	// Create the "sun"
 	DirectionalLight light(camera);
+
+	Skybox s;
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window))
@@ -114,6 +121,14 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
 		glPointSize(pointSize);
+
+		glDepthMask(GL_FALSE);// Remember to turn depth writing off
+		skyboxShader.use();
+		glm::mat4 view = glm::mat4(glm::mat3(camera.view()));	// Remove any translation component of the view matrix
+		glm::mat4 projection = camera.projection();
+		glUniformMatrix4fv(glGetUniformLocation(ProgramID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(ProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		s.draw(camera);
 
 		// Draw everything
 		world.draw(camera, light);
