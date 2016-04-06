@@ -6,7 +6,7 @@
 #include "glew.h"
 #include "glfw3.h"
 #include "GLM/GTC/matrix_transform.hpp"
-
+#include <string.h>
 #include "Camera.h"
 #include "utility.h"
 
@@ -28,15 +28,7 @@ PlayerController::PlayerController(Camera& camera, World& world)
 	, m_world(world)
 	, blocks(m_world.getBlocks())
 {}
-/*
-PlayerController::PlayerController(Camera& camera)
-	: m_camera(camera)
-	, m_axial(AxialDirection::Null)
-	, m_lateral(LateralDirection::Null)
-	, m_lastFrameTime(glfwGetTime())
-	, m_isRunning(false)
-{}
-*/
+
 void PlayerController::moveForward()
 {
 	m_axial = AxialDirection::Forward;
@@ -79,12 +71,11 @@ void PlayerController::update()
 	const double deltaT = time - m_lastFrameTime;
 	updateVelocity(deltaT);
 	if (isOutsideBoundingBox()){
+		previousPos = m_camera.position();
 		updatePosition(deltaT);
 	}
-	else{
-		glm::vec3 camPos = m_camera.position();
-		glm::vec3 resetPosition = glm::vec3(camPos.x - 0.1f, camPos.y - 0.1f, camPos.z);
-		m_camera.setPosition(resetPosition);
+	if (!(isOutsideBoundingBox())){
+		m_camera.setPosition(previousPos);
 	}
 	m_lastFrameTime = time;
 	
@@ -217,4 +208,17 @@ bool PlayerController::isOutsideBoundingBox(){
 	}
 
 	return isOutsideBox;
+}
+
+bool PlayerController::isInsideWorld(){
+	bool isInsideBox = true;
+	std::vector<glm::vec3> worldBoundingBox = m_world.getWorldBoundingBox();
+
+	//the 4 sides of the world "square"
+	if (((m_camera.position().x > worldBoundingBox.at(0).x || m_camera.position().x < worldBoundingBox.at(1).x) &&
+		(m_camera.position().y > worldBoundingBox.at(0).y || m_camera.position().y < worldBoundingBox.at(1).y))){
+			isInsideBox = false;
+		}
+
+	return isInsideBox;
 }

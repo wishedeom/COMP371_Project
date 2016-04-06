@@ -42,6 +42,9 @@ class PlayerController
 
 	bool isOnGround() const;
 	bool isOutsideBoundingBox();
+	bool isInsideWorld();
+
+	glm::vec3 previousPos;
 public:
 
 	static const double height;
