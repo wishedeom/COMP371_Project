@@ -29,7 +29,7 @@ class PlayerController
 
 	Camera& m_camera;			// The player's camera
 	World& m_world;				// The world the player lives in
-	std::vector<Block> blocks;
+	//std::vector<Block> blocks;
 
 	AxialDirection m_axial;		// The player's current axial motion
 	LateralDirection m_lateral;	// The player's current lateral motion

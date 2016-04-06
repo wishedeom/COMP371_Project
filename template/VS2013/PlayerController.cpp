@@ -32,7 +32,6 @@ PlayerController::PlayerController(Camera& camera, World& world)
 	, m_lastFrameTime(glfwGetTime())
 	, m_isRunning(false)
 	, m_world(world)
-	, blocks(m_world.getBlocks())
 {}
 
 
@@ -180,6 +179,7 @@ void PlayerController::jump()
 bool PlayerController::isOutsideBoundingBox()
 {
 	bool isOutsideBox = true;
+	auto& blocks = m_world.getBlocks();
 	for (GLuint i = 0; i < blocks.size(); i++)
 	{
 		std::vector<glm::vec3> boundingBox = blocks.at(i).getBoundingBoxes();
