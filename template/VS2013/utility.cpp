@@ -215,7 +215,7 @@ std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const g
 }
 
 
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height)
+Drawable makePolygonalPrismFlatRooftop(const std::vector<glm::vec2>& baseVertices, const float height)
 {
 	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
@@ -254,16 +254,142 @@ Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const fl
 }
 
 
-Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height)
+Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseVertices, const float height, const float minHeight, const float maxHeight)
 {
-	return makePolygonalPrism(makeRegularPolygon(sides, radius), height);
+	auto embeddedBaseVertices = embed(baseVertices);			// Base polygon, embedded in 3-space
+	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
+
+	// Divides the height in two parts: 1- Main body 2- Rooftop
+	float mh, rh;
+	float percent = randomFloat(20, 80);
+
+	if (percent > 100)
+		percent = percent - 100;
+	percent = percent / 100;
+
+	if (percent > 0.8)
+		percent = 0.8;
+	else if (percent < 0.2)
+		percent = 0.2;
+
+	mh = height * percent;
+	rh = height - mh;
+
+	/*****************************/
+	/** Building main body data **/
+	/*****************************/
+	std::vector<glm::vec3> verticalTrajectory;					// Represents height of the building main body
+	verticalTrajectory.push_back(glm::vec3());
+	verticalTrajectory.push_back(glm::vec3(0.0f, 0.0f, mh));
+
+	std::vector<glm::vec3> positions = computeTranslationalSweep(embeddedBaseVertices, verticalTrajectory);
+	auto indices = computeSweepIndices(embeddedBaseVertices.size(), verticalTrajectory.size());
+
+	// Normals
+	std::vector<glm::vec3> normals;
+	for (const auto vertex : positions)
+	{
+		normals.push_back(glm::vec3(vertex.x, vertex.y, 0.0f));
+	}
+
+	const float length = glm::distance(baseVertices[0], baseVertices[1]);
+
+	// Wrap texture around, one width for each side
+	std::vector<glm::vec2> textureCoords(positions.size());
+	for (int i = 0; i < positions.size() / 2; i++)
+	{
+		textureCoords[i] = glm::vec2(i * length, 0.0f);
+		textureCoords[i + positions.size() / 2] = glm::vec2(i * length, mh);
+	}
+
+	std::vector<Vertex> vertices;
+	for (int i = 0; i < positions.size(); i++)
+	{
+		vertices.push_back({ positions[i], normals[i], textureCoords[i] });
+	}
+
+
+	/************************************/
+	/* Building additional rooftop data */
+	/************************************/
+	// Positions
+	for (int i = 0; i < embeddedBaseVertices.size(); i++)
+	{
+		positions.push_back(glm::vec3(embeddedBaseVertices[i].x, embeddedBaseVertices[i].y, mh)); // Represents the base of the rooftop
+
+		if (i < embeddedBaseVertices.size() - 1)
+		{
+			positions.push_back(glm::vec3(0.0f, 0.0f, height));	// Represents the highest point of the rooftop
+		}
+	}
+
+	// Indices
+	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
+	{
+		const GLuint lowerLeft = i;
+		const GLuint upper = i + 1;
+		const GLuint lowerRight = i + 2;
+
+		indices.push_back(lowerLeft);
+		indices.push_back(lowerRight);
+		indices.push_back(upper);
+	}
+
+	// Normals
+	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
+	{
+		if (i % 2 == 0)
+			normals.push_back(glm::vec3(positions[i].x, positions[i].y, 0.0f));
+		else
+			normals.push_back(glm::vec3(positions[i - 1].x, positions[i - 1].y, 0.0f));
+	}
+
+	// Wrap texture around, one width for each side
+	int temp = 0;
+	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
+	{
+		// Base
+		textureCoords.push_back(glm::vec2(temp * length, 0.0f));
+
+		// Top
+		if (i < positions.size() - 1)
+		{
+			textureCoords.push_back(glm::vec2((temp + 0.5) * length, rh));
+		}
+
+		temp++;
+	}
+
+	// Sends to the collections of vertices to be drawn
+	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
+	{
+		vertices.push_back({ positions[i], normals[i], textureCoords[i] });
+	}
+
+	return Drawable().setVertices(vertices).setIndices(indices);
 }
 
 
-Drawable makeRandomRegularPolygonalPrism(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight)
+Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height)
+{
+	return makePolygonalPrismFlatRooftop(makeRegularPolygon(sides, radius), height);
+}
+
+
+Drawable makeRandomRegularPolygon(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight)
 {
 	const float height = randomFloat(minHeight, maxHeight);
-	return makePolygonalPrism(randomRegularPolygon(maxSides, minRadius, maxRadius), height);
+
+	// Random pick a type of polygon
+	int rooftopType = (std::rand() % 99 + 1) % 2;
+
+	// 0: Flat rooftop
+	if (rooftopType == 0)
+		return makePolygonalPrismFlatRooftop(randomRegularPolygon(maxSides, minRadius, maxRadius), height);
+
+	// 1: Triangular rooftop
+	else
+		return makePolygonalPrismTriangularRooftop(randomRegularPolygon(maxSides, minRadius, maxRadius), height, minHeight, maxHeight);
 }
 
 

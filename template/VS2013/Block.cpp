@@ -61,8 +61,9 @@ Drawable Block::makeBuilding()
 {
 	const GLuint numTextures = 3;
 	GLuint randomTexture = rand() % numTextures + 1;
-	auto building = makeRandomRegularPolygonalPrism(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
+	auto building = makeRandomRegularPolygon(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
 	building.material().texture = getTexture("../Images/building" + std::to_string(randomTexture) + ".jpg");
+
 	building.material().ambientColour = { 1.0f, 1.0f, 1.0f };
 	building.material().diffuseColour = { 1.0f, 0.0f, 0.0f };
 	building.material().specularColour = { 0.0f, 0.0f, 1.0f };
