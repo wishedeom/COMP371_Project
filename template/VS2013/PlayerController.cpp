@@ -57,33 +57,48 @@ void PlayerController::stopLateral() { m_lateral = LateralDirection::Null; }
 // Runs every frame
 void PlayerController::update()
 {
+	// Time between frames
 	const double time = glfwGetTime();
 	const double deltaT = time - m_lastFrameTime;
+
+	// Update velocity
 	updateVelocity(deltaT);
-	if (isOutsideBoundingBox()){
+
+	// Check for bounding boxes
+	if (isOutsideBoundingBox())
+	{
 		updatePosition(deltaT);
 	}
-	else{
+	else
+	{
+		// Eject player if inside a bounding box
 		glm::vec3 camPos = m_camera.position();
 		glm::vec3 resetPosition = glm::vec3(camPos.x - 0.1f, camPos.y - 0.1f, camPos.z);
 		m_camera.setPosition(resetPosition);
 	}
+
+	// Update time
 	m_lastFrameTime = time;
-	
 }
+
 
 void PlayerController::updatePosition(const double deltaT)
 {
+	// Transform player velocity in egocentric coordinates to world coordinates
 	const float theta = angle(m_camera.forward(), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 worldVelocity = glm::vec3(glm::rotate(id4, theta, up) * glm::vec4(m_velocity, 0.0f));
+	
+	// Displacement
 	glm::vec3 displacement = worldVelocity * static_cast<float>(deltaT)* static_cast<float>(m_isRunning ? runFactor : 1.0f);
 	
+	// Translate the camera
 	m_camera.translate(displacement);
+
+	// Correct height after jumping
 	if (m_camera.position().z < height)
 	{
 		auto newPosition = m_camera.position();
 		newPosition.z = height;
-		
 		m_camera.setPosition(newPosition);
 	}
 	
@@ -93,12 +108,14 @@ void PlayerController::updatePosition(const double deltaT)
 
 void PlayerController::updateVelocity(const double deltaT)
 {
+	// Change in velocity from previous frame
 	glm::vec3 deltaV;
 
-	bool axPosDec = false;
-	bool axNegDec = false;
-	bool latPosDec = false;
-	bool latNegDec = false;
+	// True if and onyl if the player is decelerating while moving in the given direction
+	bool axPosDec = false;		// Positive axial (forward-backward)
+	bool axNegDec = false;		// Negative axial
+	bool latPosDec = false;		// Positive lateral (right in egocentric coordinates)
+	bool latNegDec = false;		// Negative lateral (left)
 
 	// Forward-backward
 	if ((m_axial == AxialDirection::Forward && m_velocity.y < maxSpeed) || (axNegDec = (m_axial == AxialDirection::Null && m_velocity.y < 0.0f)))
@@ -123,7 +140,7 @@ void PlayerController::updateVelocity(const double deltaT)
 	// Update velocity
 	m_velocity += deltaV;
 
-	// Deceleration to zero
+	// Deceleration to zero if a direction key is released
 	if ((axNegDec && m_velocity.y > 0.0f) || (axPosDec && m_velocity.y < 0.0f))
 	{
 		m_velocity.y = 0.0f;
@@ -133,7 +150,7 @@ void PlayerController::updateVelocity(const double deltaT)
 		m_velocity.x = 0.0f;
 	}
 
-	// Vertical deceleration
+	// Vertical deceleration, after a jump
 	if (!isOnGround())
 	{
 		m_velocity.z += gravity * deltaT;
@@ -141,22 +158,14 @@ void PlayerController::updateVelocity(const double deltaT)
 }
 
 
-Camera& PlayerController::camera()
-{
-	return m_camera;
-}
+Camera& PlayerController::camera() { return m_camera; }
 
 
-void PlayerController::setRunning(const bool isRunning)
-{
-	m_isRunning = isRunning;
-}
+void PlayerController::setRunning(const bool isRunning) { m_isRunning = isRunning; }
 
 
-bool PlayerController::isOnGround() const
-{
-	return std::abs(m_camera.position().z - height) / height < 0.1;
-}
+// Within 0.1 player heights of the ground, to account for floating-point comparisons
+bool PlayerController::isOnGround() const {	return std::abs(m_camera.position().z - height) / height < 0.1; }
 
 
 void PlayerController::jump()
@@ -167,32 +176,39 @@ void PlayerController::jump()
 	}
 }
 
-bool PlayerController::isOutsideBoundingBox(){
+
+bool PlayerController::isOutsideBoundingBox()
+{
 	bool isOutsideBox = true;
-	for (GLuint i = 0; i<blocks.size(); i++){
+	for (GLuint i = 0; i < blocks.size(); i++)
+	{
 		std::vector<glm::vec3> boundingBox = blocks.at(i).getBoundingBoxes();
 	
 		//the 4 sides of the "square"
 		if (((m_camera.position().x < boundingBox.at(0).x && m_camera.position().x > boundingBox.at(1).x) &&
-			(m_camera.position().y < boundingBox.at(0).y && m_camera.position().y > boundingBox.at(1).y))){
+			(m_camera.position().y < boundingBox.at(0).y && m_camera.position().y > boundingBox.at(1).y)))
+		{
 			isOutsideBox = false;
 			break;
 		}
 
 		if (((m_camera.position().x < boundingBox.at(1).x && m_camera.position().x > boundingBox.at(2).x) &&
-			(m_camera.position().y < boundingBox.at(1).y && m_camera.position().y > boundingBox.at(2).y))){
+			(m_camera.position().y < boundingBox.at(1).y && m_camera.position().y > boundingBox.at(2).y)))
+		{
 			isOutsideBox = false;
 			break;
 		}
 
 		if (((m_camera.position().x < boundingBox.at(2).x && m_camera.position().x > boundingBox.at(3).x) &&
-			(m_camera.position().y < boundingBox.at(2).y && m_camera.position().y > boundingBox.at(3).y))){
+			(m_camera.position().y < boundingBox.at(2).y && m_camera.position().y > boundingBox.at(3).y)))
+		{
 			isOutsideBox = false;
 			break;
 		}
 
 		if (((m_camera.position().x < boundingBox.at(3).x && m_camera.position().x > boundingBox.at(0).x) &&
-			(m_camera.position().y < boundingBox.at(3).y && m_camera.position().y > boundingBox.at(0).y))){
+			(m_camera.position().y < boundingBox.at(3).y && m_camera.position().y > boundingBox.at(0).y)))
+		{
 			isOutsideBox = false;
 			break;
 		}
