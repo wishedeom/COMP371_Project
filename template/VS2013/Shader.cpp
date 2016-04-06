@@ -1,7 +1,12 @@
 #include "Shader.h"
+
+#include <vector>
+
 #include "glew.h"
 #include "glfw3.h"
-#include <vector>
+
+
+														// - MEMBER FUNCTIONS - //
 
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
@@ -24,6 +29,7 @@ std::string Shader::readSourceCode(const std::string& path)
 	// To store source code
 	std::string sourceCode;
 
+	// Open file stream
 	std::ifstream stream(path, std::ios::in);
 	if (stream.is_open())
 	{
@@ -47,6 +53,7 @@ GLuint Shader::compileShader(const std::string& path, const GLenum shaderType)
 	// Create shader, store id
 	const GLuint id = glCreateShader(shaderType);
 
+	// Read source code
 	const std::string sourceCode = readSourceCode(path);
 	std::cout << "Compiling shader " << path;
 
@@ -67,12 +74,14 @@ GLuint Shader::compileShader(const std::string& path, const GLenum shaderType)
 		printf("%s\n", &errorMsg[0]);
 	}
 
+	// Return OpenGL id of shader
 	return id;
 }
 
 
 GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
+	// Compile vertex and fragment shader
 	const auto vertexShaderID = compileShader(vertexShaderPath, GL_VERTEX_SHADER);
 	const auto fragmentShaderID = compileShader(fragmentShaderPath, GL_FRAGMENT_SHADER);
 
@@ -104,6 +113,7 @@ GLuint Shader::makeShaderProgram(const std::string& vertexShaderPath, const std:
 	glDeleteShader(vertexShaderID);
 	glDeleteShader(fragmentShaderID);
 
+	// OpenGL id of shader program
 	return programID;
 }
 
@@ -113,6 +123,8 @@ bool Shader::isInitialized() const { return m_initialized; }
 
 GLuint Shader::projMatrixID() const { return glGetUniformLocation(m_programID, "projection"); }
 
+
 GLuint Shader::viewMatrixID() const { return glGetUniformLocation(m_programID, "view"); }
+
 
 GLuint Shader::modelMatrixID() const { return glGetUniformLocation(m_programID, "model"); }
