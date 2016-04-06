@@ -81,6 +81,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -91,6 +92,8 @@
     <None Include="..\Source\Block.vs" />
     <None Include="..\Source\COMP371_hw1.fss" />
     <None Include="..\Source\COMP371_hw1.vs" />
+    <None Include="..\Source\SKY_FRAG_SHADER.frag" />
+    <None Include="..\Source\SKY_VERTEX_SHADER.vs" />
     <None Include="..\Source\StandardDrawable.frag" />
     <None Include="..\Source\StandardDrawable.vs" />
     <None Include="..\Source\SUN_FRAG_SHADER.frag" />
@@ -104,6 +107,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SOIL.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
@@ -111,13 +115,19 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Images\back.jpg" />
     <Image Include="..\Images\BLOCK.png" />
+    <Image Include="..\Images\bottom.jpg" />
     <Image Include="..\Images\building1.jpg" />
     <Image Include="..\Images\building2.jpg" />
     <Image Include="..\Images\building3.jpg" />
     <Image Include="..\Images\container.jpg" />
+    <Image Include="..\Images\front.jpg" />
+    <Image Include="..\Images\left.jpg" />
+    <Image Include="..\Images\right.jpg" />
     <Image Include="..\Images\road.png" />
     <Image Include="..\Images\block_base.png" />
+    <Image Include="..\Images\top.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HW_Template.rc" />

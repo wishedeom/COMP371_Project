@@ -55,6 +55,7 @@
 #include "../VS2013/Drawable.h"
 #include "../VS2013/utility.h"
 #include "../VS2013/PlayerController.h"
+#include "../VS2013/Skybox.h"
 
 
 															// - GLOBAL VARIABLES - //
