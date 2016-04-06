@@ -51,15 +51,11 @@ void Block::draw(const Camera& camera, const DirectionalLight& light)
 
 Drawable Block::makeBuilding()
 {
-<<<<<<< HEAD
-	auto building = makeRandomRegularPolygon(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
-	building.material().texture = getTexture("../Images/building1.jpg");
-=======
 	const GLuint numTextures = 3;
 	GLuint randomTexture = rand() % numTextures + 1;
-	auto building = makeRandomRegularPolygonalPrism(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
+	auto building = makeRandomRegularPolygon(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
 	building.material().texture = getTexture("../Images/building" + std::to_string(randomTexture) + ".jpg");
->>>>>>> refs/remotes/origin/master
+
 	building.material().ambientColour = { 1.0f, 1.0f, 1.0f };
 	building.material().diffuseColour = { 1.0f, 0.0f, 0.0f };
 	building.material().specularColour = { 0.0f, 0.0f, 1.0f };
