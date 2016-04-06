@@ -18,3 +18,12 @@ void World::draw(const Camera& camera, const DirectionalLight& light)
 		block.draw(camera, light);
 	}
 }
+
+std::vector<glm::vec3> World::getBoundingBoxVector(){
+	return boundingBoxVector;
+}
+
+std::vector<Block> World::getBlocks(){
+	return m_blocks;
+}
+

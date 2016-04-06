@@ -5,6 +5,7 @@
 #include "glew.h"
 #include "glm.hpp"
 
+#include "World.h"
 #include "Camera.h"
 
 // Controls the player's movement.
@@ -25,6 +26,8 @@ class PlayerController
 	};
 
 	Camera& m_camera;
+	World& m_world;
+	std::vector<Block> blocks;
 
 	AxialDirection m_axial;
 	LateralDirection m_lateral;
@@ -38,7 +41,7 @@ class PlayerController
 	void updateVelocity(const double deltaT);
 
 	bool isOnGround() const;
-
+	bool isOutsideBoundingBox();
 public:
 
 	static const double height;
@@ -49,6 +52,7 @@ public:
 	static const double gravity;
 
 	PlayerController(Camera& camera);
+	PlayerController(Camera& camera, World& world);
 
 	void moveForward();
 	void moveBackward();
