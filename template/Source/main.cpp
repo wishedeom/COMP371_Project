@@ -29,7 +29,7 @@
 
 															// - INCLUDES - //
 
-// Standard C++
+// C++ Standard Library
 #include <vector>
 #include <string>
 #include <fstream>
@@ -39,11 +39,6 @@
 #include <cctype>	
 #include <ctime>
 #include <memory>
-
-// Standard C
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
 // Third-party
 #include "glew.h"
