@@ -23,6 +23,7 @@
 //
 //-------------------------------------------------------------------------------------------------------------------------
 
+
 // Static linking to GLEW
 #define GLEW_STATIC
 
@@ -77,6 +78,9 @@ const glm::vec4 clearColour(1.0f, 0.0f, 1.0f, 1.0f); // Mauve
 
 // Size of the world, in blocks
 const int worldSize = 5;
+
+// True if full-screen, false for windowed
+const bool fullScreen = false;
 
 
 														  // - FUNCTION DECLARATIONS - //
@@ -238,8 +242,8 @@ bool initialize()
 		return false;
 	}
 
-	// Create the window and set it to full-screen
-	window = glfwCreateWindow(1600, 900, "COMP371: Mega-City One", glfwGetPrimaryMonitor(), nullptr);
+	// Create the window and set its full-screen state
+	window = glfwCreateWindow(1600, 900, "COMP371: Mega-City One", fullScreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 	
 	// Check for errors
 	if (!window)
