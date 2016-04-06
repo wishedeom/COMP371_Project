@@ -69,7 +69,7 @@ public:
 	static const double gravity;		// Downward gravitational acceleration
 
 	// Constructs a PlayerController looking out of a given Camera in a given World.
-	PlayerController(Camera& camera, World& world, int block_size);
+	PlayerController(Camera& camera, World& world);
 
 	// These functions begin and end the player's motion
 	void moveForward();

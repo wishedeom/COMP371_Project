@@ -25,7 +25,7 @@ const double PlayerController::gravity = -9.8;
 
 														// - MEMBER FUNCTIONS - //
 
-PlayerController::PlayerController(Camera& camera, World& world, int block_size)
+PlayerController::PlayerController(Camera& camera, World& world)
 	: m_camera(camera)
 	, m_axial(AxialDirection::Null)
 	, m_lateral(LateralDirection::Null)
@@ -33,8 +33,8 @@ PlayerController::PlayerController(Camera& camera, World& world, int block_size)
 	, m_isRunning(false)
 	, m_world(world)
 {
-	this->block_size = block_size;
-	this->world_size = world.size;
+	block_size = Block::size;
+	world_size = world.size;
 }
 
 
