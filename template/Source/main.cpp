@@ -95,8 +95,14 @@ int main()
 	// Set up OpenGL
 	initialize();
 
+	Shader skyboxShader("../source/SKY_VERTEX_SHADER.vs", "../source/SKY_FRAG_SHADER.frag");
+
+	GLuint ProgramID = skyboxShader.programID();
+
 	// Create the city
 	World world(worldSize, worldSize);
+
+	Skybox s;
 
 	// Create a camera displaying to the window
 	Camera camera(*window);
@@ -116,6 +122,14 @@ int main()
 		glClearColor(clearColour.r, clearColour.g, clearColour.b, clearColour.a);
 		glPointSize(pointSize);
 
+		glDepthMask(GL_FALSE);// Remember to turn depth writing off
+		skyboxShader.use();
+		glm::mat4 view = glm::mat4(glm::mat3(camera.view()));	// Remove any translation component of the view matrix
+		glm::mat4 projection = camera.projection();
+		glUniformMatrix4fv(glGetUniformLocation(ProgramID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(ProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		s.draw(camera);
+		
 		// Draw everything
 		world.draw(camera, light);
 
