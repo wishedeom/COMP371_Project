@@ -100,7 +100,7 @@ int main()
 	GLuint ProgramID = skyboxShader.programID();
 
 	// Create the city
-	World world(worldSize, worldSize);
+	World world(worldSize);
 
 	Skybox s;
 
@@ -108,7 +108,7 @@ int main()
 	Camera camera(*window);
 
 	// Initialize the player controller for user input
-	playerController = std::make_unique<PlayerController>(camera, world, 10.0f, worldSize);
+	playerController = std::make_unique<PlayerController>(camera, world, 10.0f);
 
 	// Create the "sun"
 	DirectionalLight light(camera);

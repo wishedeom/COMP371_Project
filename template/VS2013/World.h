@@ -12,8 +12,9 @@ class World
 	std::vector<Block> m_blocks;
 	std::vector<glm::vec3> boundingBoxVector;
 public:
-	World(const int length = 2, const int width = 2);
+	World(const int aSize);
 	void draw(const Camera& camera, const DirectionalLight& light);
 	std::vector<glm::vec3> getBoundingBoxVector();
 	std::vector<Block>& getBlocks();
+	const int size;
 };

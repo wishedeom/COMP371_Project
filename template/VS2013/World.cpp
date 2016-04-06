@@ -1,12 +1,13 @@
 #include "World.h"
 
-World::World(const int length, const int width)
+World::World(const int aSize)
+	: size(aSize)
 {
-	for (float x = 1.0f; x <= length; x++)
+	for (float x = 1.0f; x <= size; x++)
 	{
-		for (float y = 1.0f; y <= width; y++)
+		for (float y = 1.0f; y <= size; y++)
 		{
-			m_blocks.push_back(Block(glm::vec3(Block::size * (x - length / 2), Block::size * (y - width / 2), 0.0f)));
+			m_blocks.push_back(Block(glm::vec3(Block::size * (x - size / 2), Block::size * (y - size / 2), 0.0f)));
 		}
 	}
 }
