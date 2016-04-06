@@ -108,7 +108,7 @@ int main()
 	Camera camera(*window);
 
 	// Initialize the player controller for user input
-	playerController = std::make_unique<PlayerController>(camera, world);
+	playerController = std::make_unique<PlayerController>(camera, world, 10.0f, worldSize);
 
 	// Create the "sun"
 	DirectionalLight light(camera);

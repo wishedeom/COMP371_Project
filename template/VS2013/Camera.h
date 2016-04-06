@@ -32,7 +32,7 @@ public:
 	Camera
 	(
 		GLFWwindow& window,
-		const glm::vec3& position = glm::vec3(0.0f, 0.0f, 0.1f),
+		const glm::vec3& position = glm::vec3(5.0f, 0.0f, 0.1f),
 		const glm::vec3& orientation = glm::vec3(1.0f, 0.0f, 0.0f),
 		const float fov = 1.0f,
 		const float nearPlane = 0.01f,

@@ -50,7 +50,14 @@ class PlayerController
 	bool isOnGround() const;
 
 	// Returns true if and only if the player is outside a bounding box.
+
 	bool isOutsideBoundingBox();
+	bool isOutsideWorld();
+
+	glm::vec3 previousPos;
+
+	int block_size;
+	int world_size;
 
 public:
 
@@ -62,7 +69,7 @@ public:
 	static const double gravity;		// Downward gravitational acceleration
 
 	// Constructs a PlayerController looking out of a given Camera in a given World.
-	PlayerController(Camera& camera, World& world);
+	PlayerController(Camera& camera, World& world, int block_size, int world_size);
 
 	// These functions begin and end the player's motion
 	void moveForward();
@@ -84,4 +91,6 @@ public:
 
 	// Called every frame to update's the player's position and velocity.
 	void update();
+
+	void isInsideCity();
 };
