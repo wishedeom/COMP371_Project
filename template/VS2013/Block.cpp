@@ -38,7 +38,7 @@ void Block::draw(const Camera& camera, const DirectionalLight& light)
 
 Drawable Block::makeBuilding()
 {
-	auto building = makeRandomRegularPolygonalPrism(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
+	auto building = makeRandomRegularPolygon(minSides, maxSides, minRadius, maxRadius, minHeight, maxHeight);
 	building.material().texture = getTexture("../Images/building1.jpg");
 	building.material().ambientColour = { 1.0f, 1.0f, 1.0f };
 	building.material().diffuseColour = { 1.0f, 0.0f, 0.0f };

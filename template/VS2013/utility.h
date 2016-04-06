@@ -73,15 +73,19 @@ const Texture& randomBuildingTexture();
 // Translates a collection of vertices (a mesh) to a new position
 std::vector<glm::vec3> translate(const std::vector<glm::vec3>& vertices, const glm::vec3& difference);
 
-// Generates a polygonal prism.
+// Generates a polygon: a prism (with a flat or pyramidal rooftop)
+Drawable makeRandomRegularPolygon(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight);
+
+// Generates a polygonal prism with a flat rooptop.
 // baseVertices: The vertices of the base polygon.
 // height: The height of the prism.
-Drawable makePolygonalPrism(const std::vector<glm::vec2>& baseVertices, const float height);
+Drawable makePolygonalPrismFlatRooftop(const std::vector<glm::vec2>& baseVertices, const float height);
+
+// Generates a polygonal prism with a pyramidal rooptop.
+Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseVertices, const float height, const float minHeight, const float maxHeight);
 
 // Gnerates a prism with a regular polygonal base.
 Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height);
-
-Drawable makeRandomRegularPolygonalPrism(const int minSides, const int maxSides, const float minRadius, const float maxRadius, const float minHeight, const float maxHeight);
 
 Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);
 
