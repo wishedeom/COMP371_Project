@@ -29,21 +29,29 @@ class PlayerController
 
 	Camera& m_camera;			// The player's camera
 	World& m_world;				// The world the player lives in
-	//std::vector<Block> blocks;
 
 	AxialDirection m_axial;		// The player's current axial motion
 	LateralDirection m_lateral;	// The player's current lateral motion
 
-	glm::vec3 m_velocity;	// Player velocity in egocentric coordinates
-	bool m_isRunning;		// True if and only if the player is currently running
+	glm::vec3 m_velocity;		// Player velocity in egocentric coordinates
+	bool m_isRunning;			// True if and only if the player is currently running
 
-	double m_lastFrameTime;	// The clock time at the end of the last frame
+	double m_lastFrameTime;		// The clock time at the end of the last frame
 
+	// Runs each frame to update the player's position based on its current velocity.
+	// deltaT: The time difference between the previous and current frames.
 	void updatePosition(const double deltaT);
+
+	// Runs each fram to update the player's velocity based on its current acceleration, based on key input.
+	// deltaT: The time difference between the previous and current frames.
 	void updateVelocity(const double deltaT);
 
+	// Returns true if and only if the player is (approximately) on the ground.
 	bool isOnGround() const;
+
+	// Returns true if and only if the player is outside a bounding box.
 	bool isOutsideBoundingBox();
+
 public:
 
 	static const double height;
@@ -53,7 +61,6 @@ public:
 	static const double jumpSpeed;
 	static const double gravity;
 
-	PlayerController(Camera& camera);
 	PlayerController(Camera& camera, World& world);
 
 	void moveForward();
