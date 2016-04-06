@@ -99,17 +99,17 @@ int main()
 	// Set up OpenGL
 	initialize();
 
+	// Create the city
+	World world(worldSize, worldSize);
+
 	// Create a camera displaying to the window
 	Camera camera(*window);
 
 	// Initialize the player controller for user input
-	playerController = std::make_unique<PlayerController>(camera);
+	playerController = std::make_unique<PlayerController>(camera, world);
 
 	// Create the "sun"
 	DirectionalLight light(camera);
-
-	// Create the city
-	World world(worldSize, worldSize);
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window))
