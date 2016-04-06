@@ -2,7 +2,9 @@
 
 #include <cmath>
 #include <iostream>
+
 #include <math.h>
+
 #include "glew.h"
 #include "glfw3.h"
 #include "GLM/GTC/matrix_transform.hpp"
@@ -11,6 +13,8 @@
 #include "utility.h"
 
 
+														// - STATIC CONSTANTS - //
+
 const double PlayerController::height = 0.1;
 const double PlayerController::maxSpeed = 5.0;
 const double PlayerController::acceleration = 15.0;
@@ -18,6 +22,8 @@ const double PlayerController::runFactor = 2.0;
 const double PlayerController::jumpSpeed = 3.0;
 const double PlayerController::gravity = -9.8;
 
+
+														// - MEMBER FUNCTIONS - //
 
 PlayerController::PlayerController(Camera& camera, World& world)
 	: m_camera(camera)
@@ -28,51 +34,27 @@ PlayerController::PlayerController(Camera& camera, World& world)
 	, m_world(world)
 	, blocks(m_world.getBlocks())
 {}
-/*
-PlayerController::PlayerController(Camera& camera)
-	: m_camera(camera)
-	, m_axial(AxialDirection::Null)
-	, m_lateral(LateralDirection::Null)
-	, m_lastFrameTime(glfwGetTime())
-	, m_isRunning(false)
-{}
-*/
-void PlayerController::moveForward()
-{
-	m_axial = AxialDirection::Forward;
-}
 
 
-void PlayerController::moveBackward()
-{
-	m_axial = AxialDirection::Backward;
-}
+void PlayerController::moveForward() { m_axial = AxialDirection::Forward; }
 
 
-void PlayerController::stopAxial()
-{
-	m_axial = AxialDirection::Null;
-}
+void PlayerController::moveBackward() {	m_axial = AxialDirection::Backward; }
 
 
-void PlayerController::moveLeft()
-{
-	m_lateral = LateralDirection::Left;
-}
+void PlayerController::stopAxial() { m_axial = AxialDirection::Null; }
 
 
-void PlayerController::moveRight()
-{
-	m_lateral = LateralDirection::Right;
-}
+void PlayerController::moveLeft() { m_lateral = LateralDirection::Left; }
 
 
-void PlayerController::stopLateral()
-{
-	m_lateral = LateralDirection::Null;
-}
+void PlayerController::moveRight() { m_lateral = LateralDirection::Right; }
 
 
+void PlayerController::stopLateral() { m_lateral = LateralDirection::Null; }
+
+
+// Runs every frame
 void PlayerController::update()
 {
 	const double time = glfwGetTime();
