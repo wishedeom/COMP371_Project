@@ -11,6 +11,7 @@
 // Controls the player's movement.
 class PlayerController
 {
+	// Describes motion along the forward-backward axis
 	enum class AxialDirection
 	{
 		Forward,
@@ -18,6 +19,7 @@ class PlayerController
 		Null
 	};
 
+	// Describes motion along the left-right axis
 	enum class LateralDirection
 	{
 		Left,
@@ -25,17 +27,17 @@ class PlayerController
 		Null
 	};
 
-	Camera& m_camera;
-	World& m_world;
+	Camera& m_camera;			// The player's camera
+	World& m_world;				// The world the player lives in
 	std::vector<Block> blocks;
 
-	AxialDirection m_axial;
-	LateralDirection m_lateral;
+	AxialDirection m_axial;		// The player's current axial motion
+	LateralDirection m_lateral;	// The player's current lateral motion
 
 	glm::vec3 m_velocity;	// Player velocity in egocentric coordinates
-	bool m_isRunning;
+	bool m_isRunning;		// True if and only if the player is currently running
 
-	double m_lastFrameTime;
+	double m_lastFrameTime;	// The clock time at the end of the last frame
 
 	void updatePosition(const double deltaT);
 	void updateVelocity(const double deltaT);
