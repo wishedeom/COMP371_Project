@@ -33,7 +33,7 @@ struct Material
 	glm::vec3 ambientColour;	// Ambient colour
 	glm::vec3 diffuseColour;	// Diffuse colour
 	glm::vec3 specularColour;	// Specular colour
-	float shininess;
+	float shininess;			// Shininess
 };
 
 

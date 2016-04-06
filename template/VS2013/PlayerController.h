@@ -11,6 +11,7 @@
 // Controls the player's movement.
 class PlayerController
 {
+	// Describes motion along the forward-backward axis
 	enum class AxialDirection
 	{
 		Forward,
@@ -18,6 +19,7 @@ class PlayerController
 		Null
 	};
 
+	// Describes motion along the left-right axis
 	enum class LateralDirection
 	{
 		Left,
@@ -25,35 +27,44 @@ class PlayerController
 		Null
 	};
 
-	Camera& m_camera;
-	World& m_world;
-	std::vector<Block> blocks;
+	Camera& m_camera;			// The player's camera
+	World& m_world;				// The world the player lives in
 
-	AxialDirection m_axial;
-	LateralDirection m_lateral;
+	AxialDirection m_axial;		// The player's current axial motion
+	LateralDirection m_lateral;	// The player's current lateral motion
 
-	glm::vec3 m_velocity;	// Player velocity in egocentric coordinates
-	bool m_isRunning;
+	glm::vec3 m_velocity;		// Player velocity in egocentric coordinates
+	bool m_isRunning;			// True if and only if the player is currently running
 
-	double m_lastFrameTime;
+	double m_lastFrameTime;		// The clock time at the end of the last frame
 
+	// Runs each frame to update the player's position based on its current velocity.
+	// deltaT: The time difference between the previous and current frames.
 	void updatePosition(const double deltaT);
+
+	// Runs each fram to update the player's velocity based on its current acceleration, based on key input.
+	// deltaT: The time difference between the previous and current frames.
 	void updateVelocity(const double deltaT);
 
+	// Returns true if and only if the player is (approximately) on the ground.
 	bool isOnGround() const;
+
+	// Returns true if and only if the player is outside a bounding box.
 	bool isOutsideBoundingBox();
+
 public:
 
-	static const double height;
-	static const double maxSpeed;
-	static const double acceleration;
-	static const double runFactor;
-	static const double jumpSpeed;
-	static const double gravity;
+	static const double height;			// The player's height
+	static const double maxSpeed;		// The maximum translational speed of the player
+	static const double acceleration;	// How quickly the player speeds up or slows down
+	static const double runFactor;		// How many times faster the player moves while running
+	static const double jumpSpeed;		// The vertical speed the player gets when jumping
+	static const double gravity;		// Downward gravitational acceleration
 
-	PlayerController(Camera& camera);
+	// Constructs a PlayerController looking out of a given Camera in a given World.
 	PlayerController(Camera& camera, World& world);
 
+	// These functions begin and end the player's motion
 	void moveForward();
 	void moveBackward();
 	void stopAxial();
@@ -61,10 +72,16 @@ public:
 	void moveRight();
 	void stopLateral();
 
+	// Set's the player's running state.
+	// isRunning: True if and only if the player will be running.
 	void setRunning(const bool isRunning);
+
+	// Causes the player to jump upwards.
 	void jump();
 
-	Camera& camera();
+	// Returns a reference to the player's camera.
+	Camera& camera() const;
 
+	// Called every frame to update's the player's position and velocity.
 	void update();
 };

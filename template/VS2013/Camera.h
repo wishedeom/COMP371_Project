@@ -1,4 +1,5 @@
 #pragma once
+
 #include "glm.hpp"
 #include "glfw3.h"
 
@@ -74,23 +75,29 @@ public:
 	// Returns the camera's projection matrix.
 	glm::mat4 projection() const;
 
+
 	// Returns the camera's view matrix.
 	glm::mat4 view() const;
 
+
 	// Returns the product of the camera's projection and view matrices.
 	glm::mat4 projView() const;
+
 
 	// Moves the camera to a new position.
 	// position: The camera's new position.
 	void setPosition(const glm::vec3& position);
 
+
 	// Sets the camera to a new orientation.
 	// orientation: The camera's new orientation. Cannot be the zero vector.
 	void setOrientation(const glm::vec3& orientation);
 
+
 	// Sets the camera's field of view angle.
 	// fov: The camera's new field-of-view angle, in degrees. Must be between 0 and 180, exclusive.
 	void setFOV(const float fov);
+
 
 	// Sets the camera's aspect ratio.
 	// fov: The camera's new aspect ratio. Must be positive.
@@ -100,12 +107,15 @@ public:
 	// nearPlane: The camera's new near plane distance. Must be positive and less than the far plane distance.
 	void setNearPlane(const float nearPlane);
 
+
 	// Sets the camera's far plane distance.
 	// farPlane: The camera's new far plane distance. Must be positive and greater than the near plane distance.
 	void setFarPlane(const float farPlane);
 
+
 	// Translates the camera by the given vector.
 	void translate(const glm::vec3& direction);
+
 
 	// Orients the camera based on new mouse cursor position, relative to the old cursor position.
 	// x: The mouse cursor's x-position.

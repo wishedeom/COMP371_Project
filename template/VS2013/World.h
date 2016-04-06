@@ -15,5 +15,5 @@ public:
 	World(const int length = 2, const int width = 2);
 	void draw(const Camera& camera, const DirectionalLight& light);
 	std::vector<glm::vec3> getBoundingBoxVector();
-	std::vector<Block> getBlocks();
+	std::vector<Block>& getBlocks();
 };

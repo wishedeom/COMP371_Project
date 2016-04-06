@@ -1,14 +1,17 @@
 #pragma once
-#include "glew.h"
+
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
+#include "glew.h"
+
+// Holds a GLSL shader program. Reads the source files for the vertex and fragment shaders from memory, then compiles and links the shader program.
 class Shader
 {
 
-	// Reads shader ource code from a file.
+	// Reads shader source code from a file.
 	// path: The file path of the shader source code, written in GLSL.
 	// Returns: The shader source code, as a string.
 	static std::string readSourceCode(const std::string& path);
@@ -44,16 +47,18 @@ public:
 	// Returns the program ID of the shader program.
 	GLuint programID() const;
 	
-	// Returns the ID of the transformation matrix uniform
+	// Returns the ID of the projection matrix uniform
 	GLuint projMatrixID() const;
 
+	// Returns the ID of the view matrix uniform
 	GLuint viewMatrixID() const;
 
+	// Returns the ID of the model matrix uniform
 	GLuint modelMatrixID() const;
 
 	// Returns true if and only if the shader program has been created.
 	bool isInitialized() const;
 
-    // Uses the current shader
+    // Uses the shader program
 	void use() const;
 };
