@@ -10,7 +10,7 @@
 class Texture;
 class Drawable;
 
-//------------Constants--------------//
+															// - CONSTANTS - //
 
 // Global up direction
 const glm::vec3 up(0.0f, 0.0f, 1.0f);
@@ -22,7 +22,7 @@ const double pi = 3.1415926535897;
 const glm::mat4 id4;
 
 
-//------------Functions---------------//
+															// - FUNCTIONS - //
 
 // Given a number of profile polyline vertices p and a number of trajectory polyline vertices t, computes the array of vertex indices to draw each triangle in the
 // translational sweep.
@@ -87,6 +87,7 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 // Gnerates a prism with a regular polygonal base.
 Drawable makeRegularPolygonalPrism(const int sides, const float radius, const float height);
 
+// Generates the base of a city block
 Drawable makeBlockBase(const glm::vec3& centre = glm::vec3(), const float size = 1.0f, const float height = 0.0125f);
 
 // Returns the signed angle between two vectors in the x-y plane
