@@ -50,7 +50,7 @@ const glm::vec4 clearColour(1.0f, 0.0f, 1.0f, 1.0f); // Mauve
 const int worldSize = 5;
 
 // True if full-screen, false for windowed
-const bool fullScreen = false;
+const bool fullScreen = true;
 
 
 														  // - FUNCTION DECLARATIONS - //

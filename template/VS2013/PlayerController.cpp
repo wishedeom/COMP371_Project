@@ -19,7 +19,7 @@ const double PlayerController::height = 0.1;
 const double PlayerController::maxSpeed = 5.0;
 const double PlayerController::acceleration = 15.0;
 const double PlayerController::runFactor = 2.0;
-const double PlayerController::jumpSpeed = 3.0;
+const double PlayerController::jumpSpeed = 5.0;
 const double PlayerController::gravity = -9.8;
 
 
