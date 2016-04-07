@@ -7,6 +7,7 @@ out vec3 FragPos;
 out vec3 Normal;
 out vec2 TexCoords;
 out vec4 viewSpace;
+out vec3 skyboxTex;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -19,5 +20,5 @@ void main()
     Normal = normalize(normal);
     TexCoords = texCoords;
 	viewSpace = gl_Position;
-
+	skyboxTex = position;
 } 
