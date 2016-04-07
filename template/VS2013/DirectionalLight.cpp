@@ -40,9 +40,11 @@ void DirectionalLight::update()
 {
 	double time = glfwGetTime();
 	double deltaT = time - m_lastFrameTime;
-	float theta = deltaT / 1;
+	float theta = deltaT / 100;
 	m_direction = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_direction, 0.0f));
 	m_ambientColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_ambientColour, 0.0f));
+	m_diffuseColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_diffuseColour, 0.0f));
+	m_specularColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_specularColour, 0.0f));
 	m_lastFrameTime = time;
 	std::cout << m_direction.y << std::endl;
 }
