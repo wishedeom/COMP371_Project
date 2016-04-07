@@ -1,6 +1,5 @@
 #version 330 core
 
-
 struct Material
 {
 	vec3 ambient;
@@ -35,11 +34,10 @@ in vec4 viewSpace;
 
 //values for fog
 //FOG COLOR SHOULD MATCH BACKGROUND COLOR TO GIVE FADE-IN EFFECT
-//vec3 fogColor = vec3(0.4,0.4,0.4);
+//vec3 fogColor = vec3(1,0,1);
 vec3 fogColor = texture(skybox, skyboxTex).rgb;
-
 //length is multipled to limit how far you can see, multiply by bigger number to see closer
-float distance = length(viewSpace)*2;
+float distance = length(viewSpace)*3;
 
 float fogFactor = 0;
 
@@ -63,8 +61,8 @@ void main()
 	fogFactor = clamp (fogFactor, 0,1);
 
 	vec3 textureVec =  texture(texture1, TexCoords).rgb;
-
+	
 	vec3 ads = vec3(textureVec+diffuse);
-	color = vec4(mix(fogColor,ads,fogFactor),1.0f);
+	color = vec4(mix(fogColor,ads,fogFactor),fogFactor-0.1f);
 } 
 
