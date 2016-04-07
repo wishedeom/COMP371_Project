@@ -46,5 +46,5 @@ void DirectionalLight::update()
 	m_diffuseColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_diffuseColour, 0.0f));
 	m_specularColour = glm::vec3(glm::rotate(id4, theta, glm::vec3(1.0f, 0.0f, 0.0f)) * glm::vec4(m_specularColour, 0.0f));
 	m_lastFrameTime = time;
-	std::cout << m_direction.y << std::endl;
+	//std::cout << m_direction.y << std::endl;
 }
