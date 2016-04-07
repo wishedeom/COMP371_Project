@@ -36,6 +36,7 @@
 //		LL -> UR -> UL
 //
 // This is done for each rectangle of the translational sweep mesh.
+
 std::vector<GLuint> computeSweepIndices(const int p, const int t)
 {
 	static std::vector<GLuint> indices;
@@ -62,7 +63,6 @@ std::vector<GLuint> computeSweepIndices(const int p, const int t)
 	}
 	return indices;
 }
-
 
 std::vector<glm::vec3> computeDisplacements(const std::vector<glm::vec3>& polyline)
 {
@@ -159,9 +159,11 @@ std::vector<glm::vec2> makeRegularPolygon(const int sides, const float radius)
 
 std::vector<glm::vec2> randomRegularPolygon(const int maxSides, const float minRadius, const float maxRadius)
 {
-	const int sides = randomInt(3, maxSides);
+	//const int sides = randomInt(3, maxSides);
+	int randSides = randomInt(3, maxSides/2);
+	int evenSides = randSides * 2;
 	const float radius = randomFloat(minRadius, maxRadius);
-	return makeRegularPolygon(sides, radius);
+	return makeRegularPolygon(randSides, radius);
 }
 
 
@@ -260,17 +262,17 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 	embeddedBaseVertices.push_back(embeddedBaseVertices[0]);	// Connect the polygon
 
 	// Divides the height in two parts: 1- Main body 2- Rooftop
-	float mh, rh;
-	float percent = randomFloat(20, 80);
+	GLfloat mh, rh;
+	GLfloat percent = randomFloat(20.f, 80.f);
 
-	if (percent > 100)
-		percent = percent - 100;
-	percent = percent / 100;
+	if (percent > 100.f)
+		percent = percent - 100.f;
+	percent = percent / 100.f;
 
-	if (percent > 0.8)
-		percent = 0.8;
-	else if (percent < 0.2)
-		percent = 0.2;
+	if (percent > 0.8f)
+		percent = 0.8f;
+	else if (percent < 0.2f)
+		percent = 0.2f;
 
 	mh = height * percent;
 	rh = height - mh;
@@ -292,18 +294,18 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 		normals.push_back(glm::vec3(vertex.x, vertex.y, 0.0f));
 	}
 
-	const float length = glm::distance(baseVertices[0], baseVertices[1]);
+	const GLfloat length = glm::distance(baseVertices[0], baseVertices[1]);
 
 	// Wrap texture around, one width for each side
 	std::vector<glm::vec2> textureCoords(positions.size());
-	for (int i = 0; i < positions.size() / 2; i++)
+	for (GLuint i = 0; i < positions.size() / 2; i++)
 	{
 		textureCoords[i] = glm::vec2(i * length, 0.0f);
 		textureCoords[i + positions.size() / 2] = glm::vec2(i * length, mh);
 	}
 
 	std::vector<Vertex> vertices;
-	for (int i = 0; i < positions.size(); i++)
+	for (GLuint i = 0; i < positions.size(); i++)
 	{
 		vertices.push_back({ positions[i], normals[i], textureCoords[i] });
 	}
@@ -313,7 +315,7 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 	/* Building additional rooftop data */
 	/************************************/
 	// Positions
-	for (int i = 0; i < embeddedBaseVertices.size(); i++)
+	for (GLuint i = 0; i < embeddedBaseVertices.size(); i++)
 	{
 		positions.push_back(glm::vec3(embeddedBaseVertices[i].x, embeddedBaseVertices[i].y, mh)); // Represents the base of the rooftop
 
@@ -324,7 +326,7 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 	}
 
 	// Indices
-	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
+	for (GLuint i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
 	{
 		const GLuint lowerLeft = i;
 		const GLuint upper = i + 1;
@@ -333,10 +335,11 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 		indices.push_back(lowerLeft);
 		indices.push_back(lowerRight);
 		indices.push_back(upper);
+		
 	}
 
 	// Normals
-	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
+	for (GLuint i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
 	{
 		if (i % 2 == 0)
 			normals.push_back(glm::vec3(positions[i].x, positions[i].y, 0.0f));
@@ -345,8 +348,8 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 	}
 
 	// Wrap texture around, one width for each side
-	int temp = 0;
-	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
+	GLuint temp = 0;
+	for (GLuint i = (embeddedBaseVertices.size() * 2); i < positions.size(); i += 2)
 	{
 		// Base
 		textureCoords.push_back(glm::vec2(temp * length, 0.0f));
@@ -361,7 +364,7 @@ Drawable makePolygonalPrismTriangularRooftop(const std::vector<glm::vec2>& baseV
 	}
 
 	// Sends to the collections of vertices to be drawn
-	for (int i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
+	for (GLuint i = (embeddedBaseVertices.size() * 2); i < positions.size(); i++)
 	{
 		vertices.push_back({ positions[i], normals[i], textureCoords[i] });
 	}
